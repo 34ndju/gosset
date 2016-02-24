@@ -23,8 +23,6 @@ app.use(session({
 
 var UserModel = require('./client/models/user')(mongoose);
 
-/*require('./client/scripts/login')(express, app, session, UserModel);
-require('./client/scripts/register')(express, app, session, UserModel);*/
 require('./client/routes/routes')(express, app, session, UserModel, mongoose);
 
 var port = process.env.PORT || 8080;
