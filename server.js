@@ -6,23 +6,28 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
 var session = require('express-session');
-
 var app = express();
+var bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static(path.resolve(__dirname, 'client')));
+app.use(session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: true
+    })
+);
 
-mongoose.connect('mongodb://localhost/base');
+var UserModel = require('./client/models/user')(mongoose);
 
-app.get('/', function(req, res) {
-    res.sendFile(process.cwd() + '/client/html/home.html');
-});
-
-app.get('/login', function(req, res) {
-    res.sendFile(process.cwd() + '/client/html/login.html');
-});
+/*require('./client/scripts/login')(express, app, session, UserModel);
+require('./client/scripts/register')(express, app, session, UserModel);*/
+require('./client/routes/routes')(express, app, session, UserModel, mongoose);
 
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
-

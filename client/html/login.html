@@ -1,12 +1,19 @@
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="../scripts/login.js"></script>
+
 <head>
     <title>Login</title>
 </head>
 
 <div class="login">
-    <h1 id="login">Login</h1>
-    <form>
-        <input type="email" placeholder="Email">
+    <a href="/"><img id ="logo" src="/images/base.jpg"></a>
+    <form class="info" method="post" action="/login">
+        <input id="email" class="email" type="email" spellcheck="false" placeholder="Email" name="email">
+        <input id="password" class= "password" type="password" placeholder="Password" name="password">
+        <button class ="submitbutton" type="submit">Sign in!</button> 
     </form>
+    <div style="height:10px;"></div>
 </div>
 
 
@@ -21,7 +28,7 @@
         padding: 0px;
         overflow-x: hidden; 
         font-family:"Muli";
-        background-image: url('images/rails.jpg');
+        background-image: url('images/blackcity.jpg');
         background-size:cover;
     }
     .login {
@@ -30,12 +37,50 @@
         width:330px;
         margin-left:auto;
         margin-right:auto;
-        background: #99ccff;
-        box-shadow: 1px 1px 1px 1px gray;
+        background-color:rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 1px rgba(14,41,57,0.44),inset 0 -1px 2px;
+    }
+    #logo {
+        padding-top:20px;
+        display:block;
+        width:200px;
+        margin:0 auto 20px auto;
     }
     
     #login {
+        padding-top:20px;
         font-weight:bold;
         text-align: center;
+    }
+    
+    .info {
+        text-align: center;
+    }
+    
+    .password {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .submitbutton {
+        display:block;
+        margin: 0px auto 20px  auto;
+        cursor:pointer;
+        width:100px;
+        height:50px;
+        font-family:"Muli";
+        font-size:20px;
+        border-radius:5px;
+        background-color:rgba(255, 255, 255, 0.8);
+    }
+    
+    form input {
+        border-radius:5px;
+        width:300px;
+        height:50px;
+        background-color:rgba(255, 255, 255, 0.4);
+        font-size:15px;
+        padding-left:10px;
+        font-family:"Muli";
     }
 </style>
