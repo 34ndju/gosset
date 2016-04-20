@@ -1,0 +1,99 @@
+<body>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    
+    <a href="/logout">
+        <p class="logout">Logout</p>
+    </a>
+    
+    <img class="logo" src="/images/base.jpg">
+    
+    <div class="menu">
+        <div class="menuContent">
+            <ul id="tabs">
+                <a href="/dashboard"><li>Dashboard</li></a>
+                <a href="/upload"><li>Upload</li></a>
+                <a href="/mydata"><li>My Data</li></a>
+            </ul>
+        </div>
+    </div>
+    
+    <h1>Store</h1>
+    <div class="files"></div>
+    
+    <script src="/scripts/store.js"></script>
+</body>
+
+
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Muli);
+    
+     .logo {
+        padding-top:20px;
+        display:block;
+        width:200px;
+        margin:0 auto 20px auto;
+    }
+    
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        overflow-x: hidden; 
+        font-family:"Muli"; 
+        background-image: url('images/bg.jpg');
+        background-size:cover; 
+    }
+    
+    .logout {
+        right: 20px;
+        top:5px;
+        position:absolute;
+        color: #2d3235;
+        cursor:pointer;
+        text-decoration:none;
+    }
+    
+    body {
+        text-align: center;
+    }
+    
+
+    .files {
+        display: block;
+    }
+    
+/* menu */
+    .menu {
+        width: calc(100% - 140px);
+        text-align: center;
+        position: relative;
+        background: #fff;
+        z-index: 999;
+        margin: auto;
+        background-color: rgba(255,255,255, 0.3);
+    }
+    
+    .menu .menuContent {
+        margin: auto;
+        position: relative;
+        line-height: 70px;
+        text-align: center;
+        margin-right: 50px;
+    }
+    
+    .menu .menuContent ul li {
+        display: inline-block;
+        margin-left: 50px;
+        margin-right: 50px;
+        color: #2d3235;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .menu .menuContent ul li:hover {
+        text-decoration: underline;
+    }
+/* menu */
+</style>
