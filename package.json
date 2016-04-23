@@ -24,11 +24,18 @@
   "author": "Blake Johnston",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "bootstrap": "^3.3.6",
+    "d3": "^3.5.16",
+    "db": "^1.0.6",
     "dotenv": "^1.2.0",
+    "excel": "^0.1.4",
     "express": "^4.12.4",
     "express-session": "^1.11.3",
+    "fs": "0.0.2",
     "mongoose": "^4.1.0",
-    "multer": "^1.1.0",
+    "multiparty": "^4.1.2",
+    "papaparse": "^4.1.2",
     "passport": "^0.3.0",
     "passport-github": "^1.0.0"
   }
