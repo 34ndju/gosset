@@ -22,12 +22,12 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(session({
-    secret: process.env.SECRET,
+    secret: "this is my secret", //process.env.SECRET,
     resave: false,
     saveUninitialized: true
     })
 );
-console.log("Secret: " + process.env.SECRET)
+console.log("Secret: " + "this is my secret") //process.env.SECRET)
 app.use(express.static(path.resolve(__dirname, 'client')));
 
 
@@ -42,7 +42,7 @@ var CSVModel = require('./client/models/csvdata')(mongoose, db);
 
 require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel);
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 8080;
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
