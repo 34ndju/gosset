@@ -31,7 +31,7 @@ console.log("Secret: " + "this is my secret") //process.env.SECRET)
 app.use(express.static(path.resolve(__dirname, 'client')));
 
 
-var db = mongoose.createConnection(process.env.MONGO_URI);
+var db = mongoose.createConnection('mongodb://34ndju:jun73521@ds059125.mlab.com:59125/base');
 
 db.once('open', function callback () {
   console.info('Mongo db connected successfully');
