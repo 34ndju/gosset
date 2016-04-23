@@ -22,16 +22,16 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(session({
-    secret: "this is my secret", //process.env.SECRET,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true
     })
 );
-console.log("Secret: " + "this is my secret") //process.env.SECRET)
+console.log("Secret: " + process.env.SECRET)
 app.use(express.static(path.resolve(__dirname, 'client')));
 
 
-var db = mongoose.createConnection('mongodb://34ndju:jun73521@ds059125.mlab.com:59125/base');
+var db = mongoose.createConnection(process.env.MONGO_URI);
 
 db.once('open', function callback () {
   console.info('Mongo db connected successfully');
