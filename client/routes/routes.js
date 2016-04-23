@@ -100,33 +100,58 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         form.parse(req, function(err, fields, files) {
             if(err)
                 console.log(err);
-
-            var file = files.file[0]
             
-            console.log(file)
+            var file = files.file[0],
+                ext = file.originalFilename.split('.').pop()
+                
             
-            /*excel(file.path, function(err, data) {
-                if(err) throw err;
-                console.log(data)
-            }); */
-            
-            
-            /*fs.readFile(file.path, 'utf-8', function(err, data) {
+            fs.readFile(file.path, 'utf-8', function(err, data) {
                 if(err)
                     console.log(err);
-                    
-                var results = papa.parse(data, {
-                    header: true
-                }).data
                 
-                newCSV.email = req.session.email
-                newCSV.data = results;
-                newCSV.save()
-                req.session.dataid = newCSV._id
-                res.redirect('/upload2')
-            }) */
+                if(ext == "xlsx") {
+                    var results = [],
+                        keys = []
+                    excel(file.path, function(err, data) {
+                        if(err) 
+                            console.log(err)
+                        
+                        data[0].forEach(function(d) {
+                            keys.push(d)
+                        })
+                        
+                        for(var i = 1; i < data.length; i++) {
+                            var newObj = {}
+                            for(var x = 0; x < keys.length; x++)  {
+                                newObj[keys[x]] = data[i][x]
+                            }
+                            results.push(newObj)
+                        }
+                        
+                        //adding to mongo
+                        newCSV.email = req.session.email
+                        newCSV.data = results;
+                        newCSV.save()
+                        req.session.dataid = newCSV._id
+                        res.redirect('/upload2')
+                    }); 
+                }
+            
+                else if(ext == "csv") {
+                    var results = papa.parse(data, {
+                        header: true
+                    }).data
+                    
+                    //adding to mongo
+                    newCSV.email = req.session.email
+                    newCSV.data = results;
+                    newCSV.save()
+                    req.session.dataid = newCSV._id
+                    res.redirect('/upload2')
+                }
+            }) 
         })
-    })
+    })  //supports .xlsx and .csv
     
     app.get('/upload2', function(req, res) {
         res.sendFile(process.cwd() + '/client/html/upload2.html')
