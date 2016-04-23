@@ -1,14 +1,12 @@
 'use strict';
 
 var express = require('express');
-var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
 var session = require('express-session');
 var d3 = require('d3');
 var bodyParser = require('body-parser');
-var jsdom = require('jsdom');
 var multiparty = require('multiparty')
 var fs = require('fs')
 var papa = require('papaparse')
@@ -33,7 +31,7 @@ console.log("Secret: " + process.env.SECRET)
 app.use(express.static(path.resolve(__dirname, 'client')));
 
 
-var db = mongoose.createConnection('mongodb://34ndju:jun73521@ds059125.mlab.com:59125/base');
+var db = mongoose.createConnection(process.env.MONGO_URI);
 
 db.once('open', function callback () {
   console.info('Mongo db connected successfully');
@@ -44,7 +42,7 @@ var CSVModel = require('./client/models/csvdata')(mongoose, db);
 
 require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel);
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 5000;
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
