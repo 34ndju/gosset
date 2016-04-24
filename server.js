@@ -42,6 +42,16 @@ var CSVModel = require('./client/models/csvdata')(mongoose, db);
 
 require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel);
 
+/*
+var temp_dir = path.join(process.cwd(), 'temp/');
+if (!fs.existsSync(temp_dir))
+    fs.mkdirSync(temp_dir);
+*/
+
+console.log("HEYYYYYYYYYYYY")
+console.log("HEYYYY")
+console.log(process.cwd())
+
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
