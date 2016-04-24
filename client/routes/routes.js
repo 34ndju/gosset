@@ -247,7 +247,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         var cart,
             data = []
     
-        UserModel.findOne({email: '34ndju@gmail.com'/*req.session.email*/}, function(err, user) {
+        UserModel.findOne({email: req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
             
