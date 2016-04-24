@@ -256,7 +256,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })  //sends an array of user's cart.
     
     app.get('/addtocart/:id/:title', function(req, res) {
-        UserModel.findOne({email: "34ndju@gmail.com"/*req.session.email*/}, function(err, user) {
+        UserModel.findOne({email: req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
             user.cart.push({id: req.params.id, title: req.params.title.replace(/_/g, " ")});
