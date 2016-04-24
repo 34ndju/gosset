@@ -176,7 +176,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
 
     app.get('/download/:id', function(req, res) {
-        var path = process.cwd() + "/server/tempdata/"
+        var path = process.cwd() + "/tmp"
         
         CSVModel.findOne({_id: req.params.id}, function(err, data) {
             if(err)
