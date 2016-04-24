@@ -15,7 +15,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         else {
             console.log(req.session.email + " logged out.");
             req.session.destroy();
-            res.redirect('/login')
+            res.redirect('/')
         }
     })
     
@@ -38,30 +38,35 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             }
         });
         
-    });
-    
-    app.get('/register', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/register.html');
     })
     
     app.post('/register', function(req, res) {
-        var firstName = req.body.firstName;
-        var lastName = req.body.lastName;
-        var email = req.body.email;
-        var password = req.body.password;
-        var newUser = new UserModel();
-        newUser.firstName = firstName;
-        newUser.lastName = lastName;
-        newUser.email = email;
-        newUser.password = password;
-        newUser.save(function(err, saved) {
+        UserModel.findOne({email: req.body.email}, function(err, user) {
             if(err)
-                throw err;
-            else {
-                req.session.email = email;
-                res.sendFile(process.cwd() + '/client/html/myaccount.html');
+                console.log(err)
+            if(!user) {
+                var firstName = req.body.firstName;
+                var lastName = req.body.lastName;
+                var email = req.body.email;
+                var password = req.body.password;
+                var newUser = new UserModel();
+                newUser.firstName = firstName;
+                newUser.lastName = lastName;
+                newUser.email = email;
+                newUser.password = password;
+                newUser.save(function(err, saved) {
+                    if(err)
+                        throw err;
+                    else {
+                        req.session.email = email;
+                        res.sendFile(process.cwd() + '/client/html/myaccount.html');
+                    }
+                })
             }
-        });
+            else {
+                res.redirect('/')
+            }
+        })
     }); 
     
     app.get('/data', function(req, res) {

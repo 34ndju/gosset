@@ -7,9 +7,6 @@
     <div class="inner-col">
         <nav>
             <ul class="pages">
-                <a href='/register'><li class="Register">Register</li></a>
-            </ul>
-            <ul class="external">
                 <a href="/login"><li  class="login">Login</li></a>
             </ul>
         </nav>
@@ -19,9 +16,14 @@
 <div class="top">
     <img src="/images/base.jpg" id="logo">
     <h2>The Marketplace for Data</h2>
-    <div class="about">
-        <p>Data is hard to come by; material resources and time must be spent to extract only a few data points.</p>
-        <p>At Base, we make data easy to come by: Purchase data with a click, saving resources and your most important asset—time.</p>
+    <div class="box">
+        <form class="register" method="post" action="/register">
+            <input spellcheck="false" placeholder="First Name" name="firstName">
+            <input spellcheck="false" placeholder="Last Name" name="lastName">
+            <input type="email" spellcheck="false" placeholder="E-mail" name="email">
+            <input type="password" placeholder="Password" name="password">
+            <button type="submit">Join</button>
+        </form>
     </div>
 </div>
 
@@ -47,9 +49,82 @@
         font-family:"Muli";
         background-image: url('images/bg.jpg');
         background-size:cover; 
-        font-size: 1.1em;
-        /*background: linear-gradient(to right, #BBE3F0, #0BA3D6); */
+        
+        /* background: linear-gradient(to right, #BBE3F0, #0BA3D6); */
     }
+     
+    .box {
+        background: rgba(100, 100, 100, 0.5);
+        padding-top:20px;
+        padding-bottom:15px;
+        width: 230px;
+        margin-left:auto;
+        margin-right:auto;
+        border-radius:5px;
+    } 
+     
+     
+    button {
+        outline: none;
+        height: 40px;
+        text-align: center;
+        width: 130px;
+        border-radius: 40px;
+        background: #fff;
+        border: 2px solid black;
+        color: black;
+        letter-spacing: 1px;
+        text-shadow: 0;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+    button:hover {
+        color: white;
+        background: black;
+        border: 2px solid white;
+    }
+
+     
+     
+    /* All Placeholders*/ 
+    ::-webkit-input-placeholder {
+        font-weight:bold;
+        font-family:"Muli";
+        text-align: center;
+    }
+    
+    :-moz-placeholder { /* Firefox 18- */
+    
+    }
+    
+    ::-moz-placeholder {  /* Firefox 19+ */
+   
+    }
+    
+    :-ms-input-placeholder {  
+     
+    }
+    /*All Placeholders */
+    
+    
+    .register {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        width:220px;
+        font-weight:bold;
+    }
+    
+    form input {
+        width: 200px;
+        height: 30px;
+        border-radius:10px;
+        margin-bottom: 20px;
+        text-align:center;
+    }
+    
     
     a { text-decoration: none; color:white;}
     a:visited { text-decoration: none; }
@@ -90,15 +165,4 @@
         text-align:center;
     }
     
-    .external {
-        position: absolute;
-        right: 0;
-        display: block;
-        list-style-type: disc;
-        margin: auto 10px auto 0px;
-        top: 0px;
-        padding-top:15px;
-    }
-  
-  
 </style>
