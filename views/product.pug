@@ -1,0 +1,30 @@
+body
+  script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    |     
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    |     
+    |     
+    h1.title.center #{title}
+    |     
+    h5.fileName.center #{fileName}
+    |     
+    p.email.center #{email}
+    |     
+    h2.keys.center
+    | 
+    a(href=download)
+      h4.download.center Download
+      
+  style.
+    @import url(https://fonts.googleapis.com/css?family=Muli);
+    body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    font-family:"Muli";
+    }
+    .center {
+    text-align: center;
+    }

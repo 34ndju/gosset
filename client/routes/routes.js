@@ -1,6 +1,8 @@
-module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel) {
+module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug) {
     
     app.get('/', function(req, res) {
+        if(req.session.email)
+            res.redirect('/dashboard')
         res.sendFile(process.cwd() + '/client/html/home.html');
     });
     
@@ -99,82 +101,78 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.post('/upload', function(req, res) {
-        var newCSV = new CSVModel()
+        console.log(req.body.title)
         var form = new multiparty.Form()
         
         form.parse(req, function(err, fields, files) {
             if(err)
                 console.log(err);
             
-            var file = files.file[0],
-                ext = file.originalFilename.split('.').pop()
-                
             
-            fs.readFile(file.path, 'utf-8', function(err, data) {
-                if(err)
-                    console.log(err);
-                
-                if(ext == "xlsx") {
-                    var results = [],
-                        keys = []
-                    excel(file.path, function(err, data) {
-                        if(err) 
-                            console.log(err)
-                        
-                        data[0].forEach(function(d) {
-                            keys.push(d)
-                        })
-                        
-                        for(var i = 1; i < data.length; i++) {
-                            var newObj = {}
-                            for(var x = 0; x < keys.length; x++)  {
-                                newObj[keys[x]] = data[i][x]
-                            }
-                            results.push(newObj)
-                        }
-                        
-                        //adding to mongo
-                        newCSV.email = req.session.email
-                        newCSV.data = results;
-                        newCSV.save()
-                        req.session.dataid = newCSV._id
-                        res.redirect('/upload2')
-                    }); 
-                }
+            var file = files.file[0]
             
-                else if(ext == "csv") {
-                    var results = papa.parse(data, {
-                        header: true
-                    }).data
-                    
-                    //adding to mongo
-                    newCSV.email = req.session.email
-                    newCSV.data = results;
-                    newCSV.save()
-                    req.session.dataid = newCSV._id
-                    res.redirect('/upload2')
-                }
-            }) 
+            var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
+                                                        metadata: {
+                                                            email: '34ndju@gmail.com' /*req.session.email*/,
+                                                            title: fields.title[0],
+                                                            description: fields.description[0]
+                                                        }
+            })
+            fs.createReadStream(file.path).pipe(writeStream)
+                
+            writeStream.on('close', function(file) {
+                console.log("file stored")
+                res.redirect('/mydata')
+            })
         })
-    })  //supports .xlsx and .csv
+    })  
     
-    app.get('/upload2', function(req, res) {
+    app.get('/download/:id', function(req, res) {
+        gridfs.findOne({_id: req.params.id}, function(err, file) {
+            console.log(file)
+            if(err)
+                console.log(err)
+            if(!file)
+                console.log("File not found")
+            res.set('Content-Type', file.contentType);
+            res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
+
+            var readStream = gridfs.createReadStream({_id: file._id})
+
+            readStream.on('error', function(err) {
+                console.log(err)
+            })
+ 
+            readStream.pipe(res)
+        })
+    })
+    
+    /*app.get('/upload2', function(req, res) {
         res.sendFile(process.cwd() + '/client/html/upload2.html')
-    }) 
-    
+    }) */ //delete
+    /*    
     app.post('/upload2', function(req, res) {
+        gridfs.findOne({_id:req.session.dataid}, function(err, file) {
+            if(err)
+                console.log(err)
+            file.metadata.title = req.body.title;
+            file.save();
+        })
+        res.redirect('/upload')
+        
+        
         var title = req.body.title
         var id = req.session.dataid
-        CSVModel.findOne({"_id": id}, function(err, data) {
+        CSVModel.findOne({_id: id}, function(err, data) {
             if(err)
                 console.log(err)
             data.title = title;
             data.fileName = title.replace(/\s/g, '') + '.csv'
             data.save()
         })
-        res.redirect('/upload')
-    })
-
+        res.redirect('/upload') 
+    }) */ //delete
+    /*
     app.get('/download/:id', function(req, res) {
         var path = process.cwd() + "/tmp"
         
@@ -197,7 +195,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                 })
             })
         })
-    })  //previously get /csv/:id
+    })  //previously get /csv/:id */ //delete
     
     app.get('/myaccount', function(req, res) {
         res.sendFile(process.cwd() + '/client/html/myaccount.html');
@@ -228,22 +226,23 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.get('/storeAPI', function(req, res) {
-        var files = {files: []}
-        CSVModel.find({}, function(err, data) {
+        var f = {files: []}
+        gridfs.files.find({}).toArray(function(err, files) {
             if(err)
                 console.log(err)
-            data.forEach(function(d) {
-                files.files.push({title: d.title, id: d._id})
+            files.forEach(function(d) {
+                f.files.push({title: d.filename, id: d._id})
             })
-            res.json(files)
+            res.json(f)
         })
+        
     }) //THIS IS AN API
     
     app.get('/cart', function(req, res) {
         res.sendFile(process.cwd() + '/client/html/cart.html')
     })
     
-    app.get('/cartAPI', function(req, res) {
+    /*app.get('/cartAPI', function(req, res) {
         var cart,
             data = []
     
@@ -253,7 +252,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             
             res.json({cart: user.cart})
         })
-    })  //sends an array of user's cart.
+    })  //sends an array of user's cart. */
     
     app.get('/addtocart/:id/:title', function(req, res) {
         UserModel.findOne({email: req.session.email}, function(err, user) {
@@ -265,8 +264,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         })
     })
     
-    app.get('/productAPI', function(req, res) {
-        CSVModel.findOne({_id: req.session.currentProduct}, function(err, data) {
+    app.get('/productAPI/:id', function(req, res) {
+        gridfs.findOne({_id: req.params.id/*req.session.currentProduct*/}, function(err, data) {
             if(err)
                 console.log(err)
             res.json(data)
@@ -274,14 +273,31 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     }) //THIS IS AN API
     
     app.get('/product/:id', function(req, res) {
-        req.session.currentProduct = req.params.id;
-        res.redirect('/product')
+        var title,
+            fileName,
+            email,
+            download,
+            description;
+            
+        gridfs.findOne({_id:req.params.id}, function(err, data) {
+            if(err)
+                console.log(err)
+            fileName = data.filename.substr(data.filename.lastIndexOf("/") + 1)
+            download = "/download/" + data._id
+            title = data.metadata.title
+            email = data.metadata.email
+            description = data.metadata.description
+            res.render('product', {
+                                    fileName:fileName, 
+                                    download:download, 
+                                    title:title, 
+                                    email:email, 
+                                    description:description});
+            })
+        /*req.session.currentProduct = req.params.id;
+        res.sendFile(process.cwd() + '/client/html/product.html') */
     })
-    
-    app.get('/product', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/product.html')
-    })
-    
+
     app.get('/accountinfoAPI', function(req, res) {
         UserModel.findOne({email: req.session.email}, function(err, user) {
             if(err)
@@ -309,22 +325,19 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         UserModel.findOne({email: req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
-            for(var i=0; i<user.cart.length; i++) {
-                if(user.cart[i].id == req.params.id) {
-                    user.cart.splice(i, 1)
-                    i--
-                }
+            if(user.cart.indexOf(req.params.id)>0) {
+                user.cart.splice(user.cart.indexOf(req.params.id), 1)
+                user.save()
             }
-            user.save()
             res.redirect('/mydata')
         })
-    })
+    }) //however, this only removes from the current user's cart??!!
     
     app.get('/totalremove/:id', function(req, res) {
-        CSVModel.findOne({_id: req.params.id}, function(err, data) {
+        gridfs.remove({_id:req.params.id}, function(err) {
             if(err)
                 console.log(err)
             res.redirect('/removefromcartfrommydata/' + req.params.id)
-        }).remove().exec()
+        })
     })
 }

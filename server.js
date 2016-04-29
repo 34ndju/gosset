@@ -1,5 +1,6 @@
 'use strict';
 
+var gridfs
 var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -11,10 +12,16 @@ var multiparty = require('multiparty')
 var fs = require('fs')
 var papa = require('papaparse')
 var excel = require('excel')
+var gridFs = require('gridfs-stream')
+var pug = require('pug')
 
 require('dotenv').config()
 
 var app = express();
+
+
+app.set('views', './views')
+app.set('view engine', 'pug')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -35,22 +42,14 @@ var db = mongoose.createConnection(process.env.MONGO_URI);
 
 db.once('open', function callback () {
   console.info('Mongo db connected successfully');
+  gridfs = gridFs(db.db, mongoose.mongo)
+  
+  
+  var UserModel = require('./client/models/user')(mongoose, db);
+  var CSVModel = require('./client/models/csvdata')(mongoose, db);
+
+  require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug);
 });
-
-var UserModel = require('./client/models/user')(mongoose, db);
-var CSVModel = require('./client/models/csvdata')(mongoose, db);
-
-require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel);
-
-/*
-var temp_dir = path.join(process.cwd(), 'temp/');
-if (!fs.existsSync(temp_dir))
-    fs.mkdirSync(temp_dir);
-*/
-
-console.log("HEYYYYYYYYYYYY")
-console.log("HEYYYY")
-console.log(process.cwd())
 
 var port = process.env.PORT || 8080;
 app.listen(port,  function () {

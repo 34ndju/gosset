@@ -1,22 +1,23 @@
 $.getJSON('/productAPI', function(data) {
-    var email = data.email,
-        fileName = data.fileName,
-        title = data.title,
+    var filename = data.filename,
         id = data._id,
-        data = data.data[0],
-        keys = Object.keys(data)
-        
+        metadata = data.metadata, //assigns data again
+        email = metadata.email,
+        title = metadata.title
+        //keys = Object.keys(data)
+    console.log(1)
     $('.title').append(document.createTextNode(title))
-    $('.fileName').append(document.createTextNode(fileName))
+    $('.fileName').append(document.createTextNode(filename))
     $('.email').append(document.createTextNode(email))
-    
+
+    /* not working now
     var str = ""
     keys.forEach(function(d) {
         str += "" + d + ", "
     })
     str = str.replace(/,\s*$/, "");
     
-    $('.keys').append(document.createTextNode(str))
+    $('.keys').append(document.createTextNode(str)) */
     
     var a = document.createElement("a")
     a.setAttribute("href", "/download/" + id)

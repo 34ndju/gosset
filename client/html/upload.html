@@ -6,12 +6,11 @@
         <p class="logout">Logout</p>
     </a>
     
-    <img class="logo" src="/images/base.jpg">
+    <a href="/dashboard"><img class="logo" src="/images/base.jpg"></a>
     
     <div class="menu">
         <div class="menuContent">
             <ul id="tabs">
-                <a href="/dashboard"><li>Dashboard</li></a>
                 <a href="/mydata"><li>My Data</li></a>
                 <a href="/store"><li>Store</li></a>
             </ul>
@@ -21,6 +20,8 @@
     <h1 class="title">Upload</h1>
 
     <form method="post" action="/upload" enctype="multipart/form-data" class="upload"> 
+        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="description" placeholder="Description">
         <input type="file" name="file" id="input">
         <button type="submit" id="button">Submit</button>
     </form>
