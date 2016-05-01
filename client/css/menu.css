@@ -1,0 +1,27 @@
+.menu {
+    width: calc(100% - 140px);
+    text-align: center;
+    position: relative;
+    background: #fff;
+    z-index: 999;
+    margin: auto;
+    background-color: rgba(255,255,255, 0.3);
+}
+.menu .menuContent {
+    margin: auto;
+    position: relative;
+    line-height: 70px;
+    text-align: center;
+    margin-right: 50px;
+}
+.menu .menuContent ul li {
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
+    color: #2d3235;
+    cursor: pointer;
+    position: relative;
+}
+.menu .menuContent ul li:hover {
+    text-decoration: underline;
+}

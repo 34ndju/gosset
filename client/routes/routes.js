@@ -7,6 +7,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     });
     
     app.get('/login', function(req, res) {
+        req.session.email = null
         res.sendFile(process.cwd() + '/client/html/login.html');
     });
     
@@ -70,7 +71,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             }
         })
     }); 
-    
+    /*
     app.get('/data', function(req, res) {
         
         res.sendFile(process.cwd() + '/client/html/data.html') 
@@ -90,14 +91,13 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             res.status(401).send('Error 401: Not authorized')
         }
     }) //THIS IS AN API
-    
+    */ //deprecated
     app.get('/upload', function(req, res) {
-        if(true) {
-            res.sendFile(process.cwd() + '/client/html/upload.html')
-        }
-        else {
-            res.status(401).send("Error 401: Not authorized")
-        }
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            res.render('upload', {cart:user.cart})
+        })
     })
     
     app.post('/upload', function(req, res) {
@@ -107,23 +107,28 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         form.parse(req, function(err, fields, files) {
             if(err)
                 console.log(err);
+            if(!fields.title[0] || !fields.description[0] || !files.file[0]) {
+                console.log('invalid upload')
+                res.redirect('/upload')
+            }
             
-            
-            var file = files.file[0]
-            
-            var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
-                                                        metadata: {
-                                                            email: '34ndju@gmail.com' /*req.session.email*/,
-                                                            title: fields.title[0],
-                                                            description: fields.description[0]
-                                                        }
-            })
-            fs.createReadStream(file.path).pipe(writeStream)
+            else {
+                var file = files.file[0]
                 
-            writeStream.on('close', function(file) {
-                console.log("file stored")
-                res.redirect('/mydata')
-            })
+                var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
+                                                            metadata: {
+                                                                email: req.session.email,
+                                                                title: fields.title[0],
+                                                                description: fields.description[0]
+                                                            }
+                })
+                fs.createReadStream(file.path).pipe(writeStream)
+                    
+                writeStream.on('close', function(file) {
+                    console.log("file stored")
+                    res.redirect('/mydata')
+                })
+            }
         })
     })  
     
@@ -147,60 +152,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         })
     })
     
-    /*app.get('/upload2', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/upload2.html')
-    }) */ //delete
-    /*    
-    app.post('/upload2', function(req, res) {
-        gridfs.findOne({_id:req.session.dataid}, function(err, file) {
-            if(err)
-                console.log(err)
-            file.metadata.title = req.body.title;
-            file.save();
-        })
-        res.redirect('/upload')
-        
-        
-        var title = req.body.title
-        var id = req.session.dataid
-        CSVModel.findOne({_id: id}, function(err, data) {
-            if(err)
-                console.log(err)
-            data.title = title;
-            data.fileName = title.replace(/\s/g, '') + '.csv'
-            data.save()
-        })
-        res.redirect('/upload') 
-    }) */ //delete
-    /*
-    app.get('/download/:id', function(req, res) {
-        var path = process.cwd() + "/tmp"
-        
-        CSVModel.findOne({_id: req.params.id}, function(err, data) {
-            if(err)
-                console.log(err)
-            var name = data.fileName
-            data = data["data"];
-            var csv = papa.unparse(data);
-            fs.writeFile(path + name, csv, function(err) {
-                if(err)
-                    console.log(err)
-                    
-                res.download(path + name, name, function(err) {
-                    if(!err)
-                        fs.unlink(path + name, function(err) {
-                            if(err)
-                                console.log(err)
-                        })
-                })
-            })
-        })
-    })  //previously get /csv/:id */ //delete
-    
-    app.get('/myaccount', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/myaccount.html');
-    })
-    
     app.get('/mydataAPI', function(req, res) { 
         var files = {files: []}
         CSVModel.find({email: req.session.email}, function(err, data) {
@@ -214,15 +165,27 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     }) //THIS IS AN API
     
     app.get('/mydata', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/myfiles.html');
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            res.render('mydata', {cart:user.cart})
+        })
     })
     
     app.get('/dashboard', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/myaccount.html');
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            res.render('dashboard', {user:user})
+        })
     }) 
     
     app.get('/store', function(req, res) {
-        res.sendFile(process.cwd() + '/client/html/store.html')
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            res.render('store', {cart:user.cart})
+        })
     })
     
     app.get('/storeAPI', function(req, res) {
@@ -242,7 +205,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         res.sendFile(process.cwd() + '/client/html/cart.html')
     })
     
-    /*app.get('/cartAPI', function(req, res) {
+    app.get('/cartAPI', function(req, res) {
         var cart,
             data = []
     
@@ -263,14 +226,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             res.redirect('/store')
         })
     })
-    
-    app.get('/productAPI/:id', function(req, res) {
-        gridfs.findOne({_id: req.params.id/*req.session.currentProduct*/}, function(err, data) {
-            if(err)
-                console.log(err)
-            res.json(data)
-        })
-    }) //THIS IS AN API
     
     app.get('/product/:id', function(req, res) {
         var title,
