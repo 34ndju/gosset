@@ -3,7 +3,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     app.get('/', function(req, res) {
         if(req.session.email)
             res.redirect('/dashboard')
-        res.sendFile(process.cwd() + '/client/html/home.html');
+        else 
+            res.sendFile(process.cwd() + '/client/html/home.html');
     });
     
     app.get('/login', function(req, res) {
@@ -13,7 +14,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     
     app.get('/logout', function(req, res) {
         if(!req.session.email) {
-            res.status(200).send("No one is logged in yet");
+            res.redirect('/login')
         }
         else {
             console.log(req.session.email + " logged out.");
@@ -60,10 +61,10 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                 newUser.save(function(err, saved) {
                     if(err)
                         throw err;
-                    else {
-                        req.session.email = email;
-                        res.sendFile(process.cwd() + '/client/html/myaccount.html');
-                    }
+                    console.log(email + " registered and logged in.")
+                    req.session.email = email;
+                    res.redirect('/')
+
                 })
             }
             else {
@@ -93,6 +94,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     }) //THIS IS AN API
     */ //deprecated
     app.get('/upload', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         UserModel.findOne({email:req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
@@ -101,7 +104,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.post('/upload', function(req, res) {
-        console.log(req.body.title)
         var form = new multiparty.Form()
         
         form.parse(req, function(err, fields, files) {
@@ -111,10 +113,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                 console.log('invalid upload')
                 res.redirect('/upload')
             }
-            
             else {
                 var file = files.file[0]
-                
                 var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
                                                             metadata: {
                                                                 email: req.session.email,
@@ -123,7 +123,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                                                             }
                 })
                 fs.createReadStream(file.path).pipe(writeStream)
-                    
                 writeStream.on('close', function(file) {
                     console.log("file stored")
                     res.redirect('/mydata')
@@ -154,17 +153,19 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     
     app.get('/mydataAPI', function(req, res) { 
         var files = {files: []}
-        CSVModel.find({email: req.session.email}, function(err, data) {
+        gridfs.files.find({"metadata.email": req.session.email}).toArray(function(err, data) {
             if(err)
                 console.log(err)
             data.forEach(function(d) {
-                files.files.push({title: d.title, id: d._id})
+                files.files.push({title: d.metadata.title, id: d._id})
             })
             res.json(files)
         })
     }) //THIS IS AN API
     
     app.get('/mydata', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         UserModel.findOne({email:req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
@@ -173,6 +174,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.get('/dashboard', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         UserModel.findOne({email:req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
@@ -180,7 +183,10 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         })
     }) 
     
+    
     app.get('/store', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         UserModel.findOne({email:req.session.email}, function(err, user) {
             if(err)
                 console.log(err)
@@ -202,6 +208,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     }) //THIS IS AN API
     
     app.get('/cart', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         res.sendFile(process.cwd() + '/client/html/cart.html')
     })
     
@@ -228,6 +236,8 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.get('/product/:id', function(req, res) {
+        if(!req.session.email)
+            res.redirect('/login')
         var title,
             fileName,
             email,
