@@ -109,7 +109,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         form.parse(req, function(err, fields, files) {
             if(err)
                 console.log(err);
-            if(!fields.title[0] || !fields.description[0] || !files.file[0]) {
+            if(fields.title[0].length <= 0 || fields.description[0].length <= 0 || !files.file[0]) {
                 console.log('invalid upload')
                 res.redirect('/upload')
             }

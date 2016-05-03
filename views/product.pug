@@ -1,33 +1,33 @@
 head
   link(href='/css/product.css', rel='stylesheet')
+  link(href='/css/menu.css', rel='stylesheet')
 body
   script(src='//code.jquery.com/jquery-1.11.2.min.js')
-    |     
-    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
-    |     
-    |     
-    h1.title.center #{title}
-    |     
-    h5.fileName.center #{fileName}
-    |     
-    p.description.center #{description}
-    p.email.center #{email}
-    |     
-    h2.keys.center
-    | 
-    a(href=download)
-      h4.download.center Download
-      
-  style.
-    @import url(https://fonts.googleapis.com/css?family=Muli);
-    body {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    overflow-x: hidden;
-    font-family:"Muli";
-    }
-    .center {
-    text-align: center;
-    }
+  script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+  a(href='/dashboard')
+    img.logo(src='/images/GossetMoustacheClear.png')
+  .menu
+      .menuContent
+        ul#tabs
+          a(href='/upload')
+              li Upload
+          a(href='/mydata')
+              li My Data
+          <!--a(href='/store')
+              li Store-->
+  h1 Product
+  h1.title.center 
+    strong Title: 
+    | #{title}
+  h5.fileName.center 
+    strong Filename: 
+    | #{fileName}
+  p.description.center 
+    strong Descpription: 
+    | #{description}
+  p.email.center 
+    strong Owner: 
+    | #{email}
+  h2.keys.center
+  a(href=download)
+    h4.download.center Download

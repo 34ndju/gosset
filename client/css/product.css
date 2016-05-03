@@ -6,7 +6,17 @@ body {
     padding: 0px;
     overflow-x: hidden;
     font-family:"Muli";
+    text-align:center;
+}
+.logo {
+    padding-top:20px;
+    display:block;
+    width:200px;
+    margin:0 auto 20px auto;
 }
 .center {
     text-align: center;
+}
+.menu {
+    background-color: rgba(255,255,255, 0.3);
 }

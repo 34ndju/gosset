@@ -14,6 +14,7 @@ body {
     font-family:"Muli";
     background-image: url('/images/bg.jpg');
     background-size:cover;
+    text-align:center;
 }
 .logout {
     right: 20px;
@@ -22,9 +23,6 @@ body {
     color: #2d3235;
     cursor:pointer;
     text-decoration:none;
-}
-body {
-    text-align: center;
 }
 .files {
     display: block;
