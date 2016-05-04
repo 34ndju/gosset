@@ -6,7 +6,8 @@ body {
     padding: 0px;
     overflow-x: hidden;
     font-family:"Muli";
-    text-align:center;
+    background-image: url('/images/bg.jpg');
+    background-size:cover;
 }
 .logo {
     padding-top:20px;
@@ -17,6 +18,23 @@ body {
 .center {
     text-align: center;
 }
-.menu {
-    background-color: rgba(255,255,255, 0.3);
+.payment {
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.box {
+    margin:auto;
+    width: 50%;
+    background-color:rgba(255,255,255,0.7);
+    text-align:left;
+    border-radius:10px;
+}
+
+.leftm {
+    margin-left:10px;
+}
+
+.download {
+    text-decoration: none;
 }

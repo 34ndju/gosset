@@ -24,11 +24,35 @@ body {
     cursor:pointer;
     text-decoration:none;
 }
-.files {
-    display: block;
-    text-decoration: none;
-    color: #2d3235;
-}
+
 .x {
     margin-left:20px;
+}
+
+.files  {
+
+}
+
+.box {
+    margin-bottom:10px;
+    overflow:hidden;
+    width:300px;
+    line-height:30px;
+    background-color:white;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:10px;
+}
+
+.box a {
+    text-decoration:none;
+    display:inline-block;
+}
+
+.box a p {
+    color: #2d3235;
+}
+
+.box a p:hover {
+    text-decoration:underline;
 }

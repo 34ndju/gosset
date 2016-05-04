@@ -1,33 +1,37 @@
 head
   link(href='/css/product.css', rel='stylesheet')
   link(href='/css/menu.css', rel='stylesheet')
+  link(rel='shortcut icon', href='/images/GWhite.png')
+  title Product
 body
   script(src='//code.jquery.com/jquery-1.11.2.min.js')
   script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
   a(href='/dashboard')
     img.logo(src='/images/GossetMoustacheClear.png')
   .menu
-      .menuContent
-        ul#tabs
-          a(href='/upload')
-              li Upload
-          a(href='/mydata')
-              li My Data
-          <!--a(href='/store')
-              li Store-->
-  h1 Product
-  h1.title.center 
-    strong Title: 
-    | #{title}
-  h5.fileName.center 
-    strong Filename: 
-    | #{fileName}
-  p.description.center 
-    strong Descpription: 
-    | #{description}
-  p.email.center 
-    strong Owner: 
-    | #{email}
-  h2.keys.center
-  a(href=download)
-    h4.download.center Download
+    .menuContent
+      ul#tabs
+        a(href='/upload')
+            li Upload
+        a(href='/mydata')
+            li My Data
+        <!--a(href='/store')
+            li Store-->
+  h3.center Product
+  div.box
+    h1.title.center 
+      strong #{title}
+    p.fileName.leftm
+      strong Filename: 
+      | #{fileName}
+    p.description.leftm
+      strong Descpription: 
+      | #{description}
+    p.email.leftm
+      strong Owner: 
+      | #{email}
+    h2.keys.leftm
+    form.payment.leftm(action='', method='POST')
+      script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_PdRYHr3CnJdGGZH6RhZ1px6K', data-amount='999', data-name='Demo Site', data-description='Widget', data-image='/images/GossetMoustacheClear.png', data-locale='auto')
+    a.left(href=download)
+      h4.download.leftm Download
