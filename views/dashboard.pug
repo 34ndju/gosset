@@ -15,14 +15,14 @@ html
         ul#tabs
           a(href='/upload')
             li Upload
-          a(href='/mydata')
-            li My Data
           <!--a(href='/store')
             li Store
           a(href='/cart')
             li Cart[#{user.cart.length}]-->
-    h1.name #{user.firstName} #{user.lastName}
-    h5.email #{user.email}
-      .cart
-      .links
+    div.me
+      h2.name #{user.firstName} #{user.lastName}
+      h5.email #{user.email}
+    h1.mydata My Data
+    .files
+    script(src='/scripts/mydata.js')
       <!--a(href='/data') Graph Data-->

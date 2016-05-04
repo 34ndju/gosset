@@ -12,8 +12,9 @@ body {
     padding: 0px;
     overflow-x: hidden;
     font-family:"Muli";
-    background-image: url('/images/bg.jpg');
-    background-size:cover;
+    background: linear-gradient(to bottom,  #8b9da9, #fff6e4);
+    /*background-image: url('/images/bg.jpg');
+    background-size:cover; */
 }
 .logout {
     right: 20px;

@@ -2,30 +2,32 @@
     <title>Gosset</title>
     <link rel="shortcut icon" href="/images/GWhite.png">
 </head>
-
-<header id="main-header">
-    <div class="inner-col">
-        <nav>
-            <ul class="pages">
-                <a href="/login"><li  class="login">Login</li></a>
-            </ul>
-        </nav>
+<body>
+    <header id="main-header">
+        <div class="inner-col">
+            <nav>
+                <ul class="pages">
+                    <a href="/login"><li  class="login">Login</li></a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="top">
+        <img src="/images/GossetMoustacheClear.png" id="logo">
+        <h2>The Marketplace for Data</h2>
+        <div class="box">
+            <form class="register" method="post" action="/register">
+                <input spellcheck="false" placeholder="First Name" name="firstName">
+                <input spellcheck="false" placeholder="Last Name" name="lastName">
+                <input type="email" spellcheck="false" placeholder="E-mail" name="email">
+                <input type="password" placeholder="Password" name="password">
+                <button type="submit">Join</button>
+            </form>
+        </div>
     </div>
-</header>
 
-<div class="top">
-    <img src="/images/GossetMoustacheClear.png" id="logo">
-    <h2>The Marketplace for Data</h2>
-    <div class="box">
-        <form class="register" method="post" action="/register">
-            <input spellcheck="false" placeholder="First Name" name="firstName">
-            <input spellcheck="false" placeholder="Last Name" name="lastName">
-            <input type="email" spellcheck="false" placeholder="E-mail" name="email">
-            <input type="password" placeholder="Password" name="password">
-            <button type="submit">Join</button>
-        </form>
-    </div>
-</div>
+</body>
 
 
 
@@ -47,11 +49,12 @@
         padding: 0px;
         overflow-x: hidden; 
         font-family:"Muli";
-        background-image: url('images/bg.jpg');
-        background-size:cover; 
-        
+        /*background-image: url('images/bg.jpg');
+        background-size:cover; */
+        background: linear-gradient(to top,  #8b9da9, #fff6e4);
         /* background: linear-gradient(to right, #BBE3F0, #0BA3D6); */
     }
+    
      
     .box {
         background: rgba(100, 100, 100, 0.5);
@@ -150,14 +153,10 @@
         display:block;
     }
     .inner-col {
-        border-bottom: 1px solid white;
+        line-height:50px;
         background: rgba(0, 0, 0, 0.5);
     }
-    header #main-header nav {
-        position:relative;
-    }
     .pages {
-        padding-top:15px;
         display: block;
         list-style-type: disc;
     }
@@ -172,5 +171,5 @@
     .top {
         text-align:center;
     }
-    
+
 </style>

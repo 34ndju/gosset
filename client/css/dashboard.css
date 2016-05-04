@@ -1,7 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Muli);
 .logo {
     padding-top:20px;
-    display:block;
     width:200px;
     margin:0 auto 20px auto;
 }
@@ -12,21 +11,8 @@ body {
     padding: 0px;
     overflow-x: hidden;
     font-family:"Muli";
-    background-image: url('/images/bg.jpg');
-    background-size:cover;
-}
-h1 {
-    text-align: center;
-}
-h5 {
+    background: linear-gradient(to bottom,  #8b9da9, #fff6e4);
     text-align:center;
-}
-.links {
-    text-align: center;
-    color: black;
-}
-.cart {
-    text-align: center;
 }
 .logout {
     right: 20px;
@@ -38,4 +24,58 @@ h5 {
 }
 .logout:hover {
     text-decoration: underline;
+}
+
+.name {
+    margin-right:20px;
+    display:inline-block;
+}
+.email {
+    margin-left:10px;
+    display:inline-block;
+}
+.me {
+    
+}
+ /*My Data*/
+ 
+ .mydata {
+     font-weight:bold;
+     font-size:3em;
+ }
+.x{
+    margin-left:10px;
+}
+
+.files {
+    margin-left:auto;
+    margin-right:auto;
+    background-color: rgba(255,255,255, 0.3);
+    padding-top:10px;
+    width:calc(75%);
+    border-radius:10px;
+}
+.box {
+    display:inline-block;
+    margin-bottom:10px;
+    overflow:hidden;
+    width:300px;
+    line-height:30px;
+    background-color:white;
+    margin-right:10px;
+    margin-left:10px;
+    border-radius:10px;
+}
+
+.box a {
+    text-decoration:none;
+    display:inline-block;
+}
+
+.box a p {
+    color: #2d3235;
+}
+
+.box a p:hover {
+    text-decoration:underline;
 }
