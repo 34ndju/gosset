@@ -302,7 +302,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
         gridfs.remove({_id:req.params.id}, function(err) {
             if(err)
                 console.log(err)
-            res.redirect('/removefromcartfrommydata/' + req.params.id)
+            res.redirect('/')
         })
     })
 }
