@@ -125,7 +125,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                 fs.createReadStream(file.path).pipe(writeStream)
                 writeStream.on('close', function(file) {
                     console.log("file stored")
-                    res.redirect('/mydata')
+                    res.redirect('/')
                 })
             }
         })
