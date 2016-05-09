@@ -115,7 +115,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             else {
                 var file = files.file[0]
                 var ext = file.originalFilename.split('.')[1]
-                console.log(ext)
                 if(ext == 'xlsx' || ext == 'xltx' || ext == 'xls' || ext == 'xlw' || ext == 'xml' || ext == 'csv') {
                     var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
                                                                 metadata: {
@@ -126,12 +125,12 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                     })
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {
-                        console.log("file stored")
+                        console.log(req.session.email + " uploaded " + file.originalFilename)
                         res.redirect('/')
                     })
                 }
                 else {
-                    console.log("wrong filetype")
+                    console.log(" uploaded the wrong filetype")
                     res.redirect('/upload')
                 }
             }
@@ -140,7 +139,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     
     app.get('/download/:id', function(req, res) {
         gridfs.findOne({_id: req.params.id}, function(err, file) {
-            console.log(file)
             if(err)
                 console.log(err)
             if(!file)
@@ -155,6 +153,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             })
  
             readStream.pipe(res)
+            console.log(req.session.email + " downloaded " + file.filename)
         })
     })
     
@@ -305,9 +304,13 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     }) //however, this only removes from the current user's cart??!!
     
     app.get('/totalremove/:id', function(req, res) {
+        if(!req.session.email) {
+            res.redirect('/login')
+        }
         gridfs.remove({_id:req.params.id}, function(err) {
             if(err)
                 console.log(err)
+            console.log(req.session.email + " removed file ID " + req.params.id)
             res.redirect('/')
         })
     })

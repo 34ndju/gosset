@@ -61,3 +61,7 @@ body {
 .box a p:hover {
     text-decoration:underline;
 }
+
+.message {
+    padding:0;
+}
