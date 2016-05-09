@@ -46,31 +46,30 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     
     app.post('/register', function(req, res) {
         UserModel.findOne({email: req.body.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            if(!user) {
-                var firstName = req.body.firstName;
-                var lastName = req.body.lastName;
-                var email = req.body.email;
-                var password = req.body.password;
-                var newUser = new UserModel();
-                newUser.firstName = firstName;
-                newUser.lastName = lastName;
-                newUser.email = email;
-                newUser.password = password;
-                newUser.save(function(err, saved) {
                     if(err)
-                        throw err;
-                    console.log(email + " registered and logged in.")
-                    req.session.email = email;
-                    res.redirect('/')
-
+                        console.log(err)
+                    if(!user) {
+                        var firstName = req.body.firstName;
+                        var lastName = req.body.lastName;
+                        var email = req.body.email;
+                        var password = req.body.password;
+                        var newUser = new UserModel();
+                        newUser.firstName = firstName;
+                        newUser.lastName = lastName;
+                        newUser.email = email;
+                        newUser.password = password;
+                        newUser.save(function(err, saved) {
+                            if(err)
+                                throw err;
+                            console.log(email + " registered and logged in.")
+                            req.session.email = email;
+                            res.redirect('/')
+        
+                        })
+                    }
+                    else 
+                        res.redirect('/')
                 })
-            }
-            else {
-                res.redirect('/')
-            }
-        })
     }); 
     /*
     app.get('/data', function(req, res) {
@@ -115,18 +114,26 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             }
             else {
                 var file = files.file[0]
-                var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
-                                                            metadata: {
-                                                                email: req.session.email,
-                                                                title: fields.title[0],
-                                                                description: fields.description[0]
-                                                            }
-                })
-                fs.createReadStream(file.path).pipe(writeStream)
-                writeStream.on('close', function(file) {
-                    console.log("file stored")
-                    res.redirect('/')
-                })
+                var ext = file.originalFilename.split('.')[1]
+                console.log(ext)
+                if(ext == 'xlsx' || ext == 'xltx' || ext == 'xls' || ext == 'xlw' || ext == 'xml' || ext == 'csv') {
+                    var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
+                                                                metadata: {
+                                                                    email: req.session.email,
+                                                                    title: fields.title[0],
+                                                                    description: fields.description[0]
+                                                                }
+                    })
+                    fs.createReadStream(file.path).pipe(writeStream)
+                    writeStream.on('close', function(file) {
+                        console.log("file stored")
+                        res.redirect('/')
+                    })
+                }
+                else {
+                    console.log("wrong filetype")
+                    res.redirect('/upload')
+                }
             }
         })
     })  
@@ -182,7 +189,6 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
             res.render('dashboard', {user:user})
         })
     }) 
-    
     
     app.get('/store', function(req, res) {
         if(!req.session.email)

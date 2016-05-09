@@ -1,8 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Muli);
     
 body {
-    width: 100%;
-    height: 100%;
     margin: 0px;
     padding: 0px;
     overflow-x: hidden; 
@@ -92,7 +90,6 @@ form input {
 }
 
 
-a { text-decoration: none; color:white;}
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
 a:focus { text-decoration: none; }
@@ -109,4 +106,46 @@ a:hover, a:active { text-decoration: none; }
 
 .top {
     text-align:center;
+}
+
+.video {
+    position:absolute;
+    border-width:0px;
+    margin-left:auto;
+    margin-right:auto;
+    margin: 30px calc(50% - 320px) 5px calc(50% - 320px);
+}
+
+.black {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0, 0.5);
+}
+
+.main-header a {
+    color: #C2C2C2;
+}
+
+.videobox {
+    position:absolute;
+    background-color:black;
+    width:660px;
+    height:520px;
+    margin:80px calc(50% - 330px) 20px calc(50% - 330px);
+}
+
+.exit {
+    position:absolute;
+    margin-left:620px;
+    width:40px;
+    height:25px;
+    background-color:red;
+    cursor:pointer;
+    text-align:center;
+    font-weight:bold;
+    transition: all 0.3s ease 0s;
+}
+
+.exit:hover {
+    background-color:white;
 }

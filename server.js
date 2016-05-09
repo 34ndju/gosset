@@ -44,7 +44,6 @@ db.once('open', function callback () {
   console.info('Mongo db connected successfully');
   gridfs = gridFs(db.db, mongoose.mongo)
   
-  
   var UserModel = require('./client/models/user')(mongoose, db);
   var CSVModel = require('./client/models/csvdata')(mongoose, db);
 
