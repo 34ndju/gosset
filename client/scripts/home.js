@@ -15,9 +15,6 @@ $(document).ready(function() {
             timingVar: 'Demo Vid Viewtime',
             timingValue: timeSpent
         });
-        
-        
-        //window._gaq.push(['_trackTiming', 'Video', 'Video Demo Watch', timeSpent, 'watchTime'])
     })
 })
 

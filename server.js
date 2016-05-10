@@ -14,11 +14,12 @@ var papa = require('papaparse')
 var excel = require('excel')
 var gridFs = require('gridfs-stream')
 var pug = require('pug')
+var ua = require('universal-analytics')
 
 require('dotenv').config()
 
 var app = express();
-
+var visitor = ua('UA-77388290-1');
 
 app.set('views', './views')
 app.set('view engine', 'pug')
@@ -46,7 +47,7 @@ db.once('open', function callback () {
   
   var UserModel = require('./client/models/user')(mongoose, db);
 
-  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug);
+  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 });
 
 var port = process.env.PORT || 8080;

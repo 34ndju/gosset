@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
     
     app.get('/', function(req, res) {
         if(req.session.email)
@@ -50,6 +50,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     if(err)
                         console.log(err)
                     if(!user) {
+                        visitor.event("Register", "User Registration").send()
                         var firstName = req.body.firstName;
                         var lastName = req.body.lastName;
                         var email = req.body.email;
