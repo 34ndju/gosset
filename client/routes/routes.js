@@ -36,6 +36,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 res.status(401).send("Incorrect parameters");
             }
             if(user) {
+                visitor.event("Login", "User Login").send()
                 console.log(email + " logged in.")
                 req.session.email = email;
                 res.redirect('/dashboard')
@@ -161,6 +162,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             })
  
             readStream.pipe(res)
+            visitor.event("Download", "Downloaded " + file.filename).send()
             console.log(req.session.email + " downloaded " + file.filename)
         })
     })
