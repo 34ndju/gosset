@@ -1,8 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Muli);
     
 body {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden; 
     font-family:"Muli";
     background: linear-gradient(to top,  #8b9da9, #fff6e4);
@@ -117,10 +117,11 @@ a:hover, a:active { text-decoration: none; }
 }
 
 .black {
-    width:100%;
-    height:100%;
     background:rgba(0,0,0, 0.5);
+    margin:0;
+    padding:0;
 }
+
 
 .main-header a {
     color: #C2C2C2;
@@ -148,4 +149,28 @@ a:hover, a:active { text-decoration: none; }
 
 .exit:hover {
     background-color:white;
+}
+
+.email {
+    margin-bottom:10px;
+}
+
+.checkLabel {
+    font-weight:normal;
+    width:200px;
+    font-size:0.6em;
+    float:left;
+    margin-bottom:10px;
+}
+
+.checkInput {
+    padding:0;
+    margin:0;
+    width:30px;
+    height:auto;
+    display:inline-block;
+}
+
+.checkLabel + .checkInput {
+    display:block;
 }

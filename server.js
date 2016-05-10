@@ -45,9 +45,8 @@ db.once('open', function callback () {
   gridfs = gridFs(db.db, mongoose.mongo)
   
   var UserModel = require('./client/models/user')(mongoose, db);
-  var CSVModel = require('./client/models/csvdata')(mongoose, db);
 
-  require('./client/routes/routes')(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug);
+  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug);
 });
 
 var port = process.env.PORT || 8080;

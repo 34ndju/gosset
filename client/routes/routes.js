@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug) {
     
     app.get('/', function(req, res) {
         if(req.session.email)
@@ -45,6 +45,7 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
     })
     
     app.post('/register', function(req, res) {
+        console.log(req.body.receiveEmail)
         UserModel.findOne({email: req.body.email}, function(err, user) {
                     if(err)
                         console.log(err)
@@ -52,11 +53,17 @@ module.exports = function(express, app, session, papa, UserModel, CSVModel, d3, 
                         var firstName = req.body.firstName;
                         var lastName = req.body.lastName;
                         var email = req.body.email;
+                        var receiveEmail;
+                        if(req.body.receiveEmail) 
+                            receiveEmail = true;
+                        else
+                            receiveEmail = false;
                         var password = req.body.password;
                         var newUser = new UserModel();
                         newUser.firstName = firstName;
                         newUser.lastName = lastName;
                         newUser.email = email;
+                        newUser.receiveEmail = receiveEmail;
                         newUser.password = password;
                         newUser.save(function(err, saved) {
                             if(err)

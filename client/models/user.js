@@ -4,6 +4,7 @@ module.exports = function(mongoose, db) {
         firstName: String,
         lastName: String,
         email: String,
+        receiveEmail: Boolean,
         password: String,
         cart: Array
     });

@@ -17,6 +17,7 @@
         <div onClick="" class="exit">✕</div>
         <iframe class="video" src="https://docs.google.com/file/d/0B_l-CMeRzdw3YjhzajY0dk5EWms/preview?&autoplay=1?" width="640" height="480"></iframe>
     </div>
+    
     <div class="black">
         <header class="main-header">
             <div class="inner-col" align='left'>
@@ -28,7 +29,6 @@
             </div>
         </header>
         
-        
         <div class="top">
             <img src="/images/GossetMoustacheClear.png" id="logo">
             <h2>The Marketplace for Data</h2>
@@ -36,11 +36,13 @@
                 <form class="register" method="post" action="/register">
                     <input spellcheck="false" placeholder="First Name" name="firstName">
                     <input spellcheck="false" placeholder="Last Name" name="lastName">
-                    <input type="email" spellcheck="false" placeholder="E-mail" name="email">
+                    <input type="email" spellcheck="false" placeholder="E-mail" name="email" class="email">
+                    <label class='checkLabel'><input id="checkInput" class="checkInput" type="checkbox" name="receiveEmail" checked>I accept receiving occasional emails!</label>
                     <input type="password" placeholder="Password" name="password">
                     <button type="submit">Join</button>
                 </form>
             </div>
+            <div style="height:100px"></div>
         </div>
     </div>
 </body>
