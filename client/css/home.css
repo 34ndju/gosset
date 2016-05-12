@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Muli);
     
-body {
+html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden; 
@@ -117,14 +117,17 @@ a:hover, a:active { text-decoration: none; }
 }
 
 .black {
+    position:absolute;
     background:rgba(0,0,0, 0.5);
     margin:0;
     padding:0;
+    width:0;
+    height:0;
 }
 
 
 .main-header a {
-    color: #C2C2C2;
+    color: white;
 }
 
 .videobox {
@@ -133,6 +136,8 @@ a:hover, a:active { text-decoration: none; }
     width:660px;
     height:520px;
     margin:80px calc(50% - 330px) 20px calc(50% - 330px);
+    display:none;
+    z-index:99;
 }
 
 .exit {
@@ -174,3 +179,15 @@ a:hover, a:active { text-decoration: none; }
 .checkLabel + .checkInput {
     display:block;
 }
+
+.vid {
+    font-size:1.5em;
+    color:black;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.play {
+    color:red;
+}
+
