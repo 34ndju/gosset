@@ -1,0 +1,64 @@
+html
+    head
+        title Gosset
+        link(rel='shortcut icon', href='/images/GWhite.png')
+        link(href='/css/header.css', rel='stylesheet')
+        link(href='/css/home.css', rel='stylesheet')
+        script(src='//code.jquery.com/jquery-1.11.2.min.js')
+        script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+        script(src='/package/waypoints/lib/jquery.waypoints.min.js')
+        script(src='/package/waypoints/lib/shortcuts/inview.min.js')
+        script(src='/scripts/GA.js')
+        script(src='//load.sumome.com/', data-sumo-site-id='cf9c68e2af3c5e24ed7c97ee77a049d3f18d6925bb67d9d2d97a0e5793fa0c8e', async='async')
+        script(src='/scripts/home.js')
+    body
+        .videobox
+            .exit(onclick='') ✕
+            iframe.video(src='', width='640', height='480')
+        .black
+        header.main-header
+            .inner-col(align='left')
+                ul.pages
+                a.alogin(href='/login')
+                    li.login Login
+        .top
+            img#logo(src='/images/GossetMoustacheClear.png')
+            p.play &#9658
+            h2 The Marketplace for Data
+            .box
+                form.register(method='post', action='/register')
+                    input(spellcheck='false', placeholder='First Name', name='firstName')
+                    input(spellcheck='false', placeholder='Last Name', name='lastName')
+                    input.email(type='email', spellcheck='false', placeholder='E-mail', name='email')
+                    label.checkLabel
+                        input#checkInput.checkInput(type='checkbox', name='receiveEmail', checked='')
+                        | I accept receiving occasional emails!
+                    input(type='password', placeholder='Password', name='password')
+                    button(type='submit') Join
+            div(style='height:100px')
+        .about
+            div.sell
+                h1 Sell
+                div.sellImage
+                    div.seller.buyer
+                    div#container
+                        .loader
+                            span
+                            span
+                            span
+                            span
+                    div.seller
+                p.text Take advantage of an audience that needs actionable data by uploading data sets on Gosset. Data types are flexible; they can range from a legal mailing list to bivariate data such as the effect of a pop-up on bounce rate. Gosset charges 12% of all sales, allowing for the seller to maintain a large majority of all revenue. Be creative and don’t be afraid to show the world the data that it needs to see! 
+            div.buy
+                h1 Buy
+                div.sellImage
+                    div.seller
+                    div#container
+                        .loader
+                            span
+                            span
+                            span
+                            span
+                    div.seller.buyer
+                p.text Find the data set that you need to advance your business, research, or other endeavors without exhausting significant time and physical resources to collect data. Purchase a data set and immediately begin accelerating your business or completing your research. Let your dreams run wild without letting time or other barriers stop you!
+                

@@ -4,7 +4,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         if(req.session.email)
             res.redirect('/dashboard')
         else 
-            res.sendFile(process.cwd() + '/client/html/home.html');
+            res.render('home')
     });
     
     app.get('/login', function(req, res) {

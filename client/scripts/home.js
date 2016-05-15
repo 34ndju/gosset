@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).load(function() {
     var onVid=false;
     var startTime;
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 
 
-    $(".vid").click(function() {
+    $(".play").click(function() {
         if(!onVid) {
             $('.video').attr('src', 'https://docs.google.com/file/d/0B_l-CMeRzdw3YjhzajY0dk5EWms/preview?&autoplay=1?');
             $('.videobox').css('display', 'block');
@@ -41,5 +41,26 @@ $(document).ready(function() {
         }
     });
 
-})
+    var inview = new Waypoint.Inview({
+        element: $('.about')[0],
+        enter: function(direction) {
+            console.log(1)
+            $('.about').addClass('about-t');
+            $('.buy').addClass('buy-t');
+            $('.sell').addClass('sell-t');
+        },
+        entered: function(direction) {
+            console.log(2)
+        },
+        exit: function(direction) {
+            console.log(3)
+        },
+        exited: function(direction) {
+            $('.about').removeClass('about-t');
+            $('.buy').removeClass('buy-t');
+            $('.sell').removeClass('sell-t');
+        }
+    })
+    
 
+})
