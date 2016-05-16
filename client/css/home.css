@@ -272,7 +272,7 @@ a:hover, a:active { text-decoration: none; }
   display: block;
   height: 5px;
   width: 10px;
-  background: #53AD82;
+  background: #5ecb96;
   box-shadow: #5ecb96 0 0 15px;
   animation: animate 2s infinite ease-in-out;
   opacity: 0;
@@ -326,16 +326,18 @@ a:hover, a:active { text-decoration: none; }
 }
 
 .buyer {
-    background:red;
+    background:#85CEFF;
 }
 
 
-.about h1{
+
+.about {
     text-align:center;
+    background: linear-gradient(to bottom,  #8b9da9, #fff6e4);
 }
 
 .text {
     width:500;
     margin:30 auto 0 auto;
-    font-size:1.3em;
+    font-size:0.9em;
 }
