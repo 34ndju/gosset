@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('#register').click(function() {
-        var h = $("body").height() + 'px';
+        var h = $(document).outerHeight() + 'px';
         $('#black-overlay').css({'height': h, 'visibility': 'visible'})
         $('.box').css('visibility','visible')
     });
