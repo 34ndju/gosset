@@ -194,8 +194,8 @@ body {
 }
 
 .info {
-    margin:70px 50px 0px 50px;
     width:calc(100% - 100px);
+    margin:70px auto 0px auto;
     height:300px;
     background:rgba(0,0,0, 0.6);
     padding:10px;
@@ -260,4 +260,23 @@ body {
 #buy {
     float:left;
     margin-left:5%;
+}
+
+.footer {
+    height:50px;
+    width:30%;
+    margin:50px auto 10px auto;
+    background:white;
+    border-radius:5px;
+}
+
+.footer h1 {
+    font-weight:bold;
+    margin-bottom:0;
+    font-size:1.2em;
+}
+
+.footer p {
+    margin:0;
+    color:#499E34;
 }
