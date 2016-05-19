@@ -15,6 +15,15 @@ var excel = require('excel')
 var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
+var https = require('https')
+
+var sslkey = fs.readFileSync('server.key')
+var sslcert = fs.readFileSync('www_gosset_co.crt')
+
+var options = {
+  key:sslkey,
+  cert: sslcert
+}
 
 require('dotenv').config()
 
@@ -53,6 +62,12 @@ db.once('open', function callback () {
 
 var port = process.env.PORT || 8080;
 
+https.createServer(options, app).listen(port, function() {
+  console.log('Node.js listening on port ' + port + '...');
+})
+
+/*
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
+*/
