@@ -56,7 +56,7 @@ db.once('open', function callback () {
 var UserModel = require('./client/models/user')(mongoose, db);
 require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 443;
 
 /*
 var server = https.createServer(options, app);
@@ -67,6 +67,6 @@ server.listen(port, function() {
 */
 
 
-app.listen(443,  function () {
+app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
