@@ -15,15 +15,8 @@ var excel = require('excel')
 var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
+var http = require('http')
 var https = require('https')
-
-var sslkey = fs.readFileSync('server.key')
-var sslcert = fs.readFileSync('www_gosset_co.crt')
-
-var options = {
-  key:sslkey,
-  cert: sslcert
-}
 
 require('dotenv').config()
 
@@ -45,8 +38,8 @@ app.use(session({
     })
 );
 console.log("Secret: " + process.env.SECRET)
-app.use(express.static(path.resolve(__dirname, 'client')));
 
+app.use(express.static(path.resolve(__dirname, 'client')));
 
 var db = mongoose.createConnection(process.env.MONGO_URI);
 
@@ -59,15 +52,25 @@ db.once('open', function callback () {
   require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 });
 
+var options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('www_gosset_co.crt')
+}
 
 var port = process.env.PORT || 8080;
 
-https.createServer(options, app).listen(port, function() {
-  console.log('Node.js listening on port ' + port + '...');
-})
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(options, app);
+
+httpServer.listen(80);
+
+httpsServer.listen(port);
+
+
 
 /*
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
 */
+
