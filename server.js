@@ -62,9 +62,9 @@ var port = process.env.PORT || 8080;
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app);
 
-httpServer.listen(80);
+httpServer.listen(port);
 
-httpsServer.listen(443);
+httpsServer.listen(port);
 
 
 
