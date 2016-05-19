@@ -23,9 +23,7 @@ var options = {
   passphrase: "jun7352134ndju",
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('www_gosset_co.crt'),
-  ca:[fs.readFileSync('COMODORSADomainValidationSecureServerCA.crt'), fs.readFileSync('COMODORSAAddTrustCA.crt'), fs.readFileSync('AddTrustExternalCARoot.crt')],
-  requestCert: true,
-  rejectUnauthorized: true
+  ca:[fs.readFileSync('COMODORSADomainValidationSecureServerCA.crt'), fs.readFileSync('COMODORSAAddTrustCA.crt')/*, fs.readFileSync('AddTrustExternalCARoot.crt')*/]
 }
 
 
@@ -61,16 +59,16 @@ var UserModel = require('./client/models/user')(mongoose, db);
 require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 
 var port = process.env.PORT || 443;
-
+/*
 var server = https.createServer(options, app);
 
 server.listen(port, function() {
   console.log("HTTPS listening on port " + port);
 });
+*/
 
 
-/*
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
-*/
+
