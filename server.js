@@ -20,8 +20,13 @@ var https = require('https')
 var app = express();
 
 var options = {
-  key: fs.readFileSync('server.key', 'utf8'),
-  cert: fs.readFileSync('www_gosset_co.crt', 'utf8'),
+  passphrase: "jun7352134ndju",
+  url: 'https://gosset.co',
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('www_gosset_co.crt'),
+  ca:[fs.readFileSync('COMODORSADomainValidationSecureServerCA.crt'), fs.readFileSync('COMODORSAAddTrustCA.crt'), fs.readFileSync('AddTrustExternalCARoot.crt')],
+  requestCert: true,
+  rejectUnauthorized: true
 }
 
 
@@ -58,15 +63,15 @@ require('./client/routes/routes')(express, app, session, papa, UserModel, d3, mu
 
 var port = process.env.PORT || 443;
 
-/*
 var server = https.createServer(options, app);
 
 server.listen(port, function() {
   console.log("HTTPS listening on port " + port);
 });
-*/
 
 
+/*
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
+*/
