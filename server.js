@@ -21,7 +21,6 @@ var app = express();
 
 var options = {
   passphrase: "jun7352134ndju",
-  url: 'https://gosset.co',
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('www_gosset_co.crt'),
   ca:[fs.readFileSync('COMODORSADomainValidationSecureServerCA.crt'), fs.readFileSync('COMODORSAAddTrustCA.crt'), fs.readFileSync('AddTrustExternalCARoot.crt')],
