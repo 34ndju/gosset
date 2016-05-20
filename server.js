@@ -17,15 +17,13 @@ var pug = require('pug')
 var ua = require('universal-analytics')
 var https = require('https')
 
-var app = express();
-
 var options = {
-  passphrase: "jun7352134ndju",
   key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('www_gosset_co.crt'),
-  ca:[fs.readFileSync('COMODORSADomainValidationSecureServerCA.crt'), fs.readFileSync('COMODORSAAddTrustCA.crt')/*, fs.readFileSync('AddTrustExternalCARoot.crt')*/]
+  cert: fs.readFileSync('www_gosset_co.ca-bundle')
 }
 
+var app = express();
+var server = https.createServer(options, app);
 
 require('dotenv').config()
 
@@ -60,15 +58,20 @@ require('./client/routes/routes')(express, app, session, papa, UserModel, d3, mu
 
 var port = process.env.PORT || 443;
 /*
-var server = https.createServer(options, app);
-
-server.listen(port, function() {
+var server = https.createServer(options, app).listen(port, function() {
   console.log("HTTPS listening on port " + port);
+});
+
+
+app.all('*', function(req, res, next){
+  if (req.secure) {
+    return next();
+  };
+ res.redirect("https://"+req.hostname+":"+app.get(port)+req.url);
 });
 */
 
 
-app.listen(port,  function () {
+server.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
-
