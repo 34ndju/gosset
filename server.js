@@ -19,9 +19,8 @@ var https = require('https')
 
 var options = {
   key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('www_gosset_co.ca-bundle')
+  cert: fs.readFileSync('gosset.crt')
 }
-
 
 var app = express();
 var server = https.createServer(options, app);
