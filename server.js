@@ -41,7 +41,7 @@ console.log("Secret: " + process.env.SECRET)
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
-app.use(require('express-force-domain')('https://www.gosset.co'))
+//app.use(require('express-force-domain')('https://www.gosset.co'))
 
 var db = mongoose.createConnection(process.env.MONGO_URI);
 
