@@ -16,14 +16,15 @@ var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
 var https = require('https')
-
+/*
 var options = {
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('www_gosset_co.ca-bundle')
 }
+*/
 
 var app = express();
-var server = https.createServer(options, app);
+//var server = https.createServer(options, app);
 
 require('dotenv').config()
 
@@ -57,6 +58,7 @@ var UserModel = require('./client/models/user')(mongoose, db);
 require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 
 var port = process.env.PORT || 443;
+
 /*
 var server = https.createServer(options, app).listen(port, function() {
   console.log("HTTPS listening on port " + port);
@@ -69,9 +71,9 @@ app.all('*', function(req, res, next){
   };
  res.redirect("https://"+req.hostname+":"+app.get(port)+req.url);
 });
+
 */
 
-
-server.listen(port,  function () {
+app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
