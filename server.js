@@ -74,12 +74,11 @@ app.all('*', function(req, res, next){
 
 */
 
-app.listenHTTPS(port,  function () {
-	console.log('Node.js listening on port ' + port + '...');
-});
-
-
-var listenHTTPS = function() {
+function listenHTTPS(port) {
   var server = https.createServer(options, this);
   return server.listen.apply(server, arguments);
 };
+
+app.listenHTTPS(port)
+
+
