@@ -79,7 +79,7 @@ app.listenHTTPS(port,  function () {
 });
 
 
-app.listenHTTPS = function() {
+var listenHTTPS = function() {
   var server = https.createServer(options, this);
   return server.listen.apply(server, arguments);
 };
