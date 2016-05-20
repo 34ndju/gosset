@@ -24,7 +24,7 @@ var options = {
 
 
 var app = express();
-//var server = https.createServer(options, app);
+var server = https.createServer(options, app);
 
 require('dotenv').config()
 
@@ -74,11 +74,9 @@ app.all('*', function(req, res, next){
 
 */
 
-function listenHTTPS(port) {
-  var server = https.createServer(options, this);
-  return server.listen.apply(server, arguments);
-};
 
-app.listenHTTPS(port)
+server.listen(port, function() {
+  console.log("Listening on port " + port)
+})
 
 
