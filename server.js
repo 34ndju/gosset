@@ -16,15 +16,15 @@ var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
 var https = require('https')
-/*
+
 var options = {
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('www_gosset_co.ca-bundle')
 }
-*/
+
 
 var app = express();
-//var server = https.createServer(options, app);
+var server = https.createServer(options, app);
 
 require('dotenv').config()
 
@@ -74,6 +74,6 @@ app.all('*', function(req, res, next){
 
 */
 
-app.listen(port,  function () {
+server.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });
