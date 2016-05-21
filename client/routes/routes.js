@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
+module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
     app.get('/', function(req, res) {
         if(req.session.email)
             res.redirect('/dashboard')

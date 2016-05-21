@@ -21,6 +21,7 @@ var app = express();
 
 require('dotenv').config()
 
+var port = process.env.PORT || 443;
 var visitor = ua('UA-77388290-1');
 
 app.set('views', './views')
@@ -41,7 +42,6 @@ console.log("Secret: " + process.env.SECRET)
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
-//app.use(require('express-force-domain')('https://www.gosset.co'))
 
 var db = mongoose.createConnection(process.env.MONGO_URI);
 
@@ -50,9 +50,13 @@ db.once('open', function callback () {
   gridfs = gridFs(db.db, mongoose.mongo)
 });
 var UserModel = require('./client/models/user')(mongoose, db);
-require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
 
-var port = process.env.PORT || 443;
+app.get('*',function(req,res){  
+  console.log('https://gosset.co'+req.url)
+    res.redirect('https://www.gosset.co'+req.url)
+})
+require('./client/routes/routes')(app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
+
 
 app.listen(port, function() {
   console.log("Listening on port " + port)
