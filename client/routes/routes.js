@@ -6,11 +6,6 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
             res.render('home')
     })
     
-    app.get('/login', function(req, res) {
-        req.session.email = null
-        res.sendFile(process.cwd() + '/client/html/login.html');
-    });
-    
     app.get('/logout', function(req, res) {
         if(!req.session.email) {
             res.redirect('/login')
@@ -22,6 +17,14 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
         }
     })
     
+    app.get('/login', function(req, res) {
+        req.session.email = null;
+        if(req.query.failed)
+            res.render('login', {failed: true});
+        else
+            res.render('login', {failed: false})
+    });
+    
     app.post('/login', function(req, res) {
         var email = req.body.email;
         var password = req.body.password;
@@ -31,8 +34,8 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
                 res.status(404).send("Error");
             }
             if(!user) {
-                console.log("Failed login attempt");
-                res.status(401).send("Incorrect parameters");
+                res.redirect('/login?failed=true');
+                
             }
             if(user) {
                 visitor.event("Login", "User Login").send()
