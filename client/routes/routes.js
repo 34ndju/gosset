@@ -35,13 +35,15 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
             }
             if(!user) {
                 res.redirect('/login?failed=true');
-                
             }
             if(user) {
                 visitor.event("Login", "User Login").send()
                 console.log(email + " logged in.")
                 req.session.email = email;
                 res.redirect('/dashboard')
+            }
+            else {
+                res.redirect('/login?failed=true');
             }
         });
         
