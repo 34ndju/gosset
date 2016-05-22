@@ -27,7 +27,9 @@ body
             label.checkLabel
                 input.checkInput(type='checkbox', name='receiveEmail', checked='') 
                 | I accept receiving occasional emails!
-            input(type='password', placeholder='Password', name='password')
+            input(id="pw1" type='password', placeholder='Password', name='password')
+            input(id="pw2" type='password' placeholder="Re-enter Password")
+            p#noMatch Passwords do not match.
             button(type='submit') Join
     div.info
         h1#head Unlock the power of Data.

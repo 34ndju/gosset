@@ -180,6 +180,17 @@ body {
     text-align:center;
 }
 
+#pw2 {
+    margin-bottom:10px;
+}
+
+#noMatch {
+    font-size:0.8em;
+    color:red;
+    margin: 0 0 10px 0;
+    visibility:hidden;
+}
+
 .checkLabel {
     width:200px;
     font-size:0.6em;

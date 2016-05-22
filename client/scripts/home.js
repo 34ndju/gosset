@@ -3,10 +3,33 @@ $(document).ready(function() {
         var h = $(document).outerHeight() + 'px';
         $('#black-overlay').css({'height': h, 'visibility': 'visible'})
         $('.box').css('visibility','visible')
+        if($('#pw1').val() != $('#pw2').val()) {
+            $('#noMatch').css('visibility', 'visible')
+            $('.box form button').prop('disabled', true)
+        }
+        else if($('#pw1').val() == '') {
+            $('.box form button').prop('disabled', true)
+        }
     });
     
     $('.box #exit').click(function() {
         $('#black-overlay').css('visibility','hidden');
         $('.box').css('visibility','hidden');
+        $('#noMatch').css('visibility', 'hidden')
+    })
+    
+    $('#pw1, #pw2').on('input', function() {
+        if($('#pw1').val() != $('#pw2').val()) {
+            $('#noMatch').css('visibility', 'visible')
+            $('.box form button').prop('disabled', true)
+        }
+        else if($('#pw1').val() == '') {
+            $('.box form button').prop('disabled', true)
+            $('#noMatch').css('visibility', 'hidden')
+        }
+        else {
+            $('#noMatch').css('visibility', 'hidden')
+            $('.box form button').prop('disabled', false)
+        }
     })
 })
