@@ -105,11 +105,13 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
     app.get('/upload', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
-        UserModel.findOne({email:req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            res.render('upload', {cart:user.cart})
-        })
+        else {
+            UserModel.findOne({email:req.session.email}, function(err, user) {
+                if(err)
+                    console.log(err)
+                res.render('upload', {cart:user.cart})
+            })
+        }
     })
     
     app.post('/upload', function(req, res) {
@@ -183,21 +185,25 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
     app.get('/mydata', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
-        UserModel.findOne({email:req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            res.render('mydata', {cart:user.cart})
-        })
+        else {
+            UserModel.findOne({email:req.session.email}, function(err, user) {
+                if(err)
+                    console.log(err)
+                res.render('mydata', {cart:user.cart})
+            })
+        }
     })
     
     app.get('/dashboard', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
-        UserModel.findOne({email:req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            res.render('dashboard', {user:user})
-        })
+        else {
+            UserModel.findOne({email:req.session.email}, function(err, user) {
+                if(err)
+                    console.log(err)
+                res.render('dashboard', {user:user})
+            })
+        }
     }) 
     
     app.get('/store', function(req, res) {
@@ -226,7 +232,8 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
     app.get('/cart', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
-        res.sendFile(process.cwd() + '/client/html/cart.html')
+        else
+            res.sendFile(process.cwd() + '/client/html/cart.html')
     })
     
     app.get('/cartAPI', function(req, res) {
@@ -254,29 +261,31 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
     app.get('/product/:id', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
-        var title,
-            fileName,
-            email,
-            download,
-            description;
-            
-        gridfs.findOne({_id:req.params.id}, function(err, data) {
-            if(err)
-                console.log(err)
-            fileName = data.filename.substr(data.filename.lastIndexOf("/") + 1)
-            download = "/download/" + data._id
-            title = data.metadata.title
-            email = data.metadata.email
-            description = data.metadata.description
-            res.render('product', {
-                                    fileName:fileName, 
-                                    download:download, 
-                                    title:title, 
-                                    email:email, 
-                                    description:description});
-            })
-        /*req.session.currentProduct = req.params.id;
-        res.sendFile(process.cwd() + '/client/html/product.html') */
+        else {
+            var title,
+                fileName,
+                email,
+                download,
+                description;
+                
+            gridfs.findOne({_id:req.params.id}, function(err, data) {
+                if(err)
+                    console.log(err)
+                fileName = data.filename.substr(data.filename.lastIndexOf("/") + 1)
+                download = "/download/" + data._id
+                title = data.metadata.title
+                email = data.metadata.email
+                description = data.metadata.description
+                res.render('product', {
+                                        fileName:fileName, 
+                                        download:download, 
+                                        title:title, 
+                                        email:email, 
+                                        description:description});
+                })
+            /*req.session.currentProduct = req.params.id;
+            res.sendFile(process.cwd() + '/client/html/product.html') */
+        }
     })
 
     app.get('/accountinfoAPI', function(req, res) {
@@ -318,12 +327,14 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
         if(!req.session.email) {
             res.redirect('/login')
         }
-        gridfs.remove({_id:req.params.id}, function(err) {
-            if(err)
-                console.log(err)
-            console.log(req.session.email + " removed file ID " + req.params.id)
-            res.redirect('/')
-        })
+        else {
+            gridfs.remove({_id:req.params.id}, function(err) {
+                if(err)
+                    console.log(err)
+                console.log(req.session.email + " removed file ID " + req.params.id)
+                res.redirect('/')
+            })
+        }
     })
     
     app.get('/termsofuse', function(req, res) {
