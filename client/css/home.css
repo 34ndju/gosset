@@ -233,11 +233,28 @@ body {
 }
 
 .divider {
-    margin:5px auto 5px auto;
+    margin:auto;
     height:3px;
     width:20%;
-    background:white;
 }
+
+.divider .long {
+    width:40%;
+    height:2px;
+    background:white;
+    display:inline-block;
+    margin:0 4px 0 4px;
+}
+
+.divider .dot {
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:3px;
+    display:inline-block;
+    margin:0 2px 0 2px;
+}
+
 
 .short {
     color:white;
