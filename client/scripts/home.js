@@ -47,7 +47,7 @@ $(document).ready(function() {
         $('.buy').css('right','-100%')
     })
     
-    $('#sellScroll').click(function() {
+    $('#sellScroll').click(function() {  //click sell in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
         }, 700);
@@ -57,7 +57,7 @@ $(document).ready(function() {
         $('.buy').css('right','-100%')
     })
     
-    $('#buyScroll').click(function() {
+    $('#buyScroll').click(function() { //click buy in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
         }, 700);
