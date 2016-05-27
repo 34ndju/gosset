@@ -1,5 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Muli);
 
+
 #black-overlay {
     background-color: #333;
     left: 0;
@@ -14,9 +15,17 @@ body {
     margin:0;
     padding:0;
     font-family:"muli";
+    text-align:center;
+    position:relative;
+    overflow-x:hidden;
+    background:#EDFBFF;
+}
+
+.landing {
     background:linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('/images/SkylineStock.jpg');
     background-size:cover;
-    text-align:center;
+    height:940px;
+    overflow:hidden;
 }
 
 .header {
@@ -205,80 +214,127 @@ body {
 }
 
 .info {
-    width:calc(100% - 20px);
+    width:100%;
     margin:70px auto 0px auto;
-    height:300px;
+
     background:rgba(0,0,0, 0.6);
-    padding:10px;
+    padding:20px 0 20px 0;
+    transition-duration:0.5s;
 }
 
 #head {
     color:#499E34;
     font-size:1.6em;
+    margin-top:0;
 }
 
 #secondUSP {
     color:white;
 }
 
-.half {
-    float:left;
-    width:50%;
+.divider {
+    margin:5px auto 5px auto;
+    height:3px;
+    width:20%;
+    background:white;
 }
 
-.sb {
-    width:200px;
-    height:150px;
-    border-radius:10px;
-    border-style: solid;
-    border-color: white;
-    border-width: 2px;
-    transition-duration:0.5s;
-}
-
-.sb:hover {
-    border-color:#499E34;
-    width:90%;
-}
-
-.sb h1 {
+.short {
     color:white;
 }
 
-.sb:hover h1 {
+#sellScroll, #buyScroll {
+    cursor:pointer;
     color:#499E34;
 }
 
-.sb p {
-    height:60px;
-    font-size:0.5em;
-    color:white;
-    visibility:hidden;
-    transition-delay:0s;
+#sellScroll:hover, #buyScroll:hover {
+    font-weight:bold;
+}
+
+.more {
+    background:url('/images/cityscape.png');
+    background-position:center bottom;
+    background-size:100%;
+    background-repeat:no-repeat;
+    margin-top:50px;
+    height:400px;
+    width:100%;
     overflow:hidden;
+    position:relative;
 }
 
-.sb:hover p {
-    visibility:visible;
-    transition-delay:0.5s;
+
+.sell {
+    position:absolute;
+    width: 100%;
+    height:350px;
+    left:0%;
+    transition-duration:0.3s;
 }
 
-#sell {
-    float:right;
-    margin-right:5%;
+.buy {
+    position:absolute;
+    width: 100%;
+    height:350px;
+    right:-100%;
+    transition-duration:0.3s;
 }
 
-#buy {
+.third {
+    width:33%;
+    height:100%;
+}
+
+.third p {
+    width:95%;
+}
+
+.sell .third {
     float:left;
-    margin-left:5%;
+    height:100%;
 }
+
+.vector {
+    width:100px;
+}
+
+.buy .third {
+    float:right;
+}
+
+.sbText {
+    font-size:50px;
+    height:50px;
+}
+
+#s {
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#dot {
+    color:gray;
+}
+
+#b {
+    color:gray;
+    cursor:pointer;
+}
+
+
+
+
+
+
 
 .footer {
     height:50px;
-    width:30%;
-    margin:50px auto 10px auto;
-    background:white;
-    border-radius:5px;
+    width:100%;
+    margin:0 auto 0 auto;
+    background:black;
+    color:white;
 }
 
 .footer h1 {
@@ -291,3 +347,4 @@ body {
     margin:0;
     color:#499E34;
 }
+

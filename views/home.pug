@@ -7,43 +7,77 @@ head
     script(src='/scripts/GA.js')
     script(src='/scripts/home.js')
 body
-    div.header
-        div#logo
-            img(src='/images/GossetMoustacheClear.png')
-            h1 The Data Marketplace
-        a#login(href='/login') 
-            div
-                h1 Login
-    h1.title Data. Without the Hassle.
-    div#register
-        h1 Register
-    .box
-        div#exit
-            h1 ✕
-        form(method='post', action='/register')
-            input(spellcheck='false', placeholder='First Name', name='firstName')
-            input(spellcheck='false', placeholder='Last Name', name='lastName')
-            input(type='email', spellcheck='false', placeholder='E-mail', name='email')
-            label.checkLabel
-                input.checkInput(type='checkbox', name='receiveEmail', checked='') 
-                | I accept receiving occasional emails!
-            input(id="pw1" type='password', placeholder='Password', name='password')
-            input(id="pw2" type='password' placeholder="Re-enter Password")
-            p#noMatch Passwords do not match.
-            button(type='submit') Join
-    div.info
-        h1#head Unlock the power of Data.
-        p#secondUSP Data lends the world another dimension in guiding actions and decisions. 
-        p#secondUSP Gosset is a marketplace that makes this resource, Data, ten-fold more accessible.
-        div.half
-            div.sb#sell
-                h1 Sell
-                    p Unlock the dreams of others by uploading data sets on Gosset. Gosset provides an easy-to-use marketplace interface. You sell, you earn, and Gosset charges a simple 7% commission.
-        div.half
-            div.sb#buy
-                h1 Buy
-                    p Unleash the potential of your endeavors through data. Gosset's easy-to-use marketplace interface allows for a frictionless buying experience. Purchase, download, then utilize the data.
+    div.landing
+        div.header
+            div#logo
+                img(src='/images/GossetMoustacheClear.png')
+                h1 The Data Marketplace
+            a#login(href='/login') 
+                div
+                    h1 Login
+        h1.title Data. Without the Hassle.
+        div#register
+            h1 Register
+        .box
+            div#exit
+                h1 ✕
+            form(method='post', action='/register')
+                input(spellcheck='false', placeholder='First Name', name='firstName')
+                input(spellcheck='false', placeholder='Last Name', name='lastName')
+                input(type='email', spellcheck='false', placeholder='E-mail', name='email')
+                label.checkLabel
+                    input.checkInput(type='checkbox', name='receiveEmail', checked='') 
+                    | I accept receiving occasional emails!
+                input(id="pw1" type='password', placeholder='Password', name='password')
+                input(id="pw2" type='password' placeholder="Re-enter Password")
+                p#noMatch Passwords do not match.
+                button(type='submit') Join
+        div.info
+            h1#head Unlock the power of Data.
+            p#secondUSP Data is a resource that lends the world another dimension in guiding actions and decisions. 
+            p#secondUSP Gosset is a marketplace that makes this resource ten-fold more accessible.
+            div.divider
+            p.short
+                span#sellScroll Sell 
+                span data by simply uploading an Excel-compatible file.
+            p.short
+                span#buyScroll Purchase 
+                span data by finding your desired data set and downloading.
+    div.more
+        div(style="height:350px")
+            div.sell
+                div.third#1
+                    img.vector(src='/images/vectors/Notes.png')
+                    h1 Give Data Purpose
+                    p Give your relinquished data newfound purpose by selling it to a data-savvy audience.
+                div.third#2
+                    img.vector(src='/images/vectors/Paper-Money.png')
+                    h1 Earn Money
+                    p Earning money on Gosset is easy: Simply upload data sets and wait for customers to buy.
+                div.third#3
+                    img.vector(src='/images/vectors/Dollar-Coin.png')
+                    h1 Simple Pricing
+                    p Gosset's simple 15% commission and easy-to-use price index ensures money in your pocket.
+            div.buy 
+                div.third#6
+                    img.vector(src='/images/vectors/Graph.png')
+                    h1 Make Guided Decisions
+                    p Using sellers' actionable data, make accurate and guided decisions in every endeavor.
+                div.third#5
+                    img.vector(src='/images/vectors/Key.png')
+                    h1 Access Inaccessible Data
+                    p Tap into data that is exclusively uploaded on Gosset — nowhere else.
+                div.third#4
+                    img.vector(src='/images/vectors/Clock.png')
+                    h1 Save Time
+                    p Time is a vital asset. Save it for what really matters by purchasing pre-gathered data.
+        div.sbText
+            span#s SELL
+            span#dot  • 
+            span#b BUY
+
     div.footer
         h1 Questions, comments, or concerns?
         p nathan@gosset.co (847)-754-7568
+        
     div#black-overlay(style="width:100%")

@@ -32,4 +32,39 @@ $(document).ready(function() {
             $('.box form button').prop('disabled', false)
         }
     })
+    
+    $('#b').click(function() {   //click buy and slide left
+        $('#s').css({'color':'gray', 'font-weight':'normal'});
+        $('#b').css({'color':'white', 'font-weight':'bold'})
+        $('.sell').css('left','-100%')
+        $('.buy').css('right','0%')
+    })
+    
+    $('#s').click(function() {  //click sell and slide right
+        $('#b').css({'color':'gray', 'font-weight':'normal'});
+        $('#s').css({'color':'white', 'font-weight':'bold'})
+        $('.sell').css('left','0%')
+        $('.buy').css('right','-100%')
+    })
+    
+    $('#sellScroll').click(function() {
+        $('html, body').animate({
+            scrollTop: $(".more").offset().top
+        }, 700);
+        $('#b').css({'color':'gray', 'font-weight':'normal'});
+        $('#s').css({'color':'white', 'font-weight':'bold'})
+        $('.sell').css('left','0%')
+        $('.buy').css('right','-100%')
+    })
+    
+    $('#buyScroll').click(function() {
+        $('html, body').animate({
+            scrollTop: $(".more").offset().top
+        }, 700);
+        $('#s').css({'color':'gray', 'font-weight':'normal'});
+        $('#b').css({'color':'white', 'font-weight':'bold'})
+        $('.sell').css('left','-100%')
+        $('.buy').css('right','0%')
+    })
+
 })
