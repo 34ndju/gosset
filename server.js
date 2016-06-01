@@ -48,17 +48,12 @@ var db = mongoose.createConnection(process.env.MONGO_URI);
 db.once('open', function callback () {
   console.info('Mongo db connected successfully');
   gridfs = gridFs(db.db, mongoose.mongo)
+  
+  var UserModel = require('./client/models/user')(mongoose, db);
+
+  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
+  
 });
-var UserModel = require('./client/models/user')(mongoose, db);
-
-app.get('*',function(req,res, next){  
-  if (req.headers["x-forwarded-proto"] === "https"){
-    return next();
-  }
-  res.redirect('https://www.gosset.co'+req.url)
-})
-require('./client/routes/routes')(app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
-
 
 app.listen(port, function() {
   console.log("Listening on port " + port)

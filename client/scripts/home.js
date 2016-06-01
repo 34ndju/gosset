@@ -50,7 +50,7 @@ $(document).ready(function() {
     $('#sellScroll').click(function() {  //click sell in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
-        }, 700);
+        }, 600);
         $('#b').css({'color':'gray', 'font-weight':'normal'});
         $('#s').css({'color':'white', 'font-weight':'bold'})
         $('.sell').css('left','0%')
@@ -60,7 +60,7 @@ $(document).ready(function() {
     $('#buyScroll').click(function() { //click buy in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
-        }, 700);
+        }, 600);
         $('#s').css({'color':'gray', 'font-weight':'normal'});
         $('#b').css({'color':'white', 'font-weight':'bold'})
         $('.sell').css('left','-100%')

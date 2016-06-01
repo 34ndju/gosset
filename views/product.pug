@@ -1,41 +1,37 @@
 head
-  link(href='/css/product.css', rel='stylesheet')
-  link(href='/css/header.css', rel='stylesheet')
-  link(rel='shortcut icon', href='/images/GWhite.png')
-  script(src="//load.sumome.com/", data-sumo-site-id="cf9c68e2af3c5e24ed7c97ee77a049d3f18d6925bb67d9d2d97a0e5793fa0c8e", async="async")
-  script(src='/scripts/GA.js')
-  title Product
+    link(href='/css/product.css', rel='stylesheet')
+    link(href='/css/header.css', rel='stylesheet')
+    link(rel='shortcut icon', href='/images/GWhite.png')
+    
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    
+    script(src='/scripts/GA.js')
+    title Product
+    
+    script(src='/scripts/product.js')
 body
-  script(src='//code.jquery.com/jquery-1.11.2.min.js')
-  script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
-  header.main-header
-      div.left-col(align="left")
-        ul.pages
-          a(href='/upload')
-            li.login Upload
-      div.right-col(align="right")
-        ul.pages
-          a(href='/logout', align="right")
-            p.logout Logout
-      a(href='/dashboard')
-        img.logo(src='/images/GossetMoustacheClear.png')
-  div(style="height:50;")
-  h3.center Product
-  div.box
-    h1.title.center 
-      strong #{title}
-    p.fileName.leftm
-      strong Filename: 
-      | #{fileName}
-    p.description.leftm
-      strong Description: 
-      | #{description}
-    p.email.leftm
-      strong Owner: 
-      | #{email}
-    //h2.keys.leftm
-    //form.payment.leftm(action='', method='POST')
-      //script.stripe-button(src='https://checkout.stripe.com/checkout.js', data-key='pk_test_PdRYHr3CnJdGGZH6RhZ1px6K', data-amount='999', data-name='Demo Site', data-description='Widget', data-image='/images/GWhite.png', data-locale='auto')
-    div(class="end comment here")
-    a.left(href=download)
-      h4.download.leftm Download
+    header.main-header
+        a(href='/')
+            img.logo(src='/images/GossetMoustacheClear.png')
+        div#user
+            div#dropdown
+                a(href='/logout')
+                    div#logout
+                        p Logout
+                a(href='#')
+                    div#settings
+                        p Settings
+    div.content
+        h1 #{data.metadata.title}
+        h2 #{data.filename}
+        p Uploaded on #{data.uploadDate.toDateString()}
+        p #{data.length / 1000}kb
+        p #{data.metadata.description}
+        p Published by #{data.metadata.email}
+        div.options
+            a#download(href='/download/' + data._id)
+                p download
+            a#delete(href='/totalremove/' + data._id)
+                p delete
+        

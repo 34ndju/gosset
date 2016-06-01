@@ -1,35 +1,70 @@
-html
-  head
+head
     link(href='/css/dashboard.css', rel='stylesheet')
-    link(href='/css/menu.css', rel='stylesheet')
     link(href='/css/header.css', rel='stylesheet')
+    
     link(rel='shortcut icon', href='/images/GWhite.png')
-    script(src="//load.sumome.com/", data-sumo-site-id="cf9c68e2af3c5e24ed7c97ee77a049d3f18d6925bb67d9d2d97a0e5793fa0c8e", async="async")
+    
     script(src='/scripts/GA.js')
-    title Dashboard
-
-  
-  body
+    
     script(src='//code.jquery.com/jquery-1.11.2.min.js')
     script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
-    script(src='/scripts/mydata.js')
+    script(src='/scripts/dashboard.js')
+    
+    title Dashboard
   
+body
     header.main-header
-      div.left-col(align="left")
-        ul.pages
-          a(href='/upload')
-            li.login Upload
-      div.right-col(align="right")
-        ul.pages
-          a(href='/logout', align="right")
-            p.logout Logout
-      a
-        img.logo(src='/images/GossetMoustacheClear.png')
-    div(style="height:50;")
+        a(href='/')
+            img.logo(src='/images/GossetMoustacheClear.png')
+        div#user
+            div#dropdown
+                a(href='/logout')
+                    div#logout
+                        p Logout
+                a(href='#')
+                    div#settings
+                        p Settings
+    div.menu1
+        div.menu1item#upload
+            div#tri
+            p My Data
+        div.menu1item#purchase
+            div#tri
+            p Data Store
+    div.content
+        div.mydata
+            form(method='post', action='/upload', enctype='multipart/form-data')
+                div.file 
+                    input#file.inputFile(type='file', name='file')
+                    label(for="file") Choose a File...
+                input#title(type='text', name='title', placeholder='Title', data-multiple-caption="{count} files selected" multiple)
+                textarea#description(name='description', placeholder='Description', cols="40", rows="50")
+                button#button(type='submit') SUBMIT
+            h3 Data by #{user.firstName} #{user.lastName} 
+            div#datacontent
+                if data[0] 
+                    ul#labels
+                        li#col1 Title
+                        li#col2 Description
+                        li#col3 Publisher
+                        li#col4 Filename
+                        li#col5 Upload Date
+                        li#col6 File Size
+                    each d in data
+                        ul
+                            a(href='/product/' + d._id)
+                                li#col1 #{d.metadata.title}
+                            li#col2 #{d.metadata.description}
+                            li#col3 #{d.metadata.email}
+                            li#col4 #{d.filename}
+                            li#col5 #{d.uploadDate.toDateString()}
+                            li#col6 #{d.length / 1000}kb
+                else
+                    h4(style='font-weight:normal;') You have no data yet...Try uploading above!
+        div.store
+            img(src='/images/vectors/under-construction.png')
+            h2(style='font-weight:bold; color:red;') Under Construction!
+            p The data store is currently being built up by users uploading their data sets.
+            p(style='font-weight:bold; font-size:1.3em;') Join them in building The Data Marketplace, Gosset.
+            p Click the "My Data" tab on the left and begin uploading!
 
-    div.me
-      h2.name #{user.firstName} #{user.lastName}
-      h5.email #{user.email}
-    p(class="message") We are currently in Phase I: the process of collecting data. 
-    h1.mydata My Data
-    .files

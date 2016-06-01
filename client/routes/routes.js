@@ -1,9 +1,18 @@
-module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
+    
+    app.get('*',function(req,res, next){  
+        if (req.headers["x-forwarded-proto"] === "https"){
+            return next();
+        }
+        else 
+            res.redirect('https://www.gosset.co'+req.url)
+    })
+    
     app.get('/', function(req, res) {
         if(req.session.email)
             res.redirect('/dashboard')
         else
-            res.render('home')
+            res.render('home');
     })
     
     app.get('/logout', function(req, res) {
@@ -102,7 +111,7 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
                 console.log(err);
             if(fields.title[0].length <= 0 || fields.description[0].length <= 0 || !files.file[0]) {
                 console.log('invalid upload')
-                res.redirect('/upload')
+                res.redirect('/')
             }
             else {
                 var file = files.file[0]
@@ -123,7 +132,7 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
                 }
                 else {
                     console.log(" uploaded the wrong filetype")
-                    res.redirect('/upload')
+                    res.redirect('/')
                 }
             }
         })
@@ -180,8 +189,12 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
         else {
             UserModel.findOne({email:req.session.email}, function(err, user) {
                 if(err)
-                    console.log(err)
-                res.render('dashboard', {user:user})
+                    console.log(err);
+                gridfs.files.find({'metadata.email': req.session.email}).toArray(function(err, data) {
+                    if(err)
+                        console.log(err)
+                    res.render('dashboard', {user:user, data:data})
+                })
             })
         }
     }) 
@@ -242,29 +255,12 @@ module.exports = function(app, session, papa, UserModel, d3, multiparty, fs, mon
         if(!req.session.email)
             res.redirect('/login')
         else {
-            var title,
-                fileName,
-                email,
-                download,
-                description;
-                
             gridfs.findOne({_id:req.params.id}, function(err, data) {
                 if(err)
                     console.log(err)
-                fileName = data.filename.substr(data.filename.lastIndexOf("/") + 1)
-                download = "/download/" + data._id
-                title = data.metadata.title
-                email = data.metadata.email
-                description = data.metadata.description
-                res.render('product', {
-                                        fileName:fileName, 
-                                        download:download, 
-                                        title:title, 
-                                        email:email, 
-                                        description:description});
-                })
-            /*req.session.currentProduct = req.params.id;
-            res.sendFile(process.cwd() + '/client/html/product.html') */
+                console.log(data)
+                res.render('product', {data:data});
+            })
         }
     })
 

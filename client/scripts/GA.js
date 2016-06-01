@@ -1,6 +1,6 @@
 //Google Analytics
 if (window.location.host != 'base-a34ndju.c9users.io') {
-    console.log('sent')
+    console.log('sent');
     (function(i,s,o,g,r,a,m){
         i['GoogleAnalyticsObject']=r;
         i[r]=i[r] || function() {
@@ -16,5 +16,6 @@ if (window.location.host != 'base-a34ndju.c9users.io') {
     ga('create', 'UA-77388290-1', 'auto');
     ga('send', 'pageview');
 }
-console.log('not sent')
+else 
+    console.log('not sent');
     
