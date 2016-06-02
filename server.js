@@ -3,7 +3,6 @@
 var gridfs
 var express = require('express');
 var mongoose = require('mongoose');
-var passport = require('passport');
 var path = require('path');
 var session = require('express-session');
 var d3 = require('d3');
