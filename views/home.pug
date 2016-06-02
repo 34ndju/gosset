@@ -5,6 +5,7 @@ head
     script(src='//code.jquery.com/jquery-1.11.2.min.js')
     script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
     script(src='/scripts/GA.js')
+    script(src="/package/waypoints/lib/noframework.waypoints.min.js")
     script(src='/scripts/home.js')
 body
     div.landing
@@ -12,9 +13,13 @@ body
             div#logo
                 img(src='/images/GossetMoustacheClear.png')
                 h1 The Data Marketplace
-            a#login(href='/login') 
-                div
-                    h1 Login
+            div#lr
+                div#reg
+                    h1 Register
+                a#login(href='/login') 
+                    div
+                        h1 Login
+        div(style="height:135px;")
         h1.title Data. Hassle-Free.
         div#register
             h1 Register

@@ -322,26 +322,5 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/termsofuse', function(req, res) {
         res.render('termsofuse');
     })
-    
-        /*
-    app.get('/data', function(req, res) {
-        
-        res.sendFile(process.cwd() + '/client/html/data.html') 
-        
-    }); 
-    
-    app.get('/dataAPI', function(req, res) {
-        if(true) {
-            var email = '34ndju@gmail.com';
-            CSVModel.findOne({title: "test one"}, function(err, data) {
-                if(err)
-                    console.log(err)
-                res.json(data)
-            })
-        }
-        else {
-            res.status(401).send('Error 401: Not authorized')
-        }
-    }) //THIS IS AN API
-    */ //deprecated
+
 }

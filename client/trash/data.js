@@ -2,22 +2,22 @@ var margin = {top: 20, right: 20, bottom: 50, left: 70},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var svg = d3.select(".svg").append("svg")
+/*var svg = d3.select(".svg").append("svg")
     .attr("width", width + margin.left  + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .style("outline", "thin solid gray")
     .append("g")
-    .attr("transform", "translate(" + margin.left + ", " + margin.top + ")")
+    .attr("transform", "translate(" + margin.left + ", " + margin.top + ")") */
 
 
-d3.json("/dataAPI", function(data) {
+$.getJSON("/trash/haha.json", function(data) {
     
+    console.log(1)
     console.log(data)
     
-    var ind = "x",  //d3.keys(data[0])[0],
-        dep = "y"  //d3.keys(data[0])[1];
+    var ind = "lat",  //d3.keys(data[0])[0],
+        dep = "lon"  //d3.keys(data[0])[1];
         
-    data = data["data"];
 
     svg.append("text")
         .attr("x", width/2) 

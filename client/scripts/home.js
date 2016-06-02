@@ -1,6 +1,6 @@
 $(document).ready(function() {
     
-    $('#register').click(function() {
+    $('#register, #reg').click(function() {
         var h = $(document).outerHeight() + 'px';
         $('#black-overlay').css({'height': h, 'visibility': 'visible'})
         $('.box').css('visibility','visible')
@@ -67,5 +67,23 @@ $(document).ready(function() {
         $('.sell').css('left','-100%')
         $('.buy').css('right','0%')
     })
-
+    
+    var waypoint = new Waypoint({
+        element: document.getElementById('register'),
+        handler: function(direction) {
+            if(direction == 'down') {
+                $('#reg').css({'display':'block'})
+                $('#login div').css({'width':'66px','background':'none', 'border':'2px solid black'})
+                $('#login div h1').css('color','black')
+                $('.header').css({'background':'rgba(255,255,255,0.9)'})
+            }
+            else {
+                $('#reg').css('display','none')
+                $('#login div').css({'width':'80px','background':'#499E34', 'border':'none'})
+                $('#login div h1').css('color','white')
+                $('.header').css('background','rgba(255,255,255,0.3)')
+            }
+        }
+    });
+    
 })

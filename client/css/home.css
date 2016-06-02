@@ -29,9 +29,13 @@ body {
 }
 
 .header {
+    z-index:100;
     padding:30px;
     height:75px;
     background:rgba(255,255,255,0.3);
+    position:fixed;
+    width:100%;
+    transition-duration:0.5s;
 }
 
 #logo {
@@ -48,19 +52,25 @@ body {
     font-size:0.8em;
 }
 
+#lr {
+    width:180px;
+    float:right;
+    margin-right:25%;
+}
+
 #login{
-    vertical-align:middle;
     text-decoration:none;
 }
 
 #login div{
-    float:right;
-    margin-right:25%;
-    width:70px;
+    margin:0 5px 0 5px;
+    width:80px;
     height:50px;
     background: #499E34;
     border-radius:10px;
+    float:right;
 }
+
 
 
 #login h1 {
@@ -71,6 +81,29 @@ body {
 #login div:hover h1 {
     color:black;
 }
+
+#reg {
+    float:right;
+    margin:0 5px 0 5px;
+    height:50px;
+    background: #499E34;
+    border-radius:10px;
+    cursor:pointer;
+    display:none;
+    transition-duration:0.3s;
+    border:2px solid black;
+    width:86px;
+}
+
+#reg h1 {
+    color:black;
+    font-size:1.2em;
+}
+
+#reg:hover {
+    background:white;
+}
+
 
 .title {
     color:white;
@@ -108,15 +141,15 @@ body {
 
 
 .box {
+    position:fixed;
     background: rgba(5, 5, 5, 0.9);
     padding:20px;
     width: 230px;
-    top:150px;
-    left:calc(50% - 135px);
+    top:calc(50% - 150px);
+    left:calc(50% - 120px);
     border-radius:5px;
-    position:absolute;
     visibility:hidden;
-    z-index:51;
+    z-index:101;
 } 
  
 .box #exit {
