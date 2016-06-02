@@ -5,7 +5,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             return next();
         }
         else 
-            res.redirect('https://www.gosset.co'+req.url)
+            res.redirect('https://www.gosset.co'+req.url);
     })
     
     app.get('/', function(req, res) {
