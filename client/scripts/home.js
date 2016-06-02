@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
     $('#register').click(function() {
         var h = $(document).outerHeight() + 'px';
         $('#black-overlay').css({'height': h, 'visibility': 'visible'})
@@ -35,14 +36,14 @@ $(document).ready(function() {
     
     $('#b').click(function() {   //click buy and slide left
         $('#s').css({'color':'gray', 'font-weight':'normal'});
-        $('#b').css({'color':'white', 'font-weight':'bold'})
+        $('#b').css({'color':'black', 'font-weight':'bold'})
         $('.sell').css('left','-100%')
         $('.buy').css('right','0%')
     })
     
     $('#s').click(function() {  //click sell and slide right
         $('#b').css({'color':'gray', 'font-weight':'normal'});
-        $('#s').css({'color':'white', 'font-weight':'bold'})
+        $('#s').css({'color':'black', 'font-weight':'bold'})
         $('.sell').css('left','0%')
         $('.buy').css('right','-100%')
     })
@@ -52,7 +53,7 @@ $(document).ready(function() {
             scrollTop: $(".more").offset().top
         }, 600);
         $('#b').css({'color':'gray', 'font-weight':'normal'});
-        $('#s').css({'color':'white', 'font-weight':'bold'})
+        $('#s').css({'color':'black', 'font-weight':'bold'})
         $('.sell').css('left','0%')
         $('.buy').css('right','-100%')
     })
@@ -62,7 +63,7 @@ $(document).ready(function() {
             scrollTop: $(".more").offset().top
         }, 600);
         $('#s').css({'color':'gray', 'font-weight':'normal'});
-        $('#b').css({'color':'white', 'font-weight':'bold'})
+        $('#b').css({'color':'black', 'font-weight':'bold'})
         $('.sell').css('left','-100%')
         $('.buy').css('right','0%')
     })

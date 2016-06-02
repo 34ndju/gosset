@@ -131,8 +131,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     })
                 }
                 else {
-                    console.log(" uploaded the wrong filetype")
-                    res.redirect('/')
+                    console.log(req.session.email + " uploaded the wrong filetype")
+                    res.redirect('/dashboard')
                 }
             }
         })
