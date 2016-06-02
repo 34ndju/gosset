@@ -365,7 +365,7 @@ body {
 }
 
 .faq #title {
-    padding-top:30px;
+    padding-top:40px;
     margin-top:0;
     margin-bottom:30px;
     color:white;
@@ -401,9 +401,8 @@ body {
 .content .a {
     font-size:0.7em;
     width:90%;
-    margin:auto;
     font-weight:normal;
-    margin:0 0 30px 10%;
+    margin:0 0 20px 10%;
 }
 
 

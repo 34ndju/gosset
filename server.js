@@ -15,6 +15,7 @@ var excel = require('excel')
 var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
+var bcrypt = require('bcrypt')
 
 
 var app = express();
@@ -51,7 +52,7 @@ db.once('open', function callback () {
   
   var UserModel = require('./client/models/user')(mongoose, db);
 
-  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor);
+  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt);
   
 });
 

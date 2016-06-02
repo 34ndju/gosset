@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt) {
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -37,16 +37,21 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.post('/login', function(req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        UserModel.findOne({email: email, password: password}, function(err, user) {
+        UserModel.findOne({email: email}, function(err, user) {
             if(err) {
                 console.log("Login error");
                 res.status(404).send("Error");
             }
             if(user) {
-                visitor.event("Login", "User Login").send()
-                console.log(email + " logged in.")
-                req.session.email = email;
-                res.redirect('/dashboard')
+                if(bcrypt.compareSync(password, user.password)) {
+                    visitor.event("Login", "User Login").send()
+                    console.log(email + " logged in.")
+                    req.session.email = email;
+                    res.redirect('/dashboard')
+                }
+                else {
+                    res.redirect('/login?failed=true');
+                }
             }
             else {
                 res.redirect('/login?failed=true');
@@ -62,21 +67,18 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         console.log(err)
                     if(!user) {
                         visitor.event("Register", "User Registration").send()
-                        var firstName = req.body.firstName;
-                        var lastName = req.body.lastName;
                         var email = req.body.email;
                         var receiveEmail;
                         if(req.body.receiveEmail) 
                             receiveEmail = true;
                         else
                             receiveEmail = false;
-                        var password = req.body.password;
                         var newUser = new UserModel();
-                        newUser.firstName = firstName;
-                        newUser.lastName = lastName;
-                        newUser.email = email;
+                        newUser.firstName = req.body.firstName;
+                        newUser.lastName = req.body.lastName;
+                        newUser.email = req.body.email;
                         newUser.receiveEmail = receiveEmail;
-                        newUser.password = password;
+                        newUser.password = bcrypt.hashSync(req.body.password, 10);
                         newUser.save(function(err, saved) {
                             if(err)
                                 throw err;
@@ -142,20 +144,24 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         gridfs.findOne({_id: req.params.id}, function(err, file) {
             if(err)
                 console.log(err)
-            if(!file)
-                console.log("File not found")
-            res.set('Content-Type', file.contentType);
-            res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
-
-            var readStream = gridfs.createReadStream({_id: file._id})
-
-            readStream.on('error', function(err) {
-                console.log(err)
-            })
- 
-            readStream.pipe(res)
-            visitor.event("Download", "Downloaded " + file.filename).send()
-            console.log(req.session.email + " downloaded " + file.filename)
+            if(!file) {
+                console.log("File not found");
+                res.redirect('/')
+            }
+            else {
+                res.set('Content-Type', file.contentType);
+                res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
+    
+                var readStream = gridfs.createReadStream({_id: file._id})
+    
+                readStream.on('error', function(err) {
+                    console.log(err)
+                })
+     
+                readStream.pipe(res)
+                visitor.event("Download", "Downloaded " + file.filename).send()
+                console.log(req.session.email + " downloaded " + file.filename)
+            }
         })
     })
     
@@ -307,7 +313,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             gridfs.remove({_id:req.params.id}, function(err) {
                 if(err)
                     console.log(err)
-                console.log(req.session.email + " removed file ID " + req.params.id)
+                console.log(req.session.email + " removed file ID " + req.params.id);
                 res.redirect('/')
             })
         }
@@ -316,7 +322,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/termsofuse', function(req, res) {
         res.render('termsofuse');
     })
-    
     
         /*
     app.get('/data', function(req, res) {
