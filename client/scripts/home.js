@@ -11,6 +11,13 @@ $(document).ready(function() {
         else if($('#pw1').val() == '') {
             $('.box form button').prop('disabled', true)
         }
+        
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Click',
+            eventAction: 'Register Button Click',
+            eventLabel: 'Register Button'
+        });
     });
     
     $('.box #exit').click(function() {
