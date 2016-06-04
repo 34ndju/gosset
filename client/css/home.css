@@ -64,23 +64,29 @@ body {
 
 #login div{
     margin:0 5px 0 5px;
-    width:80px;
+    width:76px;
     height:50px;
-    background: #499E34;
+    background: none;
     border-radius:10px;
+    border:2px solid black;
     float:right;
 }
 
 
 
 #login h1 {
-    color:white;
+    color:black;
     font-size:1.2em;
 }
 
-#login div:hover h1 {
-    color:black;
+#login div:hover{
+    border-color:white;
 }
+
+#login div:hover h1 {
+    color: white;
+}
+
 
 #reg {
     float:right;
@@ -113,8 +119,8 @@ body {
 
 #register {
     color:white;
-    width:170px;
-    line-height:50px;
+    width:150px;
+    line-height:30px;
     background:#499E34;
     margin:0 auto 0 auto;
     border-radius:10px;
