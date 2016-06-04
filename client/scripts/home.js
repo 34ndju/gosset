@@ -82,13 +82,15 @@ $(document).ready(function() {
                 $('#reg').css({'display':'block'})
                 $('#login div').css({'width':'66px','background':'none', 'border':'2px solid black'})
                 $('#login div h1').css('color','black')
-                $('.header').css({'background':'rgba(255,255,255,0.9)'})
+                $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px', 'border-bottom': '2px solid black'})
+                $('#logo h1').css({'margin-left':'5px', 'float': 'right'});
             }
             else {
                 $('#reg').css('display','none')
                 $('#login div').css({'width':'80px','background':'#499E34', 'border':'none'})
                 $('#login div h1').css('color','white')
-                $('.header').css('background','rgba(255,255,255,0.3)')
+                $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px', 'border-bottom': 'none'})
+                $('#logo h1').css({'margin-left':0, 'float': 'none'});
             }
         }
     });
