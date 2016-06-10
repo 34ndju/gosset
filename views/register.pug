@@ -1,0 +1,36 @@
+head
+    title Registration
+    link(rel='shortcut icon', href='/images/GWhite.png')
+    link(href='/css/register.css', rel='stylesheet')
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    script(src='/scripts/GA.js')
+    script(src="/package/waypoints/lib/noframework.waypoints.min.js")
+    script(src='/scripts/register.js')
+
+body
+    .box
+        a(href='/')
+            img#logo(src='/images/GossetMoustacheClear.png')
+        h1#title Join Gosset
+        form(method='post', action='/register')
+            label.checkLabel
+                input.checkInput(type='checkbox', name='receiveEmail', checked='') 
+                | I accept receiving very occasional emails!
+            div.input
+                p Email
+                input(type='email', spellcheck='false', name='email', value=email )
+            div.input
+                p First Name
+                input(spellcheck='false', name='firstName')
+            .input
+                p Last Name
+                input(spellcheck='false', name='lastName')
+            .input
+                p Password
+                input(id="pw1" type='password', name='password')
+            .input
+                p Re-enter Password
+                input(id="pw2" type='password')
+            p#noMatch Passwords do not match.
+            button(type='submit', disabled) JOIN

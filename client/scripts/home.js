@@ -1,7 +1,8 @@
 $(document).ready(function() {
     
-    $('#register, #reg').click(function() {
-        var h = $(document).outerHeight() + 'px';
+    
+    $('#reg').click(function() {
+        /*var h = $(document).outerHeight() + 'px';
         $('#black-overlay').css({'height': h, 'visibility': 'visible'})
         $('.box').css('visibility','visible')
         if($('#pw1').val() != $('#pw2').val()) {
@@ -17,7 +18,11 @@ $(document).ready(function() {
             eventCategory: 'Click',
             eventAction: 'Register Button Click',
             eventLabel: 'Register Button'
-        });
+        }); */
+        
+        $('html, body').animate({
+            scrollTop: $("body").offset().top
+        }, 600);
     });
     
     $('.box #exit').click(function() {
@@ -81,13 +86,13 @@ $(document).ready(function() {
             if(direction == 'down') {
                 $('#reg').css({'display':'block'})
                 $('#login div').css({'width':'66px'})
-                $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px', 'border-bottom': '2px solid black'})
+                $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px'})
                 $('#logo h1').css({'margin-left':'5px', 'float': 'right'});
             }
             else {
                 $('#reg').css('display','none')
                 $('#login div').css({'width':'76px'})
-                $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px', 'border-bottom': 'none'})
+                $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px'})
                 $('#logo h1').css({'margin-left':0, 'float': 'none'});
             }
         }

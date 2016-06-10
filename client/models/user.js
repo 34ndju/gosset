@@ -6,7 +6,8 @@ module.exports = function(mongoose, db) {
         email: String,
         receiveEmail: Boolean,
         password: String,
-        cart: Array
+        cart: Array,
+        invited: Array
     });
     
     mongoose.model('user', userSchema);

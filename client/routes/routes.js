@@ -60,38 +60,68 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         
     })
     
+    app.post('/registerEmail', function(req, res) { //from home page
+        if(req.body.email) 
+            res.redirect('/register?email=' + req.body.email)
+        else
+            res.redirect('/')
+    })
+    
+    app.get('/register', function(req, res) {
+        res.render('register', {email:req.query.email})
+    })
+    
     app.post('/register', function(req, res) {
-        console.log(req.body.receiveEmail)
         UserModel.findOne({email: req.body.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            if(!user) {
+                visitor.event("Register", "User Registration").send()
+                var email = req.body.email;
+                var receiveEmail;
+                if(req.body.receiveEmail) 
+                    receiveEmail = true;
+                else
+                    receiveEmail = false;
+                var newUser = new UserModel();
+                newUser.firstName = req.body.firstName;
+                newUser.lastName = req.body.lastName;
+                newUser.email = req.body.email;
+                newUser.receiveEmail = receiveEmail;
+                newUser.password = bcrypt.hashSync(req.body.password, 10);
+                newUser.save(function(err, saved) {
                     if(err)
-                        console.log(err)
-                    if(!user) {
-                        visitor.event("Register", "User Registration").send()
-                        var email = req.body.email;
-                        var receiveEmail;
-                        if(req.body.receiveEmail) 
-                            receiveEmail = true;
-                        else
-                            receiveEmail = false;
-                        var newUser = new UserModel();
-                        newUser.firstName = req.body.firstName;
-                        newUser.lastName = req.body.lastName;
-                        newUser.email = req.body.email;
-                        newUser.receiveEmail = receiveEmail;
-                        newUser.password = bcrypt.hashSync(req.body.password, 10);
-                        newUser.save(function(err, saved) {
-                            if(err)
-                                throw err;
-                            console.log(email + " registered and logged in.")
-                            req.session.email = email;
-                            res.redirect('/')
-        
-                        })
-                    }
-                    else 
-                        res.redirect('/')
+                        throw err;
+                    console.log(email + " registered")
+                    req.session.email = email;
+                    res.redirect('/invite?ref=' + email)
+
                 })
+            }
+            else 
+                res.redirect('/register')
+        })
     }); 
+    
+    app.get('/invite', function(req, res) {
+        res.render('invite', {ref:req.query.ref})
+    })
+    
+    app.post('/invite', function(req, res) {
+        var arr = []
+        for(var key in req.body) {
+            if(key != 'refEmail' && req.body[key].length > 0) {
+                arr.push(req.body[key])
+            }
+        }
+        db.collection('users').update({email:req.body.refEmail}, {
+            $set: {invited:arr}
+        }, function(err, results) {
+            if(err)
+                console.log(err)
+            res.redirect('/')
+        })
+    })
 
     app.get('/upload', function(req, res) {
         if(!req.session.email)

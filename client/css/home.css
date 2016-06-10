@@ -115,36 +115,41 @@ body {
     color:white;
     font-size:5em;
     text-shadow:2px 2px black;
+    margin-bottom:70px;
 }
 
 #register {
+    margin-left:auto;
+    margin-right:auto;
+    width:50%;
+}
+
+#register input {
+    width:70%;
+    padding:5px;
+    background:rgba(0,0,0, 0.6);
+    height:45px;
+    text-align:center;
     color:white;
-    width:150px;
-    line-height:30px;
+    border:1px solid white;
+    font-size:20px;
+    font-family:"Muli";
+}
+
+#register button {
+    width:calc(30% - 12px);
     background:#499E34;
-    margin:0 auto 0 auto;
-    border-radius:10px;
     cursor:pointer;
-    border-width:2px;
-    border-color: white;
-    border-style: solid;
-    transition-duration:0.3s;
-}
-
-#register:hover {
-    border-color:black;
-    width:200px;
-}
-
-#register:hover h1 {
-    color:black;
-}
-
-#register h1 {
-    transition-duration:0.3s;
+    height:45px;
     color:white;
+    font-family:"Muli";
+    font-size:20px;
+    border:1px solid white;
 }
 
+#register button:hover {
+    background:#347025;
+}
 
 .box {
     position:fixed;

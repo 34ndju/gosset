@@ -22,7 +22,9 @@ body
         div(style="height:135px;")
         h1.title Data for Everyone
         div#register
-            h1 Register
+            form(method='post', action='/registerEmail')
+                input(type='email', spellcheck='false', placeholder='Email address', name='email')
+                button(type='submit') Join
         .box
             div#exit
                 h1 ✕
@@ -38,7 +40,7 @@ body
                 p#noMatch Passwords do not match.
                 button(type='submit') Join
         div.info
-            h1#head Unifying data-sellers and data-buyers.
+            h1#head Unifying data-sellers and data-buyers
             p#secondUSP Data is a resource that lends the world another dimension in guiding actions and decisions. 
             p#secondUSP As a marketplace, Gosset makes this resource ten-fold more accessible.
             div.divider
