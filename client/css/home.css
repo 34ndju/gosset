@@ -320,41 +320,74 @@ body {
 }
 
 .more {
-    margin-top:20px;
     margin-bottom:30px;
     width:100%;
     overflow:hidden;
     position:relative;
 }
 
-#whygosset {
+.moreHead h1 {
+    font-size:1.5em;
+    margin:2px;
     height:50px;
-    margin:0 0 30px 0;
     padding:0;
     font-weight:normal;
+    color:#474747;
+}
+
+
+#sellingOnGosset {
+    margin:0 10% 30px 0;
+    text-align:right;
+}
+
+#moveLeft {
+    width:200%;
+}
+
+#moveLeftContent {
+    width:50%;
+    margin-left:50%;
+    transition-duration:0.5s;
 }
 
 .sell {
-    position:absolute;
+    background:#D7EEF5;
     width: 100%;
-    height:250px;
-    left:0%;
     transition-duration:0.3s;
+    padding:20px;
+    margin:0;
+    border-bottom:1px solid gray;
+}
+
+#buyingOnGosset {
+    margin:0 0 30px 10%;
+    text-align:left;
+}
+
+#moveRight {
+    width:200%;
+    margin-left:-100%;
+}
+
+#moveRightContent {
+    width:50%;
+    margin-left:0;
+    transition-duration:0.5s;
 }
 
 .buy {
-    position:absolute;
     width: 100%;
-    height:250px;
-    right:-100%;
     transition-duration:0.3s;
+    padding:20px;
 }
 
 .third {
+    vertical-align:top;
+    display:inline-block;
     width:30%;
     margin-left:1.5%;
     margin-right:1.5%;
-    height:100%;
 }
 
 .third p {
@@ -362,8 +395,7 @@ body {
 }
 
 .sell .third {
-    float:left;
-    height:100%;
+ 
 }
 
 .vector {
@@ -371,35 +403,10 @@ body {
 }
 
 .buy .third {
-    float:right;
+   
 }
 
-.sbText {
-    font-size:30px;
-    height:30px;
-    margin-bottom:10px;
-}
 
-#s {
-    color:black;
-    font-weight:bold;
-    cursor:pointer;
-    width:115px;
-}
-
-#dot {
-    color:gray;
-}
-
-#b {
-    color:gray;
-    cursor:pointer;
-    width:115px;
-}
-
-#s:hover, #b:hover {
-    text-decoration:underline;
-}
 
 .faq {
     padding:0 30px 30px 30px;

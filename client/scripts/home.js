@@ -80,22 +80,26 @@ $(document).ready(function() {
         $('.buy').css('right','0%')
     })
     
-    var waypoint = new Waypoint({
-        element: document.getElementById('register'),
-        handler: function(direction) {
-            if(direction == 'down') {
-                $('#reg').css({'display':'block'})
-                $('#login div').css({'width':'66px'})
-                $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px'})
-                $('#logo h1').css({'margin-left':'5px', 'float': 'right'});
-            }
-            else {
-                $('#reg').css('display','none')
-                $('#login div').css({'width':'76px'})
-                $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px'})
-                $('#logo h1').css({'margin-left':0, 'float': 'none'});
-            }
+    $('#register').waypoint(function(direction) {
+        if(direction == 'down') {
+            $('#reg').css({'display':'block'})
+            $('#login div').css({'width':'66px'})
+            $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px'})
+            $('#logo h1').css({'margin-left':'5px', 'float': 'right'});
         }
-    });
+        else {
+            $('#reg').css('display','none')
+            $('#login div').css({'width':'76px'})
+            $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px'})
+            $('#logo h1').css({'margin-left':0, 'float': 'none'});
+        }
+    })
     
+    $('#moveLeft').waypoint(function() {
+        $('#moveLeftContent').css('margin-left',0);
+    }, {offset:'100%'})
+    
+    $('#moveRight').waypoint(function() {
+        $('#moveRightContent').css('margin-left', '50%')
+    },{offset:'100%'})
 })

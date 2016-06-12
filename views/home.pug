@@ -5,7 +5,7 @@ head
     script(src='//code.jquery.com/jquery-1.11.2.min.js')
     script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
     script(src='/scripts/GA.js')
-    script(src="/package/waypoints/lib/noframework.waypoints.min.js")
+    script(src="/package/waypoints/lib/jquery.waypoints.min.js")
     script(src='/scripts/home.js')
 body
     div.landing
@@ -54,38 +54,40 @@ body
                 span#buyScroll Purchase
                 span  data by finding your desired data set and downloading.
     div.more
-        h1#whygosset Why Gosset?
-        div(style="height:250px")
-            div.sell
-                div.third#1
-                    img.vector(src='/images/vectors/Notes.png')
-                    h2 Give Data Purpose
-                    p Give your relinquished data newfound purpose by selling it to a data-savvy audience.
-                div.third#2
-                    img.vector(src='/images/vectors/Paper-Money.png')
-                    h2 Earn Money
-                    p Earning money on Gosset is easy: Simply upload data sets and wait for customers to buy.
-                div.third#3
-                    img.vector(src='/images/vectors/Dollar-Coin.png')
-                    h2 Simple Pricing
-                    p Gosset's simple 15% commission and easy-to-use price index ensures money in your pocket.
-            div.buy 
-                div.third#6
-                    img.vector(src='/images/vectors/Graph.png')
-                    h2 Make Guided Decisions
-                    p Using sellers' actionable data, make accurate and guided decisions in every endeavor.
-                div.third#5
-                    img.vector(src='/images/vectors/Clock.png')
-                    h2 Save Time
-                    p Time is a vital asset. Save it for what really matters by purchasing pre-gathered data.
-                div.third#4
-                    img.vector(src='/images/vectors/Key.png')
-                    h2 Access Inaccessible Data
-                    p Tap into data that is exclusively uploaded on Gosset — nowhere else.
-        div.sbText
-            span#s SELL
-            span#dot  • 
-            span#b BUY
+        div.sell
+            div.moreHead
+                h1#sellingOnGosset Why Sell?
+            div#moveLeft
+                div#moveLeftContent
+                    div.third#1
+                        img.vector(src='/images/vectors/Notes.png')
+                        h2 Give Data Purpose
+                        p Give your relinquished data newfound purpose by selling it to a data-savvy audience.
+                    div.third#2
+                        img.vector(src='/images/vectors/Paper-Money.png')
+                        h2 Earn Money
+                        p Earning money on Gosset is easy: Simply upload data sets and wait for customers to buy.
+                    div.third#3
+                        img.vector(src='/images/vectors/Dollar-Coin.png')
+                        h2 Simple Pricing
+                        p Gosset's simple 15% commission and easy-to-use price index ensures money in your pocket.
+        div.buy 
+            div.moreHead
+                h1#buyingOnGosset Why Buy?
+            div#moveRight
+                div#moveRightContent
+                    div.third#4
+                        img.vector(src='/images/vectors/Key.png')
+                        h2 Access Inaccessible Data
+                        p Tap into data that is exclusively uploaded on Gosset — nowhere else.
+                    div.third#5
+                        img.vector(src='/images/vectors/Clock.png')
+                        h2 Save Time
+                        p Time is a vital asset. Save it for what really matters by purchasing pre-gathered data.
+                    div.third#6
+                        img.vector(src='/images/vectors/Graph.png')
+                        h2 Make Guided Decisions
+                        p Using sellers' actionable data, make accurate and guided decisions in every endeavor.
     div.faq 
         h1#title 
             span#big F
