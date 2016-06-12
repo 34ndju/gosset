@@ -89,6 +89,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 newUser.email = req.body.email;
                 newUser.receiveEmail = receiveEmail;
                 newUser.password = bcrypt.hashSync(req.body.password, 10);
+                newUser.dateCreated = new Date();
                 newUser.save(function(err, saved) {
                     if(err)
                         throw err;
