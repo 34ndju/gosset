@@ -1,35 +1,11 @@
 $(document).ready(function() {
-    
+    var sendScrollToFAQ = true;
     
     $('#reg').click(function() {
-        /*var h = $(document).outerHeight() + 'px';
-        $('#black-overlay').css({'height': h, 'visibility': 'visible'})
-        $('.box').css('visibility','visible')
-        if($('#pw1').val() != $('#pw2').val()) {
-            $('#noMatch').css('visibility', 'visible')
-            $('.box form button').prop('disabled', true)
-        }
-        else if($('#pw1').val() == '') {
-            $('.box form button').prop('disabled', true)
-        }
-        
-        ga('send', {
-            hitType: 'event',
-            eventCategory: 'Click',
-            eventAction: 'Register Button Click',
-            eventLabel: 'Register Button'
-        }); */
-        
         $('html, body').animate({
             scrollTop: $("body").offset().top
         }, 600);
     });
-    
-    $('.box #exit').click(function() {
-        $('#black-overlay').css('visibility','hidden');
-        $('.box').css('visibility','hidden');
-        $('#noMatch').css('visibility', 'hidden')
-    })
     
     $('#pw1, #pw2').on('input', function() {
         if($('#pw1').val() != $('#pw2').val()) {
@@ -46,20 +22,7 @@ $(document).ready(function() {
         }
     })
     
-    $('#b').click(function() {   //click buy and slide left
-        $('#s').css({'color':'gray', 'font-weight':'normal'});
-        $('#b').css({'color':'black', 'font-weight':'bold'})
-        $('.sell').css('left','-100%')
-        $('.buy').css('right','0%')
-    })
-    
-    $('#s').click(function() {  //click sell and slide right
-        $('#b').css({'color':'gray', 'font-weight':'normal'});
-        $('#s').css({'color':'black', 'font-weight':'bold'})
-        $('.sell').css('left','0%')
-        $('.buy').css('right','-100%')
-    })
-    
+
     $('#sellScroll').click(function() {  //click sell in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
@@ -102,4 +65,15 @@ $(document).ready(function() {
     $('#moveRight').waypoint(function() {
         $('#moveRightContent').css('margin-left', '50%')
     },{offset:'100%'})
+    
+    $('.faq').waypoint(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Scroll',
+            eventAction: 'Scrolled to FAQ',
+            eventLabel: 'Scroll Down'
+        });
+        sendScrollToFAQ = false;
+    })
+    
 })

@@ -13,4 +13,12 @@ $(document).ready(function() {
             $('.box form button').prop('disabled', false)
         }
     })
+    
+    $('.box form button').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Register',
+            eventAction: 'User Registration'
+        });
+    })
 })

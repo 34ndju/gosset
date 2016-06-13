@@ -44,7 +44,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             }
             if(user) {
                 if(bcrypt.compareSync(password, user.password)) {
-                    visitor.event("Login", "User Login").send()
+                    //visitor.event("Login", "User Login").send()
                     console.log(email + " logged in.")
                     req.session.email = email;
                     res.redirect('/dashboard')
@@ -76,7 +76,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             if(err)
                 console.log(err)
             if(!user) {
-                visitor.event("Register", "User Registration").send()
+                //visitor.event("Register", "User Registration").send()
                 var email = req.body.email;
                 var receiveEmail;
                 if(req.body.receiveEmail) 
@@ -190,7 +190,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 })
      
                 readStream.pipe(res)
-                visitor.event("Download", "Downloaded " + file.filename).send()
+                //visitor.event("Download", "Downloaded " + file.filename).send()
                 console.log(req.session.email + " downloaded " + file.filename)
             }
         })

@@ -36,4 +36,13 @@ $(document).ready(function() {
         }
     })
     
+    console.log($('.content h1').text())
+    $('.options #download').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Download',
+            eventAction: 'Downloaded Product',
+            eventLabel: 'Downloaded' + $('.content h1').text()
+        });
+    })
 })
