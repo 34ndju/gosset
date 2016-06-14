@@ -206,7 +206,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             })
             res.json(files)
         })
-    }) //THIS ISS AN API
+    }) //THIS IS AN API
     
     app.get('/mydata', function(req, res) {
         if(!req.session.email)
