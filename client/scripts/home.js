@@ -24,26 +24,21 @@ $(document).ready(function() {
     
 
     $('#sellScroll').click(function() {  //click sell in .info and scroll to bottom, then transition left/right
-        $('html, body').animate({
+        /*$('html, body').animate({
             scrollTop: $(".more").offset().top
-        }, 600);
-        $('#b').css({'color':'gray', 'font-weight':'normal'});
-        $('#s').css({'color':'black', 'font-weight':'bold'})
-        $('.sell').css('left','0%')
-        $('.buy').css('right','-100%')
+        }, 600); */
+        
+        $(".more").scrollTop(300)
     })
     
     $('#buyScroll').click(function() { //click buy in .info and scroll to bottom, then transition left/right
         $('html, body').animate({
             scrollTop: $(".more").offset().top
         }, 600);
-        $('#s').css({'color':'gray', 'font-weight':'normal'});
-        $('#b').css({'color':'black', 'font-weight':'bold'})
-        $('.sell').css('left','-100%')
-        $('.buy').css('right','0%')
     })
     
     $('#register').waypoint(function(direction) {
+        console.log(direction)
         if(direction == 'down') {
             $('#reg').css({'display':'block'})
             $('#login div').css({'width':'66px'})
@@ -66,14 +61,17 @@ $(document).ready(function() {
         $('#moveRightContent').css('margin-left', '50%')
     },{offset:'100%'})
     
+    
     $('.faq').waypoint(function() {
-        ga('send', {
-            hitType: 'event',
-            eventCategory: 'Scroll',
-            eventAction: 'Scrolled to FAQ',
-            eventLabel: 'Scroll Down'
-        });
-        sendScrollToFAQ = false;
-    })
+        if(sendScrollToFAQ) {
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'Scroll',
+                eventAction: 'Scrolled to FAQ',
+                eventLabel: 'Scroll Down'
+            });
+            sendScrollToFAQ = false;
+        }
+    }) 
     
 })

@@ -9,13 +9,24 @@ body {
     overflow-x:hidden;
     background:url('/images/SkylineStock.jpg');
     background-size:cover;
+    height:100%;
+}
+
+#black-overlay {
+    position:absolute;
+    background:rgba(0,0,0,0.7);
+    z-index:-1;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
 }
 
 .box {
-    margin: 20px auto 20px auto;
+    margin: 0 auto 20px auto;
     padding:20px;
     width: 50%;
-    z-index:101;
+    z-index:99;
     background-color:rgba(255, 255, 255, 0.6);
 } 
 
@@ -27,6 +38,7 @@ body {
     font-weight:normal;
     margin:20px;
 }
+
 
 .content *{
     display:inline-block;
@@ -45,14 +57,14 @@ body {
 .left h3 {
     margin:0;
     font-size:0.7em;
-    color:gray;
+    color:#454545;
 }
 
 #submit {
     width: 40%;
     border-radius: 40px;
     background: #499E34;
-    border:1px white solid;
+    border:none;
     color: white;
     font-family:'Muli';
     font-size: 18px;
@@ -69,7 +81,7 @@ body {
     display:block;
     width: 40%;
     border-radius: 40px;
-    border:1px black solid;
+    border:1px #808080 solid;
     cursor: pointer;
     margin:10px auto 0 auto;
 }
@@ -80,7 +92,7 @@ body {
 
 #skip h1 {
     margin:0;
-    color: black;
+    color: #808080;
     font-family:'Muli';
     font-size: 15px;
 }
@@ -113,7 +125,7 @@ body {
 
 #addMore {
     margin:0;
-    font-size:0.7em;
+    font-size:0.9em;
     color:#499E34;
     cursor:pointer;
     font-weight:bold;

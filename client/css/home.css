@@ -144,7 +144,7 @@ body {
     color:white;
     font-family:"Muli";
     font-size:20px;
-    border:1px solid white;
+    border:1px solid #499E34;
 }
 
 #register button:hover {
@@ -272,7 +272,7 @@ body {
 }
 
 #head {
-    color:#499E34;
+    color:#8FC496;
     font-size:1.6em;
     margin-top:0;
 }
@@ -394,19 +394,26 @@ body {
     width:95%;
 }
 
-.sell .third {
- 
-}
-
 .vector {
     width:100px;
 }
 
-.buy .third {
-   
+
+#tellMore {
+    text-decoration:none;
+    width:200px;
 }
 
+#tellMore p{
+    margin:3px;
+    color:black;
+    font-weight:normal;
+    text-decoration:underline;
+}
 
+#tellMore p:hover {
+    font-weight:bold;
+}
 
 .faq {
     padding:0 30px 30px 30px;

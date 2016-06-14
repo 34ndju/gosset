@@ -21,7 +21,7 @@ body
                     div
                         h1 Login
         div(style="height:135px;")
-        h1.title Data for Everyone
+        h1.title Data. For Everyone.
         div#register
             form(method='post', action='/registerEmail')
                 input(type='email', spellcheck='false', placeholder='Email address', name='email')
@@ -43,7 +43,7 @@ body
         div.info
             h1#head Unifying data-sellers and data-buyers
             p#secondUSP Data is a resource that lends the world another dimension in guiding actions and decisions. 
-            p#secondUSP As a marketplace, Gosset makes this resource ten-fold more accessible.
+            p#secondUSP As a data marketplace, Gosset makes this resource ten-fold more accessible.
             div.divider
                 div.long
                 div.dot
@@ -72,6 +72,8 @@ body
                         img.vector(src='/images/vectors/Dollar-Coin.png')
                         h2 Simple Pricing
                         p Gosset's simple 15% commission and easy-to-use price index ensures money in your pocket.
+                    a#tellMore(href='/sell')
+                        p Tell me more...
         div.buy 
             div.moreHead
                 h1#buyingOnGosset Why Buy?
@@ -89,6 +91,8 @@ body
                         img.vector(src='/images/vectors/Graph.png')
                         h2 Make Guided Decisions
                         p Using sellers' actionable data, make accurate and guided decisions in every endeavor.
+                    a#tellMore(href='/buy')
+                        p Tell me more...
     div.faq 
         h1#title 
             span#big F
