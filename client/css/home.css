@@ -472,10 +472,15 @@ body {
     padding:20px;
 }
 
+.footer a {
+    text-decoration:none;
+}
 .footer h1 {
     font-weight:bold;
     margin-bottom:0;
     font-size:1.2em;
+    text-decoration:none;
+    color:white;
 }
 
 .footer p {

@@ -1,80 +1,155 @@
-html
-  body
-    h2
-      | Web Site Terms and Conditions of Use
-    h3
-      | 1. Terms
-    p
-      | By accessing this web site, you are agreeing to be bound by these
-      | web site Terms and Conditions of Use, all applicable laws and regulations,
-      | and agree that you are responsible for compliance with any applicable local
-      | laws. If you do not agree with any of these terms, you are prohibited from
-      | using or accessing this site. The materials contained in this web site are
-      | protected by applicable copyright and trade mark law.
-    h3
-      | 2. Use License
-    ol(type='a')
-      li
-        | Permission is granted to temporarily download one copy of the materials 
-        | (information or software) on Gosset's web site for personal, 
-        | non-commercial transitory viewing only. This is the grant of a license, 
-        | not a transfer of title, and under this license you may not:
-        ol(type='i')
-          li modify or copy the materials;
-          li
-            | use the materials for any commercial purpose, or for any public display (commercial or non-commercial);
-          li
-            | attempt to decompile or reverse engineer any software contained on Gosset's web site;
-          li remove any copyright or other proprietary notations from the materials; or
-          li
-            | transfer the materials to another person or "mirror" the materials on any other server.
-      li
-        | This license shall automatically terminate if you violate any of these restrictions and may be terminated by Gosset at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.
-    h3
-      | 3. Disclaimer
-    ol(type='a')
-      li
-        | The materials on Gosset's web site are provided "as is". Gosset makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights. Further, Gosset does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its Internet web site or otherwise relating to such materials or on any sites linked to this site.
-    h3
-      | 4. Limitations
-    p
-      | In no event shall Gosset or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption,) arising out of the use or inability to use the materials on Gosset's Internet site, even if Gosset or a Gosset authorized representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.
-    h3
-      | 5. Revisions and Errata
-    p
-      | The materials appearing on Gosset's web site could include technical, typographical, or photographic errors. Gosset does not warrant that any of the materials on its web site are accurate, complete, or current. Gosset may make changes to the materials contained on its web site at any time without notice. Gosset does not, however, make any commitment to update the materials.
-    h3
-      | 6. Links
-    p
-      | Gosset has not reviewed all of the sites linked to its Internet web site and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Gosset of the site. Use of any such linked web site is at the user's own risk.
-    h3
-      | 7. Site Terms of Use Modifications
-    p
-      | Gosset may revise these terms of use for its web site at any time without notice. By using this web site you are agreeing to be bound by the then current version of these Terms and Conditions of Use.
-    h3
-      | 8. Governing Law
-    p
-      | Any claim relating to Gosset's web site shall be governed by the laws of the State of Illinois without regard to its conflict of law provisions.
-    p
-      | General Terms and Conditions applicable to Use of a Web Site.
-    h2
-      | Privacy Policy
-    p
-      | Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our privacy policy.
-    ul
-      li
-        | Before or at the time of collecting personal information, we will identify the purposes for which information is being collected.
-      li
-        | We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.
-      li
-        | We will only retain personal information as long as necessary for the fulfillment of those purposes.
-      li
-        | We will collect personal information by lawful and fair means and, where appropriate, with the knowledge or consent of the individual concerned.
-      li
-        | Personal data should be relevant to the purposes for which it is to be used, and, to the extent necessary for those purposes, should be accurate, complete, and up-to-date.
-      li
-        | We will protect personal information by reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.
-      li
-        | We will make readily available to customers information about our policies and practices relating to the management of personal information.
-    p
-      | We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.
+head
+    title Terms of Use
+    link(rel='shortcut icon', href='/images/GWhite.png')
+    link(href='/css/termsofuse.css', rel='stylesheet')
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    script(src='/scripts/fingerprint.js')
+    script(src='/scripts/GA.js')
+    script(src="/package/waypoints/lib/jquery.waypoints.min.js")
+    script(src='/scripts/termsofuse.js')
+body
+    div.header
+        a(href='/')
+            div#logo
+                img(src='/images/GossetMoustacheClear.png')
+                h1(style="text-decoration:none; color:black;") The Data Marketplace
+        div#lr
+            a(href='/register')
+                div#reg
+                    h1 Register
+            a#login(href='/login') 
+                div
+                    h1 Login
+    div(style="height:135px;")
+    h1#title Terms of Use
+    div#terms
+        h2.header1 Introduction
+        p.text All policies posted on our sites set out the terms on which Gosset offers you access to and use of our sites, services, applications and tools (collectively "Services"). All policies are incorporated into this User Agreement. You agree to comply with all of the above when accessing or using our Services. 
+            span(style="font-weight:bold;") Please be advised that this User Agreement contains provisions that govern how claims you and we have against each other are resolved.
+        h2.header1 Using Gosset
+        p.text In connection with using or accessing the Services you will not:
+        ul.list
+            li post, list or upload content or items in inappropriate categories or areas on our sites
+            li breach or circumvent any laws, third-party rights or our systems, policies, or determinations of your account status
+            li use our Services if you are not able to form legally binding contracts (for example if you are under 18), or are temporarily or indefinitely suspended from using our sites, services, applications or tools
+            li fail to pay for items purchased by you, unless you have a valid reason as set out in a Gosset policy, for example, the seller has materially changed the item's description after your payment, a clear typographical error is made, or you cannot contact the seller
+            li post false, inaccurate, misleading, defamatory, or libelous content
+            li transfer your Gosset account and user ID to another party without our consent 
+            li distribute or post spam, unsolicited or bulk electronic communications, chain letters, or pyramid schemes
+            li distribute viruses or any other technologies that may harm Gosset, or the interests or property of users
+            li use any robot, spider, scraper, or other automated means to access our Services for any purpose
+            li bypass our robot exclusion headers, interfere with the working of our Services, or impose an unreasonable or disproportionately large load on our infrastructure
+            li export or re-export any Gosset application or tool except in compliance with the export control laws of any relevant jurisdictions and in accordance with posted rules and restrictions
+            li reproduce, perform, display, distribute, reverse engineer, or prepare derivative works from content that belongs to or is licensed to Gosset, or that comes from the Services and belongs to another Gosset user or to a third party including works covered by any copyrights, trademark, patent, or other intellectual property right, except with prior express permission of Gosset and/or any other party holding the right to license such use
+            li commercialize any Gosset application or any information or software associated with such application
+            li harvest or otherwise collect information about users without their consent
+            li circumvent any technical measures we use to provide the Services.
+        p.text If we believe you are abusing Gosset in any way, we may, in our sole discretion and without limiting other remedies, limit, suspend, or terminate your user account(s) and access to our Services, delay or remove hosted content, remove any special status associated with your account(s), remove and demote listings, reduce or eliminate any discounts, and take technical and/or legal steps to prevent you from using our Services.
+        p.text We may cancel unconfirmed accounts or accounts that have been inactive for a long time or modify or discontinue our Services. Additionally, we reserve the right to refuse or terminate all or part of our Services to anyone for any reason at our discretion.
+        h2.header1 Policy Enforcement
+        p.text When a buyer or seller issue arises, we may consider the user's performance history and the specific circumstances in applying our policies. We may choose to be more lenient with policy enforcement in an effort to do the right thing for both buyers and sellers.
+        h2.header1 Fees
+        p.text We charge a 15% commission on all sales from the seller for using our services. We may change our seller fees from time to time by posting the changes on the Gosset site 14 days in advance, but with no advance notice required for temporary promotions or any changes that result in the reduction of fees.
+        p.text You must have a payment method on file when selling on Gosset and pay all fees and applicable taxes associated with our Services by the payment due date. If your payment method fails or your account is past due, we may collect fees owed by charging other payment methods on file with us, retaining collection agencies and legal counsel. In addition, you will be subject to late fees. Gosset, or the collection agencies we retain, may also report information about your account to credit bureaus, and as a result, late payments, missed payments, or other defaults on your account may be reflected in your credit report. If you wish to dispute the information a collection agency reported to a credit bureau regarding your Gosset account, you must contact the collection agency directly.
+        h2.header1 Listing Conditions
+        p.text When listing an item, you agree to comply with Gosset's rules for listing and selling:
+        ul.list
+            li You are responsible for the accuracy and content of the listing and item offered
+            li Your listing may not be immediately searchable by keyword or category for several hours (or up to 24 hours in some circumstances). Gosset can't guarantee exact listing durations
+            li Content that violates any of Gosset's policies may be deleted at Gosset's discretion
+            li We strive to create a marketplace where buyers find what they are looking for. Therefore, the appearance or placement of listings in search and browse results will depend on a variety of factors, including, but not limited to:
+            ul
+                li buyer's search query, browsing site, and history
+                li history, and relevance to the user query
+                li seller's history, including listing practices, Detailed Seller Ratings, Gosset policy compliance, Feedback, and defect rate
+                li number of listings matching the buyer's query
+                li Accordingly, to drive a positive user experience, a listing may not appear in some search and browse results regardless of the sort order chosen by the buyer.
+        p.text Some advanced listing upgrades will only be visible on certain Services.
+        p.text Metatags and URL links that are included in a listing may be removed or altered so as to not affect third-party search engine results.
+        p.text We may provide you with optional recommendations to consider when creating your listings. Such recommendations may be based on the aggregated sales and performance history of similar sold and current listings; results will vary for individual listings. To drive the recommendations experience, you agree that we may display the sales and performance history of your individual listings to other sellers.
+        h2.header1 Purchase Conditions
+        p.text When buying an item, you agree that:
+        ul.list
+            li You are responsible for reading the full item listing before making a commitment to buy.
+            li You enter into a legally binding contract to purchase an item when you commit to buy the item.
+            li We do not transfer legal ownership of items from the seller to the buyer.
+        h2.header1 Translation
+        p.text You authorize us to use automated tools to translate your Gosset content and member-to-member communications, in whole or in part, into local languages where such translation solutions are available. We may provide you with tools which will enable you to translate content at your request. The accuracy and availability of any translation are not guaranteed.
+        h2.header1 Content
+        p.text When providing us with content or causing content to be posted using our Services, you grant us a non-exclusive, worldwide, perpetual, irrevocable, royalty-free, sublicensable (through multiple tiers) right to exercise any and all copyright, publicity, trademark, and database rights and other intellectual property rights you have in the content, in any media known now or developed in the future. Further, to the fullest extent permitted under applicable law, you waive your moral rights and promise not to assert such rights or any other intellectual property or publicity rights against us, our sublicensees, or our assignees.
+        p.text You represent and warrant that none of the following infringe any rights mentioned in the preceding paragraph: your provision of content to us, your causing content to be posted using the Services, and use of any such content (including of works derived from it) by us, our users, or others in contract with us that is done in connection with the Services and in compliance with this User Agreement.
+        p.text You may use catalog content solely in connection with your Gosset listings. The permission to use catalog content is subject to modification or revocation at any time at Gosset's sole discretion.
+        p.text While we try to offer reliable data, we cannot promise that the catalogs will always be available, accurate, and up-to-date, and you agree that you will not hold our catalog providers or us responsible for inaccuracies. The catalog may include copyrighted, trademarked or other proprietary materials. You agree not to remove any copyright, proprietary or identification markings included within the catalogs or create any derivative works based on catalog content (other than by including them in your listings).
+        h2.header1 Notice for Claims of Intellectual Property Violations and Copyright Infringement Pursuant to Section 512(c) of Title 17 of the United States Code
+        p.text We respond to notices of alleged copyright infringement under the United States Digital Millennium Copyright Act. Gosset works to ensure that listed items and content on our site or in our apps do not infringe upon the copyright, trademark, or other intellectual property rights of third parties. If you believe that your intellectual property rights have been infringed, please notify us via our contact information found on our website.
+        h2.header1 Authorization to Contact You; Recording Calls
+        p.text Gosset may contact you using autodialed or prerecorded calls and text messages, at any telephone number that you have provided us, to: (i) notify you regarding your account; (ii) troubleshoot problems with your account; (iii) resolve a dispute; (iv) collect a debt; (v) poll your opinions through surveys or questionnaires; or (vi) as otherwise necessary to service your account or enforce this User Agreement, our policies, applicable law, or any other agreement we may have with you. Gosset may also contact you using autodialed or prerecorded calls and text messages for marketing purposes (e.g., offers and promotions), if you consent to such communications. As described in our User Privacy Notice, Gosset may collect other telephone numbers for you and may place manual non-marketing calls to any of those numbers and autodialed non-marketing calls to any landline. Standard telephone minute and text charges may apply and may include overage fees if you have exceeded your plan limits. If you do not wish to receive such communications, you may change your communications preference at any time via emailing Gosset’s support email. 
+        p.text Gosset may share your telephone number with its authorized service providers as stated in our User Privacy Notice. These service providers may contact you using autodialed or prerecorded calls and text messages, only as authorized by Gosset to carry out the purposes we have identified above.
+        p.text Gosset may, without further notice or warning and in its discretion, monitor or record telephone conversations you or anyone acting on your behalf has with Gosset or its agents for quality control and training purposes or for its own protection.
+        h2.header1 Privacy of Others; Marketing
+        p.text If Gosset provides you with information about another user, you agree you will use the information only for the purposes it is provided to you. You may not disclose, sell, rent, or distribute a user's information to a third party for purposes unrelated to the Services. 
+        p.text Additionally, you may not use information for marketing purposes, via electronic or other means, unless you obtain the consent of the specific user to do so.
+        h2.header1 Cancellations
+        p.text Sellers can create rules to automate refunds under certain circumstances. 
+        p.text When a transaction is cancelled, to refund the buyer, you (as seller) authorize Gosset to request that Braintree remove the refund amount (in same or other currency) from your Braintree account. 
+        h2.header1 Gosset Money Back Guarantee
+        p.text Most Gosset sales go smoothly, but if there's a problem with a purchase, the Gosset Money Back Guarantee helps buyers and sellers communicate and resolve issues. You agree to comply with the policy and permit us to make a final decision on any Gosset Money Back Guarantee case.
+        p.text If you (as seller), choose to reimburse a buyer, or are required to reimburse a buyer or Gosset under the Gosset Money Back Guarantee, you authorize Gosset to request that Braintree remove the reimbursement amount (in same or other currency) from your Braintree account, place the amount on your invoice, and/or charge your payment method on file. If we cannot get reimbursement from you, we may collect the outstanding sums using other collection mechanisms, including retaining collection agencies.
+        h2.header1 Disclaimer of Warranties; Limitation of Liability
+        p.text We try to keep our Services safe, secure, and functioning properly, but we cannot guarantee the continuous operation of or access to our Services. Notification functionality in Gosset's applications may not occur in real time. Such functionality is subject to delays beyond Gosset's control.
+        p.text You agree that you are making use of our Services at your own risk, and that they are being provided to you on an "AS IS" and "AS AVAILABLE" basis. Accordingly, to the extent permitted by applicable law, we exclude all express or implied warranties, terms and conditions including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+        p.text In addition, to the extent permitted by applicable law, we are not liable, and you agree not to hold us responsible, for any damages or losses (including, but not limited to, loss of money, goodwill or reputation, profits, or other intangible losses or any special, indirect, or consequential damages) resulting directly or indirectly from:
+        ul.list
+            li your use of or your inability to use our Services
+            li pricing, format, or other guidance provided by Gosset
+            li delays or disruptions in our Services
+            li viruses or other malicious software obtained by accessing or linking to our Services
+            li glitches, bugs, errors, or inaccuracies of any kind in our Services
+            li damage to your hardware device from the use of any Gosset Service
+            li the content, actions, or inactions of third parties, including items listed using our Services
+            li a suspension or other action taken with respect to your account or breach of the Abusing Gosset Section above
+            li the duration or manner in which your listings appear in search results as set out in the Listing Conditions Section above
+            li your need to modify practices, content, or behavior or your loss of or inability to do business, as a result of changes to this User Agreement or our policies
+        p.text Some jurisdictions do not allow the disclaimer of warranties or exclusion of damages, so such disclaimers and exclusions may not apply to you.
+        p.text Regardless of the previous paragraphs, if we are found to be liable, our liability to you or to any third party is limited to the greater of (a) any amounts due under the Gosset Money Back Guarantee up to the price the item sold for on Gosset (including any applicable sales tax) and its original shipping costs, (b) the amount of fees in dispute not to exceed the total fees, which you paid to us in the 12 months prior to the action giving rise to the liability, or (c) $100.
+        h2.header1 Release
+        p.text If you have a dispute with one or more users, you release us from claims, demands and damages (actual and consequential) of every kind and nature, known and unknown, arising out of or in any way connected with such disputes. 
+            span(style='font-weight:bold') In entering into this release you expressly waive any protections (whether statutory or otherwise) that would otherwise limit the coverage of this release to include only those claims which you may know or suspect to exist in your favor at the time of agreeing to this release.
+        h2.header1 Indemnity
+        p.text You will indemnify and hold us harmless from any claim or demand, including reasonable legal fees, made by any third party due to or arising out of your breach of this Agreement, your improper use of Gosset's Services or your breach of any law or the rights of a third party.
+        h2.header1 Legal Disputes
+        p.textBold PLEASE READ THIS SECTION CAREFULLY. IT AFFECTS YOUR RIGHTS AND WILL HAVE A SUBSTANTIAL IMPACT ON HOW CLAIMS YOU AND GOSSET HAVE AGAINST EACH OTHER ARE RESOLVED.
+        p.textBold You and Gosset agree that any claim or dispute at law or equity that has arisen or may arise between us relating in any way to or arising out of this or previous versions of the Gosset User Agreement, your use of or access to the Services, or any products or services sold or purchased through the Services, will be resolved in accordance with the provisions set forth in this Legal Disputes Section.
+        p.textBold A. Applicable Law
+        p.text2 You agree that, except to the extent inconsistent with or preempted by federal law, the laws of the State of Illinois, without regard to principles of conflict of laws, will govern the User Agreement and any claim or dispute that has arisen or may arise between you and Gosset, except as otherwise stated in the User Agreement.
+        p.textBold B. Agreement to Arbitrate
+        p.text2(style="font-weight:bold;") You and Gosset each agree that any and all disputes or claims that have arisen or may arise between you and Gosset relating in any way to or arising out of this or previous versions of the User Agreement, your use of or access to Gosset's Services, or any products or services sold, offered, or purchased through Gosset's Services shall be resolved exclusively through final and binding arbitration, rather than in court. Alternatively, you may assert your claims in small claims court, if your claims qualify and so long as the matter remains in such court and advances only on an individual (non-class, non-representative) basis. 
+            span(style="font-weight:normal") The Federal Arbitration Act governs the interpretation and enforcement of this Agreement to Arbitrate.
+        p.textBold C. Prohibition of Class and Representative Actions and Non-Individualized Relief
+        p.text2(style="font-weight:bold;") YOU AND GOSSET AGREE THAT EACH OF US MAY BRING CLAIMS AGAINST THE OTHER ONLY ON AN INDIVIDUAL BASIS AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE OR PRIVATE ATTORNEY GENERAL ACTION OR PROCEEDING. UNLESS BOTH YOU AND Gosset AGREE OTHERWISE, THE ARBITRATOR MAY NOT CONSOLIDATE OR JOIN MORE THAN ONE PERSON'S OR PARTY'S CLAIMS, AND MAY NOT OTHERWISE PRESIDE OVER ANY FORM OF A CONSOLIDATED, REPRESENTATIVE, CLASS, OR PRIVATE ATTORNEY GENERAL ACTION OR PROCEEDING. ALSO, THE ARBITRATOR MAY AWARD RELIEF (INCLUDING MONETARY, INJUNCTIVE, AND DECLARATORY RELIEF) ONLY IN FAVOR OF THE INDIVIDUAL PARTY SEEKING RELIEF AND ONLY TO THE EXTENT NECESSARY TO PROVIDE RELIEF NECESSITATED BY THAT PARTY'S INDIVIDUAL CLAIM(S). ANY RELIEF AWARDED CANNOT AFFECT OTHER USERS. 
+            span(style="font-weight:normal;") If a court decides that applicable law precludes enforcement of any of this paragraph's limitations as to a particular claim for relief, then that claim (and only that claim) must be severed from the arbitration and may be brought in court, subject to your and Gosset's right to appeal the court's decision. All other claims will be arbitrated.
+        p.textBold D. Arbitration Procedures
+        p.text2 Arbitration is more informal than a lawsuit in court. Arbitration uses a neutral arbitrator instead of a judge or jury, and court review of an arbitration award is very limited. However, an arbitrator can award the same damages and relief on an individual basis that a court can award to an individual. An arbitrator should apply the terms of the User Agreement as a court would. All issues are for the arbitrator to decide, except that issues relating to arbitrability, the scope or enforceability of this Agreement to Arbitrate, or the interpretation of Section 1 of this Agreement to Arbitrate ("Prohibition of Class and Representative Actions and Non-Individualized Relief"), shall be for a court of competent jurisdiction to decide.
+        p.text2 The arbitration will be conducted by the American Arbitration Association ("AAA") under its rules and procedures, including the AAA's Consumer Arbitration Rules (as applicable), as modified by this Agreement to Arbitrate. The AAA's rules are available at www.adr.org or by calling the AAA at 1-800-778-7879. The use of the word "arbitrator" in this provision shall not be construed to prohibit more than one arbitrator from presiding over an arbitration: rather, the AAA's rules will govern the number of arbitrators that may preside over an arbitration conducted under this Agreement to Arbitrate.
+        p.text2 The arbitration hearing shall be held in the county in which you reside or at another mutually agreed location. If the value of the relief sought is $10,000 or less, you or Gosset may elect to have the arbitration conducted by telephone or based solely on written submissions, which election shall be binding on you and Gosset subject to the arbitrator's discretion to require an in-person hearing, if the circumstances warrant. In cases where an in-person hearing is held, you and/or Gosset may attend by telephone, unless the arbitrator requires otherwise.
+        p.text2 The arbitrator will decide the substance of all claims in accordance with applicable law, including recognized principles of equity, and will honor all claims of privilege recognized by law. The arbitrator shall not be bound by rulings in prior arbitrations involving different users, but is bound by rulings in prior arbitrations involving the same Gosset user to the extent required by applicable law. The arbitrator's award shall be final and binding and judgment on the award rendered by the arbitrator may be entered in any court having jurisdiction thereof.
+        p.textBold E. Costs of Arbitration
+        p.text2 Payment of all filing, administration and arbitrator fees will be governed by the AAA's rules, unless otherwise stated in this Agreement to Arbitrate. If the value of the relief sought is $10,000 or less, at your request, Gosset will pay all filing, administration, and arbitrator fees associated with the arbitration. Any request for payment of fees by Gosset should be submitted by mail to the AAA along with your Demand for Arbitration and Gosset will make arrangements to pay all necessary fees directly to the AAA. If (a) you willfully fail to comply with the Notice of Dispute requirement discussed above, or (b) in the event the arbitrator determines the claim(s) you assert in the arbitration to be frivolous, you agree to reimburse Gosset for all fees associated with the arbitration paid by Gosset on your behalf that you otherwise would be obligated to pay under the AAA's rules.
+        p.textBold F. Severability
+        p.text2 With the exception of any of the provisions in Section 1 of this Agreement to Arbitrate ("Prohibition of Class and Representative Actions and Non-Individualized Relief"), if an arbitrator or court decides that any part of this Agreement to Arbitrate is invalid or unenforceable, the other parts of this Agreement to Arbitrate shall still apply.
+        p.textBold G. Future Amendments to the Agreement to Arbitrate
+        p.text2 Notwithstanding any provision in the User Agreement to the contrary, you and we agree that if we make any amendment to this Agreement to Arbitrate (other than an amendment to any notice address or site link provided herein) in the future, that amendment shall not apply to any claim that was filed in a legal proceeding against Gosset prior to the effective date of the amendment. The amendment shall apply to all other disputes or claims governed by the Agreement to Arbitrate that have arisen or may arise between you and Gosset. We will notify you of amendments to this Agreement to Arbitrate by posting the amended terms on www.gosset.co at least 30 days before the effective date of the amendments and by providing notice through email. If you do not agree to these amended terms, you may close your account within the 30 day period and you will not be bound by the amended terms.
+        p.textBold H. Judicial Forum for Legal Disputes
+        p.text2 Unless you and we agree otherwise, in the event that the Agreement to Arbitrate above is found not to apply to you or to a particular claim or dispute, either as a result of your decision to opt out of the Agreement to Arbitrate or as a result of a decision by the arbitrator or a court order, you agree that any claim or dispute that has arisen or may arise between you and Gosset must be resolved exclusively by a state or federal court located in Chicago, Illinois. You and Gosset agree to submit to the personal jurisdiction of the courts located within Chicago, Illinois for the purpose of litigating all such claims or disputes.
+        h2.header1 General
+        p.text Except as otherwise provided in this Agreement, if any provision of this User Agreement is held to be invalid, void or for any reason unenforceable, such provision shall be struck out and shall not affect the validity and enforceability of the remaining provisions.  In our sole discretion, we may assign this User Agreement, by providing notice of such assignment in accordance with the Notices Section.
+        p.text Headings are for reference purposes only and do not limit the scope or extent of such Section. Our failure to act with respect to a breach by you or others does not waive our right to act with respect to subsequent or similar breaches. We do not guarantee we will take action against all breaches of this User Agreement.
+        p.text We may amend this User Agreement at any time by posting the amended terms on www.gosset.co. Our right to amend the User Agreement includes the right to modify, add to, or remove terms in the User Agreement. We will provide you 30 days' notice by posting the amended terms. Additionally, we will notify you via email. Your continued access or use of our Services constitutes your acceptance of the amended terms. We may also ask you to acknowledge your acceptance of the User Agreement through an electronic click-through. This User Agreement may not otherwise be amended except through mutual agreement by you and a Gosset representative who intends to amend this User Agreement and is duly authorized to agree to such an amendment.
+        p.text The policies posted on our sites may be changed from time to time. Changes take effect when we post them on the Gosset site.
+        p.text If you create or use an account on behalf of a business entity, you represent that you are authorized to act on behalf of such business and bind the business to this User Agreement. Such account is owned and controlled by the business entity. No agency, partnership, joint venture, employee-employer or franchiser-franchisee relationship is intended or created by this User Agreement.
+        p.text The User Agreement, the User Privacy Notice, and all polices set forth the entire understanding and agreement between you and Gosset and supersede all prior understandings and agreements of the parties.
+        p.text The following Sections survive any termination of this User Agreement: Fees, Content, Disclaimer of Warranties; Limitation of Liability; Indemnity, and Legal Disputes.
+        p.text If you are a California resident, in accordance with Cal. Civ. Code §1789.3, you may report complaints to the Complaint Assistance Unit of the Division of Consumer Services of the California Department of Consumer Affairs by contacting them in writing at 400 R Street, Sacramento, CA 95814, or by telephone at (800) 952-5210.
+        
+                
