@@ -74,4 +74,13 @@ $(document).ready(function() {
         }
     }) 
     
+    setTimeout(function() {   //makes 10 second event
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Timing',
+            eventAction: 'Stayed on landing page for 10 seconds',
+            eventLabel: 'Stayed on landing page'
+        });
+    }, 10000);
+    
 })
