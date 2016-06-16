@@ -1,6 +1,15 @@
 $(document).ready(function() {
     var sendScrollToFAQ = true;
     
+    setTimeout(function() {   //makes 10 second event
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Timing',
+            eventAction: 'Stayed on landing page for 10 seconds',
+            eventLabel: 'Stayed on landing page'
+        }); 
+    }, 10000);
+    
     $('#reg').click(function() {
         $('html, body').animate({
             scrollTop: $("body").offset().top
@@ -73,14 +82,5 @@ $(document).ready(function() {
             sendScrollToFAQ = false;
         }
     }) 
-    
-    setTimeout(function() {   //makes 10 second event
-        ga('send', {
-            hitType: 'event',
-            eventCategory: 'Timing',
-            eventAction: 'Stayed on landing page for 10 seconds',
-            eventLabel: 'Stayed on landing page'
-        });
-    }, 10000);
     
 })
