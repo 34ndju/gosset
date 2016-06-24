@@ -237,13 +237,37 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     }) 
     
     app.get('/store', function(req, res) {
-        if(!req.session.email)
+        /*if(!req.session.email)
             res.redirect('/login')
-        UserModel.findOne({email:req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            res.render('store', {cart:user.cart})
-        })
+        else {*/
+            if(req.query.category) {
+                var arr=[]
+                gridfs.files.find({"metadata.category": req.query.category}).toArray(function(err, data) {
+                    if(err)
+                        console.log(err)
+                    data.forEach(function(d){
+                        arr.push(d)
+                    })
+                    console.log(arr)
+                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), data:arr})
+                })
+            }
+            else {
+                res.render('store') // on cient-side, check if "category" exists
+            }
+        //}
+    })
+    
+    app.post('/store', function(req, res) {
+        /*if(!req.session.email)
+            res.redirect('/login')
+        else {*/
+            
+        //}
+    })
+    
+    app.get('/blog', function(req, res) {
+        res.redirect('https://medium.com/@34ndju')
     })
     
     app.get('/storeAPI', function(req, res) {
@@ -289,16 +313,19 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/product/:id', function(req, res) {
-        if(!req.session.email)
+        /*if(!req.session.email)
             res.redirect('/login')
-        else {
+        else { */
             gridfs.findOne({_id:req.params.id}, function(err, data) {
                 if(err)
                     console.log(err)
                 console.log(data)
-                res.render('product', {data:data});
+                if(!data.metadata.sample)
+                    res.render('product', {data:data});
+                else 
+                    res.render('product', {data:data, sample:true});
             })
-        }
+        //}
     })
 
     app.get('/accountinfoAPI', function(req, res) {

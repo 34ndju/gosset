@@ -1,0 +1,86 @@
+head
+    link(href='/css/store.css', rel='stylesheet')
+    link(href='/css/header.css', rel='stylesheet')
+    
+    link(rel='shortcut icon', href='/images/GWhite.png')
+    
+    script(src='/scripts/fingerprint.js')
+    script(src='/scripts/GA.js')
+    
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    script(src='/scripts/store.js')
+    
+    title Data Store
+body
+    header.main-header
+        a(href='/')
+            img.logo(src='/images/GossetMoustacheClear.png')
+        div#user
+            div#dropdown
+                a(href='/logout')
+                    div#logout
+                        p Logout
+                a(href='#')
+                    div#settings
+                        p Settings
+    div.header
+        form(method='post', action='/searchStore')
+            input(type='text')
+            button#x(type='submit')
+            label#button(for='x')
+                p &#128269;
+        div#categories
+            p Categories
+            div#categoryDropdown
+                a(href='/store?category=business')
+                    div 
+                        p Business
+                a(href='/store?category=government')
+                    div
+                        p Government
+                a(href='/store?category=climate')
+                    div 
+                        p Climate
+                a(href='/store?category=economy')
+                    div 
+                        p Economy
+                a(href='/store?category=science')
+                    div 
+                        p Science
+                a(href='/store?category=contacts')
+                    div 
+                        p Contacts
+                a(href='/store?category=sports')
+                    div 
+                        p Sports
+    div(style='height:60px')
+    h1 #{category}
+    div#datacontent
+        if category 
+            if data[0]
+                ul#labels
+                    li#col1 Title
+                    li#col2 Description
+                    li#col3 Publisher
+                    li#col4 Filename
+                    li#col5 Upload Date
+                    li#col6 File Size
+                each d in data
+                    ul
+                        a(href='/product/' + d._id)
+                            li#col1 #{d.metadata.title}
+                        li#col2 #{d.metadata.description}
+                        li#col3 #{d.metadata.email}
+                        li#col4 #{d.filename}
+                        li#col5 #{d.uploadDate.toDateString()}
+                        li#col6 #{d.length / 1000}kb
+            else
+                h3 Nothing uploaded yet.
+                h1 Be the first to 
+                    a(href='/dashboard', style='text-decoration:none')
+                        span(style='color:blue') upload
+                    span  #{category} 
+                    span data.
+        else
+            h4(style='font-weight:normal;') Welcome to the Data Store. Begin above.

@@ -51,7 +51,7 @@ db.once('open', function callback () {
   
   var UserModel = require('./client/models/user')(mongoose, db);
 
-  require('./client/routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt);
+  require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt);
   
 });
 

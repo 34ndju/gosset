@@ -33,6 +33,7 @@ body
         div.options
             a#download(href='/download/' + data._id)
                 p download
-            a#delete(href='/totalremove/' + data._id)
-                p delete
+            if !sample
+                a#delete(href='/totalremove/' + data._id)
+                    p delete
         

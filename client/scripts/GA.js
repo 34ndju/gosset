@@ -1,6 +1,6 @@
 //Google Analytics
 if (window.location.host != 'base-a34ndju.c9users.io') {
-    if(new Fingerprint().get() != 448455415) {
+    if(new Fingerprint().get() != 1855091454) {
         console.log('sent');
         (function(i,s,o,g,r,a,m){
             i['GoogleAnalyticsObject']=r;
