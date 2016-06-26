@@ -25,8 +25,11 @@ body
                     div#settings
                         p Settings
     div.header
-        form(method='post', action='/searchStore')
-            input(type='text')
+        form(method='post', action='/store')
+            if search
+                input(type='text', name='search', placeholder=search)
+            else
+                input(type='text', name='search')
             button#x(type='submit')
             label#button(for='x')
                 p &#128269;
@@ -55,9 +58,29 @@ body
                     div 
                         p Sports
     div(style='height:60px')
-    h1 #{category}
-    div#datacontent
-        if category 
+    if category
+        h1 #{category}
+    if !category && !search
+        div#beginBox
+            div#left
+                div.vectorHolder(style='background:#ffc266')
+                    img.vector(src='/images/vectors/storeVectors/Bank.png')
+                div.vectorHolder(style='background:#009933')
+                    img.vector(src='/images/vectors/storeVectors/Cloud.png')
+                div.vectorHolder(style='background:#809fff')
+                    img.vector(src='/images/vectors/storeVectors/Credit-Card.png')
+                div.vectorHolder(style='background:#ff6666')
+                    img.vector(src='/images/vectors/storeVectors/Gauge.png')
+                div.vectorHolder(style='background:#d98cd9;')
+                    img.vector(src='/images/vectors/storeVectors/Location-Pin.png')
+                div.vectorHolder(style='background:#d2a679')
+                    img.vector(src='/images/vectors/storeVectors/Presentation.png')
+            div#right
+                h4 Begin your search for data. 
+                p Search or Choose a category above.
+                p#disclaimer (Disclaimer: No data sets are for sale now; the store is only a glimpse of what is to come. Check up July 10 to begin purchasing.)
+    if category || search
+        div#datacontent
             if data[0]
                 ul#labels
                     li#col1 Title
@@ -82,5 +105,3 @@ body
                         span(style='color:blue') upload
                     span  #{category} 
                     span data.
-        else
-            h4(style='font-weight:normal;') Welcome to the Data Store. Begin above.

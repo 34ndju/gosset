@@ -30,10 +30,24 @@ body
         p #{data.length / 1000}kb
         p #{data.metadata.description}
         p Published by #{data.metadata.email}
+        <!--
         div.options
             a#download(href='/download/' + data._id)
                 p download
             if !sample
                 a#delete(href='/totalremove/' + data._id)
                     p delete
-        
+        form#checkout(action="/checkout", method="post")
+            input(data-braintree-name="number", value="378282246310005")
+            input(data-braintree-name="expiration_month", value="10")
+            input(data-braintree-name='expiration_year', value='20')
+            input(type="submit", id="submit", value="Pay")
+                    
+    script(src="https://js.braintreegateway.com/js/braintree-2.25.0.min.js")
+    script.
+        (function() {
+            var token = "#{clientToken}";
+
+            braintree.setup(token, 'custom', {id: 'checkout'});
+        })
+        -->

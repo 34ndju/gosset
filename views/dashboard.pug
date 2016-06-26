@@ -29,9 +29,10 @@ body
         div.menu1item#upload
             div#tri
             p My Data
-        div.menu1item#purchase
-            div#tri
-            p Data Store
+        a(href='/store', style='text-decoration:none')
+            div.menu1item#purchase
+                div#tri
+                p(style='color:black') Data Store
     div.content
         div.mydata
             form(method='post', action='/upload', enctype='multipart/form-data')
@@ -62,10 +63,4 @@ body
                             li#col6 #{d.length / 1000}kb
                 else
                     h4(style='font-weight:normal;') You have no data yet...Try uploading above!
-        div.store
-            img(src='/images/vectors/under-construction.png')
-            h2(style='font-weight:bold; color:red;') Under Construction!
-            p The data store is currently being built up by users uploading their data sets.
-            p(style='font-weight:bold; font-size:1.3em;') Join them in building The Data Marketplace, Gosset.
-            p Click the "My Data" tab on the left and begin uploading!
 

@@ -204,17 +204,3 @@ body {
 #col6 {
     width:calc(15% - 12px);
 }
-
-.store {
-    display:none;
-}
-
-.store img {
-    height:200px;
-    margin:10px;
-}
-
-.store p {
-    margin:2px;
-    padding:0;
-}

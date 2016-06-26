@@ -121,6 +121,70 @@ body {
     color:white;
 }
 
+#beginBox {
+    margin: auto;
+    width: 80%;
+    background:#499E34;
+    display:table;
+}
+
+#beginBox * {
+    display:table-cell;
+}
+
+#beginBox #left {
+    width:50%;
+    background:black;
+}
+
+#beginBox #left .vectorHolder {
+    width: calc(100% / 3);
+    float:left;
+}
+
+#beginBox #left .vectorHolder .vector {
+    width:60%;
+    margin:auto;
+    padding:20%;
+    transition-duration:1s;
+}
+
+
+#beginBox #left .vectorHolder:hover .vector {
+    transform:rotate(360deg);
+}
+
+#beginBox #right {
+    vertical-align:middle;
+    width:50%;
+}
+
+#beginBox #right * {
+    margin:0;
+    line-height:50px;
+    display:block;
+    color:white;
+}
+
+#beginBox #right h4 {
+    font-size:30px;
+    text-shadow:1px 1px black;
+    margin:0;
+}
+
+#beginBox #right p {
+    font-size:20px;
+    margin:0;
+}
+
+#beginBox #right #disclaimer {
+    width:70%;
+    margin:auto;
+    font-size:10px;
+    line-height:12px;
+    
+}
+
 #datacontent {
     background: #F7FDFF;
     border:1px solid #ABCBD4;

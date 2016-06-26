@@ -15,13 +15,23 @@ var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
 var bcrypt = require('bcrypt')
-
+var braintree = require('braintree')
 
 var app = express();
 
-require('dotenv').config()
+require('dotenv').load()
 
-var port = process.env.PORT || 443;
+var gateway = require('./lib/gateway');
+var TRANSACTION_SUCCESS_STATUSES = [
+  braintree.Transaction.Status.Authorizing,
+  braintree.Transaction.Status.Authorized,
+  braintree.Transaction.Status.Settled,
+  braintree.Transaction.Status.Settling,
+  braintree.Transaction.Status.SettlementConfirmed,
+  braintree.Transaction.Status.SettlementPending,
+  braintree.Transaction.Status.SubmittedForSettlement
+];
+var port = process.env.PORT || 8080;
 var visitor = ua('UA-77388290-1');
 
 app.set('views', './views')
@@ -51,7 +61,7 @@ db.once('open', function callback () {
   
   var UserModel = require('./client/models/user')(mongoose, db);
 
-  require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt);
+  require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway);
   
 });
 

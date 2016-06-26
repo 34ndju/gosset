@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway) {
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -160,7 +160,22 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {
                         console.log(req.session.email + " uploaded " + file.originalFilename)
-                        res.redirect('/')
+                        UserModel.findOne({email:req.session.email}, function(err, user) {
+                            if(err)
+                                console.log(err)
+                            gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
+                                if(err) 
+                                    console.log(err)
+                                if(merchant == null) {
+                                    console.log(req.session.email + ' no onboarded yet; redirecting to onboardMerchant')
+                                    res.redirect('/onboardMerchant')
+                                }
+                                else {
+                                    console.log(req.session.email + " already onboarded; redirecting to dashboard")
+                                    res.redirect('/')
+                                }
+                            })
+                        })
                     })
                 }
                 else {
@@ -170,6 +185,76 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             }
         })
     })  
+    
+    app.get('/onboardMerchant', function(req, res) {
+        req.session.email = '34ndju@gmail.com'
+        UserModel.findOne({email: req.session.email}, function(err, user){
+            if(err)
+                console.log(err)
+            gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
+                if(err)
+                    console.log(err)
+                console.log(merchant)
+            })
+            res.render('onboardMerchant')
+        })
+    })
+    
+    app.post('/onboardMerchant', function(req, res) {
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            var merchantAccountParams = {
+                individual: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    dateOfBirth: req.body.birthdate.toString(),
+                    address: {
+                        streetAddress: req.body.streetAddress,
+                        locality: req.body.city, 
+                        region: req.body.state, //two letter
+                        postalCode: req.body.zipCode
+                    }
+                },
+                /*business: {
+                    legalName: "Jane's Ladders",
+                    dbaName: "Jane's Ladders",
+                    taxId: "98-7654321",
+                    address: {
+                        streetAddress: "111 Main St",
+                        locality: "Chicago",
+                        region: "IL",
+                        postalCode: "60622"
+                    }
+                }, */
+                funding: {
+                    destination: 'email' /*choose 'bank', 'email', or 'mobile_phone'*/,
+                    email: req.body.venmoEmail /*,
+                    mobilePhone: "5555555555",
+                    accountNumber: "1123581321",
+                    routingNumber: "071101307" */
+                },
+                tosAccepted: true,
+                masterMerchantAccountId: 'gosset-marketplace',
+                id: user._id.toString() //from mongo
+            };
+                
+            gateway.merchantAccount.create(merchantAccountParams, function (err, result) {
+            });
+        })
+    })
+    
+    app.post('/webhook', function(req, res) {
+        gateway.webhookNotification.parse(
+            req.body.bt_signature,
+            req.body.bt_payload,
+            function (err, webhookNotification) {
+                console.log(webhookNotification)
+                console.log("[Webhook Received " + webhookNotification.timestamp + "] | Kind: " + webhookNotification.kind);
+            });
+            res.status(200).send();
+    })
     
     app.get('/download/:id', function(req, res) {
         gridfs.findOne({_id: req.params.id}, function(err, file) {
@@ -241,15 +326,11 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.redirect('/login')
         else {*/
             if(req.query.category) {
-                var arr=[]
                 gridfs.files.find({"metadata.category": req.query.category}).toArray(function(err, data) {
                     if(err)
                         console.log(err)
-                    data.forEach(function(d){
-                        arr.push(d)
-                    })
-                    console.log(arr)
-                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), data:arr})
+                    console.log(data)
+                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), data:data})
                 })
             }
             else {
@@ -262,7 +343,20 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         /*if(!req.session.email)
             res.redirect('/login')
         else {*/
-            
+            console.log(req.body.search)
+            gridfs.files.find({'metadata.description': { "$regex": req.body.search, "$options": "i" }}).toArray(function(err, files) { //checks description
+                if(err)
+                    console.log(err)
+                if(files[0])
+                    res.render('store', {search:req.body.search, data:files})
+                else {
+                    gridfs.files.find({'metadata.title': { "$regex": req.body.search, "$options": "i" }}).toArray(function(err, files) { //checks title
+                        if(err)
+                            console.log(err)
+                        res.render('store', {search:req.body.search, data:files})
+                    })
+                }
+            })
         //}
     })
     
@@ -319,14 +413,42 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             gridfs.findOne({_id:req.params.id}, function(err, data) {
                 if(err)
                     console.log(err)
-                console.log(data)
-                if(!data.metadata.sample)
-                    res.render('product', {data:data});
+                if(!data.metadata.sample) {
+                    gateway.clientToken.generate({}, function (error, response) {
+                        if(error)
+                            console.log(error)
+                        res.render('product', {data:data, clientToken:response.clientToken});
+                    })
+                }
                 else 
                     res.render('product', {data:data, sample:true});
             })
         //}
     })
+    
+    app.post('/checkout', function(req, res) {
+        var transactionErrors;
+        var nonce = req.body.payment_method_nonce;
+        console.log('nonce', nonce)
+        
+        
+        gateway.transaction.sale({
+            amount: "4004.00",
+            paymentMethodNonce: 'fake-valid-country-of-issuance-usa-nonce',
+            options: {
+                submitForSettlement: true
+            }
+        }, function (err, transactionResult) {
+            gateway.testing.settle(transactionResult.transaction.id, function(err, settleResult) {
+                settleResult.success
+                // true
+                
+                settleResult.transaction.status
+                // Transaction.Status.Settled
+            });
+        }
+        );
+    }) 
 
     app.get('/accountinfoAPI', function(req, res) {
         UserModel.findOne({email: req.session.email}, function(err, user) {
