@@ -160,7 +160,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {
                         console.log(req.session.email + " uploaded " + file.originalFilename)
-                        UserModel.findOne({email:req.session.email}, function(err, user) {
+                        /*UserModel.findOne({email:req.session.email}, function(err, user) {
                             if(err)
                                 console.log(err)
                             gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
@@ -174,8 +174,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     console.log(req.session.email + " already onboarded; redirecting to dashboard")
                                     res.redirect('/')
                                 }
-                            })
-                        })
+                            }) 
+                        }) */
                     })
                 }
                 else {
@@ -187,17 +187,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })  
     
     app.get('/onboardMerchant', function(req, res) {
-        req.session.email = '34ndju@gmail.com'
-        UserModel.findOne({email: req.session.email}, function(err, user){
-            if(err)
-                console.log(err)
-            gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
-                if(err)
-                    console.log(err)
-                console.log(merchant)
-            })
-            res.render('onboardMerchant')
-        })
+        res.render('onboardMerchant')
     })
     
     app.post('/onboardMerchant', function(req, res) {
@@ -243,6 +233,32 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             gateway.merchantAccount.create(merchantAccountParams, function (err, result) {
             });
         })
+    })
+    
+    app.post('/checkout', function(req, res) {
+        var transactionErrors;
+        var nonce = req.body.payment_method_nonce;
+        console.log('nonce', nonce)
+        
+        
+        gateway.transaction.sale({
+            merchantAccountId: '57703af790f8d289027c510e',
+            amount: "0.02",
+            paymentMethodNonce: 'fake-valid-country-of-issuance-usa-nonce',
+            serviceFeeAmount:'0.01',
+            options: {
+                submitForSettlement: true
+            }
+        }, function (err, transactionResult) {
+            gateway.testing.settle(transactionResult.transaction.id, function(err, settleResult) {
+                settleResult.success
+                // true
+                
+                settleResult.transaction.status
+                // Transaction.Status.Settled
+            });
+        }
+        );
     })
     
     app.post('/webhook', function(req, res) {
@@ -425,30 +441,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             })
         //}
     })
-    
-    app.post('/checkout', function(req, res) {
-        var transactionErrors;
-        var nonce = req.body.payment_method_nonce;
-        console.log('nonce', nonce)
-        
-        
-        gateway.transaction.sale({
-            amount: "4004.00",
-            paymentMethodNonce: 'fake-valid-country-of-issuance-usa-nonce',
-            options: {
-                submitForSettlement: true
-            }
-        }, function (err, transactionResult) {
-            gateway.testing.settle(transactionResult.transaction.id, function(err, settleResult) {
-                settleResult.success
-                // true
-                
-                settleResult.transaction.status
-                // Transaction.Status.Settled
-            });
-        }
-        );
-    }) 
 
     app.get('/accountinfoAPI', function(req, res) {
         UserModel.findOne({email: req.session.email}, function(err, user) {
