@@ -67,7 +67,6 @@ body {
     width:76px;
     height:50px;
     background: none;
-    border-radius:10px;
     border:2px solid black;
     float:right;
 }
@@ -77,6 +76,7 @@ body {
 #login h1 {
     color:black;
     font-size:1.2em;
+    font-weight:normal;
 }
 
 #login div:hover{
@@ -92,8 +92,7 @@ body {
     float:right;
     margin:0 5px 0 5px;
     height:50px;
-    background: #499E34;
-    border-radius:10px;
+    background: #5CB547;
     cursor:pointer;
     display:none;
     transition-duration:0.3s;
@@ -104,6 +103,7 @@ body {
 #reg h1 {
     color:black;
     font-size:1.2em;
+    font-weight:normal;
 }
 
 #reg:hover {

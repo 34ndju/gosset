@@ -167,7 +167,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                 if(err) 
                                     console.log(err)
                                 if(merchant == null) {
-                                    console.log(req.session.email + ' no onboarded yet; redirecting to onboardMerchant')
+                                    console.log(req.session.email + ' not onboarded yet; redirecting to onboardMerchant')
                                     res.redirect('/onboardMerchant')
                                 }
                                 else {
@@ -175,7 +175,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     res.redirect('/')
                                 }
                             }) 
-                        }) */
+                        })  */
+                        res.redirect('/')
                     })
                 }
                 else {
@@ -187,7 +188,9 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })  
     
     app.get('/onboardMerchant', function(req, res) {
-        res.render('onboardMerchant')
+        /*req.session.email = '34ndju@gmail.com'
+        res.render */
+        res.redirect('/')
     })
     
     app.post('/onboardMerchant', function(req, res) {
@@ -495,4 +498,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         res.render('termsofuse');
     })
 
+    app.get('/medR', function(req, res) {
+        res.redirect('/?utm_source=Medium&utm_medium=Blog&utm_campaign=Medium%20Blogs');
+    })
 }
