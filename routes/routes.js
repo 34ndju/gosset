@@ -279,7 +279,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 })
     
                 if(req.query.ext == 'json') {
-                    var path = 'tmp/' + file.filename,
+                    var path = '/tmp/' + file.filename,
                         jsonFile = file.filename.split('.')[0] + '.json'
                     var out = fs.createWriteStream(path)
                     readStream.pipe(out)
@@ -288,7 +288,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         console.log(req.session.email + " downloaded " + jsonFile + '.')
                         xlsxj({
                             input: path,
-                            output: 'tmp/' + jsonFile
+                            output: '/tmp/' + jsonFile
                         }, function(err, result) {
                             if(err) 
                                 console.log(err)
