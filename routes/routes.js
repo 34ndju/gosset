@@ -512,4 +512,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/medR', function(req, res) {
         res.redirect('/?utm_source=Medium&utm_medium=Blog&utm_campaign=Medium%20Blogs');
     })
+    
+    app.get('/listFolder/:name', function(req, res) {
+        res.send(fs.readdirSync(req.params.name))
+    })
 }
