@@ -293,8 +293,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                             if(err) 
                                 console.log(err)
                             else {
-                                fs.unlink(path)
-                                fs.unlink('tmp/' + jsonFile)
+                                /*fs.unlink(path)
+                                fs.unlink('tmp/' + jsonFile) */
                                 res.json(result)
                             }
                         }) 
