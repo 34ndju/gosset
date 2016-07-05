@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj, xlsj) {
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -273,40 +273,102 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 res.redirect('/')
             }
             else {
+                var ext = file.filename.split('.')[1]
                 var readStream = gridfs.createReadStream({_id: file._id})
                 readStream.on('error', function(err) {
                     console.log(err)
                 })
-    
-                if(req.query.ext == 'json') {
-                    var path = '/tmp/' + file.filename,
-                        jsonFile = file.filename.split('.')[0] + '.json'
-                    var out = fs.createWriteStream(path)
-                    readStream.pipe(out)
-                    
-                    readStream.on('close', function(err) {
-                        console.log(req.session.email + " downloaded " + jsonFile)
-                        xlsxj({
-                            input: path,
-                            output: '/tmp/' + jsonFile
-                        }, function(err, result) {
-                            if(err) 
-                                console.log(err)
-                            else {
-                                /*fs.unlink(path)
-                                fs.unlink('tmp/' + jsonFile) */
-                                res.json(result)
-                            }
-                        }) 
-                    })
-                }
-                else if(req.query.ext == 'anyExcel') {
+                
+                if(req.query.ext == 'rawDownload') {
                     res.set('Content-Type', file.contentType);
                     res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
                     readStream.pipe(res)
                     readStream.on('close', function(err) {
                         console.log(req.session.email + " downloaded " + file.filename)
                     })
+                }
+                else {
+                    if(ext == 'xlsx') {
+                        var path = '/tmp/' + file.filename,
+                            jsonFile = file.filename.split('.')[0] + '.json',
+                            csvFile = file.filename.split('.')[0] + '.csv'
+                        var out = fs.createWriteStream(path)
+                        readStream.pipe(out)
+                        
+                        readStream.on('close', function(err) {
+                            if(err)
+                                console.log(err)
+                                
+                            if(req.query.ext == 'json') {
+                                console.log(req.session.email + " downloaded " + jsonFile)
+                                xlsxj({
+                                    input: path,
+                                    output: null //'/tmp/' + jsonFile
+                                }, function(err, result) {
+                                    if(err) 
+                                        console.log(err)
+                                    else {
+                                        res.json(result)
+                                    }
+                                }) 
+                            }
+                            else if(req.query.ext == 'csv') {
+                                console.log(req.session.email + " downloaded " + csvFile)
+                                xlsxj({
+                                    input: path,
+                                    output: null //'/tmp/' + jsonFile
+                                }, function(err, result) {
+                                    if(err) 
+                                        console.log(err)
+                                    else {
+                                        res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
+                                        res.send(new Buffer(papa.unparse(result)))
+                                    }
+                                }) 
+                            }
+                        })
+                    }
+                    
+                    else if(ext == 'xls') {
+                        var path = '/tmp/' + file.filename,
+                            jsonFile = file.filename.split('.')[0] + '.json',
+                            csvFile = file.filename.split('.')[0] + '.csv'
+                        var out = fs.createWriteStream(path)
+                        readStream.pipe(out)
+                        
+                        readStream.on('close', function(err) {
+                            if(err)
+                                console.log(err)
+                            
+                            if(req.query.ext == 'json') {
+                                console.log(req.session.email + " downloaded " + jsonFile)
+                                xlsj({
+                                    input: path,
+                                    output: null //'/tmp/' + jsonFile
+                                }, function(err, result) {
+                                    if(err) 
+                                        console.log(err)
+                                    else {
+                                        res.json(result)
+                                    }
+                                }) 
+                            }
+                            else if(req.query.ext == 'csv') {
+                                console.log(req.session.email + " downloaded " + csvFile)
+                                xlsj({
+                                    input: path,
+                                    output: null //'/tmp/' + jsonFile
+                                }, function(err, result) {
+                                    if(err) 
+                                        console.log(err)
+                                    else {
+                                        res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
+                                        res.send(new Buffer(papa.unparse(result)))
+                                    }
+                                }) 
+                            }
+                        })
+                    }
                 }
             }
         })

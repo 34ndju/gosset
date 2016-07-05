@@ -31,6 +31,7 @@
     "db": "^1.0.6",
     "dotenv": "^1.2.0",
     "excel": "^0.1.4",
+    "excel-format": "0.0.1",
     "express": "^4.12.4",
     "express-force-domain": "0.0.6",
     "express-session": "^1.11.3",
@@ -44,6 +45,8 @@
     "papaparse": "^4.1.2",
     "pug": "^2.0.0-alpha6",
     "universal-analytics": "^0.3.11",
+    "xls-to-json": "^0.3.2",
+    "xlsx": "^0.8.0",
     "xlsx-to-json": "^0.2.4"
   }
 }

@@ -11,13 +11,14 @@ var bodyParser = require('body-parser');
 var multiparty = require('multiparty')
 var fs = require('fs')
 var papa = require('papaparse')
-var excel = require('excel')
 var gridFs = require('gridfs-stream')
 var pug = require('pug')
 var ua = require('universal-analytics')
 var bcrypt = require('bcrypt')
 var braintree = require('braintree')
 var xlsxj = require('xlsx-to-json')
+var xlsj = require('xls-to-json')
+
 
 
 var app = express();
@@ -64,7 +65,7 @@ db.once('open', function callback () {
   
   var UserModel = require('./client/models/user')(mongoose, db);
 
-  require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj);
+  require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj, xlsj);
   
 });
 
