@@ -285,7 +285,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     readStream.pipe(out)
                     
                     readStream.on('close', function(err) {
-                        console.log(req.session.email + " downloaded " + jsonFile + '.')
+                        console.log(req.session.email + " downloaded " + jsonFile)
                         xlsxj({
                             input: path,
                             output: '/tmp/' + jsonFile
