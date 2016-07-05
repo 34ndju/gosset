@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, excel, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj) {
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -11,7 +11,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/', function(req, res) {
         if(req.session.email)
             res.redirect('/dashboard')
-        else
+        else 
             res.render('home');
     })
     
@@ -123,18 +123,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.redirect('/')
         })
     })
-
-    app.get('/upload', function(req, res) {
-        if(!req.session.email)
-            res.redirect('/login')
-        else {
-            UserModel.findOne({email:req.session.email}, function(err, user) {
-                if(err)
-                    console.log(err)
-                res.render('upload', {cart:user.cart})
-            })
-        }
-    })
     
     app.post('/upload', function(req, res) {
         var form = new multiparty.Form()
@@ -147,7 +135,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 res.redirect('/')
             }
             else {
-                var file = files.file[0]
+                var file = files.file[0];
+
                 var ext = file.originalFilename.split('.')[1]
                 if(ext == 'xlsx' || ext == 'xltx' || ext == 'xls' || ext == 'xlw' || ext == 'xml' || ext == 'csv') {
                     var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
@@ -160,7 +149,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {
                         console.log(req.session.email + " uploaded " + file.originalFilename)
-                        /*UserModel.findOne({email:req.session.email}, function(err, user) {
+                        UserModel.findOne({email:req.session.email}, function(err, user) {
                             if(err)
                                 console.log(err)
                             gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
@@ -168,21 +157,21 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     console.log(err)
                                 if(merchant == null) {
                                     console.log(req.session.email + ' not onboarded yet; redirecting to onboardMerchant')
-                                    res.redirect('/onboardMerchant')
+                                    res.redirect('/')
+                                    //res.redirect('/onboardMerchant')
                                 }
                                 else {
                                     console.log(req.session.email + " already onboarded; redirecting to dashboard")
                                     res.redirect('/')
                                 }
                             }) 
-                        })  */
-                        res.redirect('/')
+                        })  
                     })
                 }
                 else {
                     console.log(req.session.email + " uploaded the wrong filetype")
                     res.redirect('/dashboard')
-                }
+                } 
             }
         })
     })  
@@ -275,7 +264,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.status(200).send();
     })
     
-    app.get('/download/:id', function(req, res) {
+    app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be json or anyExcel)
         gridfs.findOne({_id: req.params.id}, function(err, file) {
             if(err)
                 console.log(err)
@@ -284,18 +273,39 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 res.redirect('/')
             }
             else {
-                res.set('Content-Type', file.contentType);
-                res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
-    
                 var readStream = gridfs.createReadStream({_id: file._id})
-    
                 readStream.on('error', function(err) {
                     console.log(err)
                 })
-     
-                readStream.pipe(res)
-                //visitor.event("Download", "Downloaded " + file.filename).send()
-                console.log(req.session.email + " downloaded " + file.filename)
+    
+                if(req.query.ext == 'json') {
+                    var path = 'tmp/' + file.filename,
+                        jsonFile = file.filename.split('.')[0] + '.json'
+                    var out = fs.createWriteStream(path)
+                    readStream.pipe(out)
+                    
+                    readStream.on('close', function(err) {
+                        console.log(req.session.email + " downloaded " + jsonFile)
+                        xlsxj({
+                            input: path,
+                            output: 'tmp/' + jsonFile
+                        }, function(err, result) {
+                            if(err) 
+                                console.log(err)
+                            else {
+                                res.json(result)
+                            }
+                        }) 
+                    })
+                }
+                else if(req.query.ext == 'anyExcel') {
+                    res.set('Content-Type', file.contentType);
+                    res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
+                    readStream.pipe(res)
+                    readStream.on('close', function(err) {
+                        console.log(req.session.email + " downloaded " + file.filename)
+                    })
+                }
             }
         })
     })
@@ -325,6 +335,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/dashboard', function(req, res) {
+        req.session.email = '34ndju@gmail.com' //for testing
         if(!req.session.email)
             res.redirect('/login')
         else {
@@ -333,11 +344,11 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     console.log(err);
                 gridfs.files.find({'metadata.email': req.session.email}).toArray(function(err, data) {
                     if(err)
-                        console.log(err)
+                        console.log(err) 
                     res.render('dashboard', {user:user, data:data})
                 })
             })
-        }
+        } 
     }) 
     
     app.get('/store', function(req, res) {

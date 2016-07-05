@@ -43,6 +43,7 @@
     "os": "^0.1.1",
     "papaparse": "^4.1.2",
     "pug": "^2.0.0-alpha6",
-    "universal-analytics": "^0.3.11"
+    "universal-analytics": "^0.3.11",
+    "xlsx-to-json": "^0.2.4"
   }
 }
