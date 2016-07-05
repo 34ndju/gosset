@@ -264,7 +264,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.status(200).send();
     })
     
-    app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be json or anyExcel)
+    app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be rawDownload, json, or csv)
         gridfs.findOne({_id: req.params.id}, function(err, file) {
             if(err)
                 console.log(err)
@@ -328,7 +328,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                             }
                         })
                     }
-                    
                     else if(ext == 'xls') {
                         var path = '/tmp/' + file.filename,
                             jsonFile = file.filename.split('.')[0] + '.json',
@@ -399,7 +398,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/dashboard', function(req, res) {
-        req.session.email = '34ndju@gmail.com' //for testing
+        //req.session.email = '34ndju@gmail.com' for testing
         if(!req.session.email)
             res.redirect('/login')
         else {
