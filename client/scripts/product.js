@@ -1,30 +1,6 @@
 $(document).ready(function() {
-    /*$.getJSON('/productAPI', function(data) {
-        var filename = data.filename,
-            id = data._id,
-            metadata = data.metadata, //assigns data again
-            email = metadata.email,
-            title = metadata.title
-            //keys = Object.keys(data)
-        console.log(1)
-        $('.title').append(document.createTextNode(title))
-        $('.fileName').append(document.createTextNode(filename))
-        $('.email').append(document.createTextNode(email))
-    
-        not working now
-        var str = ""
-        keys.forEach(function(d) {
-            str += "" + d + ", "
-        })
-        str = str.replace(/,\s*$/, "");
-        
-        $('.keys').append(document.createTextNode(str)) 
-        
-        var a = document.createElement("a")
-        a.setAttribute("href", "/download/" + id)
-        a.appendChild(document.createTextNode("Download"))
-        $(".download").append(a)
-    }) */
+    Stripe.setPublishableKey('pk_live_0kmdttZT0HwB3E8el8SpRFf8');
+    var opened = false;
     
     $('#user').click(function() {
         console.log($('#dropdown').css('visibility'))
@@ -36,13 +12,60 @@ $(document).ready(function() {
         }
     })
     
-    console.log($('.content h1').text())
-    $('.options #download').click(function() {
+    $('#rawDownload').click(function() {
         ga('send', {
             hitType: 'event',
             eventCategory: 'Download',
-            eventAction: 'Downloaded Product',
-            eventLabel: 'Downloaded' + $('.content h1').text()
+            eventAction: 'Downloaded Raw File',
+            eventLabel: 'Downloaded' + $('#filename').text()
         });
     })
+    
+    $('#json').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Download',
+            eventAction: 'Downloaded JSON',
+            eventLabel: 'Downloaded' + $('#filename').text()
+        });
+    })
+    
+    $('#csv').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Download',
+            eventAction: 'Downloaded CSV',
+            eventLabel: 'Downloaded' + $('#filename').text()
+        });
+    })
+    
+    $('#submit').click(function() {
+        if(opened) {
+            Stripe.card.createToken({
+                number: $('#number').val(),
+                cvc: $('#cvc').val(),
+                exp_month: $('#exp_month').val(),
+                exp_year: $('#exp_year').val()
+            }, function(err, response) {
+                console.log(response)
+                $('#creditCardToken').val(response.id)
+                $('.pay').submit()
+            });
+        }
+        else {
+            $('.top').css('display', 'block')
+            $('.bottom').css('display', 'block')
+            opened = true;
+        }
+    })
+    
+    $('#buttonLabel #securityText').hover(
+        function() {
+            console.log(1)
+            $('#buttonLabel #security').css({'display':'block'})
+        },
+        function() {
+            $('#buttonLabel #security').css({'display':'none'})
+        }
+    )
 })

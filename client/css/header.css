@@ -4,6 +4,34 @@
     width:100%;
 }
 
+#nav {
+    position:absolute;
+    margin-left:50px;
+}
+
+#nav a {
+    display:inline-block;
+    text-decoration:none;
+    margin-top:15px;
+}
+
+#nav a p {
+    margin:0;
+}
+
+#nav a p:hover {
+    text-decoration:underline;
+}
+
+#seller-dashboard {
+    color:black;   
+}
+
+#store {
+    margin-left:50px;
+    color:black;
+}
+
 .logo {
     position:absolute;
     height:40px;

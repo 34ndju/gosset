@@ -15,6 +15,11 @@ head
   
 body
     header.main-header
+        div#nav
+            a#seller-dashboard(href='/')
+                p seller dashboard
+            a#store(href='/store')
+                p store
         a(href='/')
             img.logo(src='/images/GossetMoustacheClear.png')
         div#user
@@ -25,23 +30,34 @@ body
                 a(href='#')
                     div#settings
                         p Settings
-    div.menu1
-        div.menu1item#upload
-            div#tri
-            p My Data
-        a(href='/store', style='text-decoration:none')
-            div.menu1item#purchase
-                div#tri
-                p(style='color:black') Data Store
     div.content
+        if(showTOS)
+            h5#showTOS By continuing to use Gosset, you accept the 
+                a(href='/termsofuse')
+                    span Updated Terms of Use
+                span .
         div.mydata
-            form(method='post', action='/upload', enctype='multipart/form-data')
-                div.file 
-                    input#file.inputFile(type='file', name='file')
-                    label(for="file") Choose a File...
-                input#title(type='text', name='title', placeholder='Title', data-multiple-caption="{count} files selected" multiple)
-                textarea#description(name='description', placeholder='Description', cols="40", rows="50")
-                button#button(type='submit') SUBMIT
+            form.uploadFile(method='post', action='/upload', enctype='multipart/form-data')
+                div.top
+                    div.file
+                        span#filename Select your file
+                        label#file(for="fileInput") Choose a File...
+                            input#fileInput(type='file', name='file')
+                    div.title
+                        p Title
+                        input#title(type='text', name='title', data-multiple-caption="{count} files selected" multiple)
+                    div.priceArea
+                        div.priceArea-top
+                            p Price
+                        div.priceArea-bottom
+                            p.money $
+                            input.price(type='number', name='dollar', style='width:50px;', maxlength='4', value='0000')
+                            p.money .
+                            input.price(type='number', name='cent', maxlength='2', value='00')
+                div.bottom
+                    textarea#description(name='description', placeholder='Description', cols="40", rows="50")
+                    button#submit(type='submit') upload
+                    
             h3 Data by #{user.firstName} #{user.lastName} 
             div#datacontent
                 if data[0] 
@@ -62,5 +78,5 @@ body
                             li#col5 #{d.uploadDate.toDateString()}
                             li#col6 #{d.length / 1000}kb
                 else
-                    h4(style='font-weight:normal;') You have no data yet...Try uploading above!
+                    h4(style='font-weight:normal;') You have no data yet...Try uploading a data set above!
 

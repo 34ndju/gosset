@@ -14,6 +14,11 @@ head
     title Data Store
 body
     header.main-header
+        div#nav
+            a#seller-dashboard(href='/')
+                p seller dashboard
+            a#store(href='/store')
+                p store
         a(href='/')
             img.logo(src='/images/GossetMoustacheClear.png')
         div#user
@@ -78,7 +83,6 @@ body
             div#right
                 h4 Begin your search for data. 
                 p Search or Choose a category above.
-                p#disclaimer (Disclaimer: No data sets are for sale now; the store is only a glimpse of what is to come. Check up July 10 to begin purchasing.)
     if category || search
         div#datacontent
             if data[0]

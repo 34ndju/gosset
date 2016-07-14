@@ -9,38 +9,6 @@ body {
     text-align:center;
 }
 
-.menu1 {
-    float:left;
-    width:200px;
-    height:100%;
-    background:white;
-}
-
-.menu1item {
-    height:40px;
-    width:100%;
-    padding:5px 0 5px 0;    
-    border-bottom:1px solid #D6D6D6;
-}
-
-.menu1item p {
-    margin:0;
-    line-height:40px;
-    cursor:default;
-}
-
-#tri {
-    position:absolute;
-    width: 0;
-	height: 0;
-	border-top: 25px solid transparent;
-	border-left: 20px solid #499E34;
-	border-bottom: 25px solid transparent;
-	margin-top:-5px;
-	left:200px;
-	visibility:hidden;
-}
-
 #upload {
     background:#499E34;
     border-bottom:0;
@@ -55,96 +23,131 @@ body {
 }
 
 .content {
-    overflow:auto;
-    height:100%;
+    margin:20px auto 20px auto;
 }
 
 .mydata {
     display:block;
 }
 
-.mydata form {
-    margin:5px auto 5px auto;
-    height:100px;
-    width:80%;
+.uploadFile {
+    margin:auto;
 }
 
-.mydata form * {
-   display:inline-block;
-   margin:0 5px 0 5px;
-   font-family:"Muli";
-}
-
-.file {
+.top {
+    margin-top:20px;
     
 }
 
-.file input {
-    width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-	visibility:hidden;
+.top *{
+    display:inline-block;
 }
 
-.file label {
-    cursor:pointer;
-    font-size: 0.8em;
-    font-weight: 700;
-    color: black;
-    line-height: 25px;
-    padding:2px;
-    border:2px solid black;
-    border-radius:5px;
+.file {
+    font-size:12px;
 }
 
-.file label:hover {
-    text-decoration:underline;
-    background:white;
+#filename {
+  padding: 0.5em;
+  float: left;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  background: #66C44F;
 }
 
-#title {
-    width:20%;
-    border: 1px solid black;
-    height:30px;
-    text-align:center;
-    font-weight:bold;
+#fileInput {
+    display:none;
 }
 
-#description {
-    height:50px;
-    width:30%;
-    resize: none;
-    transform:translateY(43%);
-    border:1px solid black;
-    padding:5px;
-}
-
-#button {
-    width:15%;
-    height: 25px;
-    font-weight:bold;
-    color: #000;
-    background-color:#499E34;
-    border: none;
-    border-radius: 45px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: 0.5s;
+#file {
+    margin-right:10px;
+    padding: 0.5em;
+    display: inline-block;
+    background: #499E34;
     cursor: pointer;
 }
 
-#button:hover {
-    background-color: #2EE59D;
-    transform: translateY(-3px);
+#file:hover {
+    background: #418A2F;
 }
+
+.title * {
+    display: block;
+}
+
+.title p {
+    margin: 0;
+    font-size:0.8em;
+}
+
+#title {
+    border:1px solid black;
+    font-family:"Muli";
+    padding:2px;
+    margin-right:10px;
+}
+
+.priceArea * {
+    display:block;
+}
+
+.priceArea-top p {
+    font-size:0.8em;
+    margin:0;
+}
+
+.priceArea-bottom *{
+    display:inline-block;
+}
+
+.money {
+    margin:0;
+}
+
+.price {
+    margin-left:2px;
+    margin-right:2px;
+    width:40px;
+    border:1px solid black;
+    text-align:center;
+}
+
+.bottom {
+    margin-top:20px;
+}
+
+.bottom * {
+    display:inline-block;
+    vertical-align:middle;
+}
+
+#description {
+    resize:none;
+    border:1px solid black;
+    height:70px;
+    padding:5px;
+    font-family:"Muli";
+    margin-right:10px;
+}
+
+#submit {
+    font-family:'Muli';
+    height:30px;
+    background:#66C44F;
+    border:1px solid black;
+    cursor:pointer;
+}
+#submit:hover {
+    background:#499E34;
+}
+
 
 #datacontent {
     background: #F7FDFF;
     border:1px solid #ABCBD4;
     width:80%;
-    margin:0px auto 0px auto;
+    margin:0px auto 0 auto;
 }
 
 #datacontent ul {

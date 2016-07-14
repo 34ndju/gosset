@@ -8,7 +8,9 @@ module.exports = function(mongoose, db) {
         password: String,
         cart: Array,
         invited: Array,
-        dateCreated: Date
+        dateCreated: Date,
+        stripe: Object,
+        owed: Number
     });
     
     mongoose.model('user', userSchema);

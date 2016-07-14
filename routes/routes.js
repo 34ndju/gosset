@@ -1,4 +1,8 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, braintree, gateway, xlsxj, xlsj) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs) {
+    
+    var CLIENT_ID = 'ca_8nK7vBK5dellv3bkYDWqzKou9HhpQQdm',
+        CLIENT_SECRET = 'sk_live_zY6uwnHjwGgH3TNCTwYqbXvY'
+    
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -90,13 +94,14 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 newUser.receiveEmail = receiveEmail;
                 newUser.password = bcrypt.hashSync(req.body.password, 10);
                 newUser.dateCreated = new Date();
+                newUser.stripe = null;
+                newUser.owed = 0;
                 newUser.save(function(err, saved) {
                     if(err)
                         throw err;
                     console.log(email + " registered")
                     req.session.email = email;
                     res.redirect('/invite?ref=' + email)
-
                 })
             }
             else 
@@ -125,6 +130,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.post('/upload', function(req, res) {
+        
         var form = new multiparty.Form()
         
         form.parse(req, function(err, fields, files) {
@@ -143,7 +149,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                                                 metadata: {
                                                                     email: req.session.email,
                                                                     title: fields.title[0],
-                                                                    description: fields.description[0]
+                                                                    description: fields.description[0],
+                                                                    price: parseInt(fields.dollar[0]) + (parseInt(fields.cent[0]) / 100)
                                                                 }
                     })
                     fs.createReadStream(file.path).pipe(writeStream)
@@ -152,19 +159,13 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         UserModel.findOne({email:req.session.email}, function(err, user) {
                             if(err)
                                 console.log(err)
-                            gateway.merchantAccount.find(user._id.toString(), function(err, merchant) {
-                                if(err) 
-                                    console.log(err)
-                                if(merchant == null) {
-                                    console.log(req.session.email + ' not onboarded yet; redirecting to onboardMerchant')
-                                    res.redirect('/')
-                                    //res.redirect('/onboardMerchant')
-                                }
-                                else {
-                                    console.log(req.session.email + " already onboarded; redirecting to dashboard")
-                                    res.redirect('/')
-                                }
-                            }) 
+                            if(user.stripe) {
+                                res.redirect('/')
+                            }
+                            else {
+                                console.log(req.session.email + ' not onboarded yet; redirecting to /authorize')
+                                res.redirect('/authorize')
+                            }
                         })  
                     })
                 }
@@ -176,94 +177,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         })
     })  
     
-    app.get('/onboardMerchant', function(req, res) {
-        /*req.session.email = '34ndju@gmail.com'
-        res.render */
-        res.redirect('/')
-    })
-    
-    app.post('/onboardMerchant', function(req, res) {
-        UserModel.findOne({email:req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            var merchantAccountParams = {
-                individual: {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    dateOfBirth: req.body.birthdate.toString(),
-                    address: {
-                        streetAddress: req.body.streetAddress,
-                        locality: req.body.city, 
-                        region: req.body.state, //two letter
-                        postalCode: req.body.zipCode
-                    }
-                },
-                /*business: {
-                    legalName: "Jane's Ladders",
-                    dbaName: "Jane's Ladders",
-                    taxId: "98-7654321",
-                    address: {
-                        streetAddress: "111 Main St",
-                        locality: "Chicago",
-                        region: "IL",
-                        postalCode: "60622"
-                    }
-                }, */
-                funding: {
-                    destination: 'email' /*choose 'bank', 'email', or 'mobile_phone'*/,
-                    email: req.body.venmoEmail /*,
-                    mobilePhone: "5555555555",
-                    accountNumber: "1123581321",
-                    routingNumber: "071101307" */
-                },
-                tosAccepted: true,
-                masterMerchantAccountId: 'gosset-marketplace',
-                id: user._id.toString() //from mongo
-            };
-                
-            gateway.merchantAccount.create(merchantAccountParams, function (err, result) {
-            });
-        })
-    })
-    
-    app.post('/checkout', function(req, res) {
-        var transactionErrors;
-        var nonce = req.body.payment_method_nonce;
-        console.log('nonce', nonce)
-        
-        
-        gateway.transaction.sale({
-            merchantAccountId: '57703af790f8d289027c510e',
-            amount: "0.02",
-            paymentMethodNonce: 'fake-valid-country-of-issuance-usa-nonce',
-            serviceFeeAmount:'0.01',
-            options: {
-                submitForSettlement: true
-            }
-        }, function (err, transactionResult) {
-            gateway.testing.settle(transactionResult.transaction.id, function(err, settleResult) {
-                settleResult.success
-                // true
-                
-                settleResult.transaction.status
-                // Transaction.Status.Settled
-            });
-        }
-        );
-    })
-    
-    app.post('/webhook', function(req, res) {
-        gateway.webhookNotification.parse(
-            req.body.bt_signature,
-            req.body.bt_payload,
-            function (err, webhookNotification) {
-                console.log(webhookNotification)
-                console.log("[Webhook Received " + webhookNotification.timestamp + "] | Kind: " + webhookNotification.kind);
-            });
-            res.status(200).send();
-    })
-    
     app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be rawDownload, json, or csv)
         gridfs.findOne({_id: req.params.id}, function(err, file) {
             if(err)
@@ -273,117 +186,114 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 res.redirect('/')
             }
             else {
-                var ext = file.filename.split('.')[1]
-                var readStream = gridfs.createReadStream({_id: file._id})
-                readStream.on('error', function(err) {
-                    console.log(err)
-                })
-                
-                if(req.query.ext == 'rawDownload') {
-                    res.set('Content-Type', file.contentType);
-                    res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
-                    readStream.pipe(res)
-                    readStream.on('close', function(err) {
-                        console.log(req.session.email + " downloaded " + file.filename)
-                    })
-                }
-                else {
-                    if(ext == 'xlsx') {
-                        var path = '/tmp/' + file.filename,
-                            jsonFile = file.filename.split('.')[0] + '.json',
-                            csvFile = file.filename.split('.')[0] + '.csv'
-                        var out = fs.createWriteStream(path)
-                        readStream.pipe(out)
+                UserModel.findOne({email:req.session.email}, function(error, user) {
+                    if(error)
+                        console.log(error)
+                    if(user.cart.indexOf(req.params.id) > -1 || file.metadata.email == req.session.email) {
+                        var ext = file.filename.split('.')[1]
+                        var readStream = gridfs.createReadStream({_id: file._id})
+                        readStream.on('error', function(err) {
+                            console.log(err)
+                        })
                         
-                        readStream.on('close', function(err) {
-                            if(err)
-                                console.log(err)
+                        if(req.query.ext == 'rawDownload') {
+                            res.set('Content-Type', file.contentType);
+                            res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
+                            readStream.pipe(res)
+                            readStream.on('close', function(err) {
+                                console.log(req.session.email + " downloaded " + file.filename)
+                            })
+                        }
+                        else {
+                            if(ext == 'xlsx') {
+                                var path = '/tmp/' + file.filename,
+                                    jsonFile = file.filename.split('.')[0] + '.json',
+                                    csvFile = file.filename.split('.')[0] + '.csv'
+                                var out = fs.createWriteStream(path)
+                                readStream.pipe(out)
                                 
-                            if(req.query.ext == 'json') {
-                                console.log(req.session.email + " downloaded " + jsonFile)
-                                xlsxj({
-                                    input: path,
-                                    output: null //'/tmp/' + jsonFile
-                                }, function(err, result) {
-                                    if(err) 
+                                readStream.on('close', function(err) {
+                                    if(err)
                                         console.log(err)
-                                    else {
-                                        res.json(result)
+                                        
+                                    if(req.query.ext == 'json') {
+                                        console.log(req.session.email + " downloaded " + jsonFile)
+                                        xlsxj({
+                                            input: path,
+                                            output: null
+                                        }, function(err, result) {
+                                            if(err) 
+                                                console.log(err)
+                                            else {
+                                                res.json(result)
+                                            }
+                                        }) 
                                     }
-                                }) 
+                                    else if(req.query.ext == 'csv') {
+                                        console.log(req.session.email + " downloaded " + csvFile)
+                                        xlsxj({
+                                            input: path,
+                                            output: null 
+                                        }, function(err, result) {
+                                            if(err) 
+                                                console.log(err)
+                                            else {
+                                                res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
+                                                res.send(new Buffer(papa.unparse(result)))
+                                            }
+                                        }) 
+                                    }
+                                })
                             }
-                            else if(req.query.ext == 'csv') {
-                                console.log(req.session.email + " downloaded " + csvFile)
-                                xlsxj({
-                                    input: path,
-                                    output: null //'/tmp/' + jsonFile
-                                }, function(err, result) {
-                                    if(err) 
+                            else if(ext == 'xls') {
+                                var path = '/tmp/' + file.filename,
+                                    jsonFile = file.filename.split('.')[0] + '.json',
+                                    csvFile = file.filename.split('.')[0] + '.csv'
+                                var out = fs.createWriteStream(path)
+                                readStream.pipe(out)
+                                
+                                readStream.on('close', function(err) {
+                                    if(err)
                                         console.log(err)
-                                    else {
-                                        res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
-                                        res.send(new Buffer(papa.unparse(result)))
+                                    
+                                    if(req.query.ext == 'json') {
+                                        console.log(req.session.email + " downloaded " + jsonFile)
+                                        xlsj({
+                                            input: path,
+                                            output: null 
+                                        }, function(err, result) {
+                                            if(err) 
+                                                console.log(err)
+                                            else {
+                                                res.json(result)
+                                            }
+                                        }) 
                                     }
-                                }) 
+                                    else if(req.query.ext == 'csv') {
+                                        console.log(req.session.email + " downloaded " + csvFile)
+                                        xlsj({
+                                            input: path,
+                                            output: null
+                                        }, function(err, result) {
+                                            if(err) 
+                                                console.log(err)
+                                            else {
+                                                res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
+                                                res.send(new Buffer(papa.unparse(result)))
+                                            }
+                                        }) 
+                                    }
+                                })
                             }
-                        })
+                        }
                     }
-                    else if(ext == 'xls') {
-                        var path = '/tmp/' + file.filename,
-                            jsonFile = file.filename.split('.')[0] + '.json',
-                            csvFile = file.filename.split('.')[0] + '.csv'
-                        var out = fs.createWriteStream(path)
-                        readStream.pipe(out)
-                        
-                        readStream.on('close', function(err) {
-                            if(err)
-                                console.log(err)
-                            
-                            if(req.query.ext == 'json') {
-                                console.log(req.session.email + " downloaded " + jsonFile)
-                                xlsj({
-                                    input: path,
-                                    output: null //'/tmp/' + jsonFile
-                                }, function(err, result) {
-                                    if(err) 
-                                        console.log(err)
-                                    else {
-                                        res.json(result)
-                                    }
-                                }) 
-                            }
-                            else if(req.query.ext == 'csv') {
-                                console.log(req.session.email + " downloaded " + csvFile)
-                                xlsj({
-                                    input: path,
-                                    output: null //'/tmp/' + jsonFile
-                                }, function(err, result) {
-                                    if(err) 
-                                        console.log(err)
-                                    else {
-                                        res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
-                                        res.send(new Buffer(papa.unparse(result)))
-                                    }
-                                }) 
-                            }
-                        })
+                    else {
+                        res.redirect('/')
                     }
-                }
+                })
             }
         })
     })
-    
-    app.get('/mydataAPI', function(req, res) { 
-        var files = {files: []}
-        gridfs.files.find({"metadata.email": req.session.email}).toArray(function(err, data) {
-            if(err)
-                console.log(err)
-            data.forEach(function(d) {
-                files.files.push({title: d.metadata.title, id: d._id})
-            })
-            res.json(files)
-        })
-    }) //THIS IS AN API
     
     app.get('/mydata', function(req, res) {
         if(!req.session.email)
@@ -398,7 +308,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/dashboard', function(req, res) {
-        //req.session.email = '34ndju@gmail.com' for testing
         if(!req.session.email)
             res.redirect('/login')
         else {
@@ -408,34 +317,38 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 gridfs.files.find({'metadata.email': req.session.email}).toArray(function(err, data) {
                     if(err)
                         console.log(err) 
-                    res.render('dashboard', {user:user, data:data})
+                    if(user.dateCreated < new Date('Wed Jul 12 2016 23:29:59 GMT+0000 (UTC)')) { //check if created before I started new TOS
+                        res.render('dashboard', {user:user, data:data, showTOS:true})
+                    }
+                    else {
+                        res.render('dashboard', {user:user, data:data, showTOS:false})
+                    }
                 })
             })
         } 
     }) 
     
     app.get('/store', function(req, res) {
-        /*if(!req.session.email)
+        if(!req.session.email)
             res.redirect('/login')
-        else {*/
+        else {
             if(req.query.category) {
                 gridfs.files.find({"metadata.category": req.query.category}).toArray(function(err, data) {
                     if(err)
                         console.log(err)
-                    console.log(data)
                     res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), data:data})
                 })
             }
             else {
                 res.render('store') // on cient-side, check if "category" exists
             }
-        //}
+        }
     })
     
     app.post('/store', function(req, res) {
-        /*if(!req.session.email)
+        if(!req.session.email)
             res.redirect('/login')
-        else {*/
+        else {
             console.log(req.body.search)
             gridfs.files.find({'metadata.description': { "$regex": req.body.search, "$options": "i" }}).toArray(function(err, files) { //checks description
                 if(err)
@@ -450,120 +363,115 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     })
                 }
             })
-        //}
+        }
     })
     
     app.get('/blog', function(req, res) {
         res.redirect('https://medium.com/@34ndju')
     })
-    
-    app.get('/storeAPI', function(req, res) {
-        var f = {files: []}
-        gridfs.files.find({}).toArray(function(err, files) {
-            if(err)
-                console.log(err)
-            files.forEach(function(d) {
-                f.files.push({title: d.filename, id: d._id})
-            })
-            res.json(f)
-        })
-        
-    }) //THIS IS AN API
-    
-    app.get('/cart', function(req, res) {
-        if(!req.session.email)
-            res.redirect('/login')
-        else
-            res.sendFile(process.cwd() + '/client/html/cart.html')
-    })
-    
-    app.get('/cartAPI', function(req, res) {
-        var cart,
-            data = []
-    
-        UserModel.findOne({email: req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            
-            res.json({cart: user.cart})
-        })
-    })  //sends an array of user's cart. */
-    
-    app.get('/addtocart/:id/:title', function(req, res) {
-        UserModel.findOne({email: req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            user.cart.push({id: req.params.id, title: req.params.title.replace(/_/g, " ")});
-            user.save()
-            res.redirect('/store')
-        })
-    })
-    
+
     app.get('/product/:id', function(req, res) {
-        /*if(!req.session.email)
-            res.redirect('/login')
-        else { */
+        if(!req.session.email)
+            res.redirect('/login') 
+        else { 
             gridfs.findOne({_id:req.params.id}, function(err, data) {
                 if(err)
                     console.log(err)
                 if(!data.metadata.sample) {
-                    gateway.clientToken.generate({}, function (error, response) {
-                        if(error)
-                            console.log(error)
-                        res.render('product', {data:data, clientToken:response.clientToken});
+                    
+                    //get headers
+                    var readStream = gridfs.createReadStream({_id: data._id})
+                    var path = '/tmp/' + data.filename
+                    var out = fs.createWriteStream(path)
+                        readStream.pipe(out)
+                        
+                    readStream.on('close', function(err) {
+                        if(err)
+                            console.log(err)
+                        
+                        var ext = data.filename.split('.')[1] 
+                        if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml'){
+                            var workbook = excel.readFile(path);
+                            if(workbook.Sheets.Sheet1) {
+                                var sheet1 = workbook.Sheets.Sheet1
+                                var alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+                                var keepParsing = true;
+                                var headers = []
+                                var currentCell;
+                                while(keepParsing) {
+                                    currentCell = alphabet[0] + '1'
+                                    if(sheet1[currentCell]) {
+                                        headers.push(sheet1[currentCell].v)
+                                        alphabet.shift();
+                                    }
+                                    else
+                                        keepParsing = false;
+                                }
+                            }
+                            else {
+                                headers = []
+                            }
+                        }
+                        else if(ext == 'csv') {
+                            var csv = fs.readFileSync(path, 'utf8').split("\r")[0]
+                            var headers = csv.split(',')
+                        }
+                        
+                        var headerStr = headers.join(', ')
+                        
+                        UserModel.findOne({email:req.session.email}, function(err, user) {
+                            if(err)
+                                console.log(err)
+                                
+                            var isOwner; //check if item belongs to current user's session
+                            var isPurchased; //check if item is already purchased
+                            
+                            if(data.metadata.email == req.session.email) {
+                                isOwner = true;
+                                isPurchased = false;
+                            }
+                            else {
+                                isOwner = false;
+                                if(user.cart.indexOf(req.params.id) > -1)
+                                    isPurchased = true;
+                                else
+                                    isPurchased = false;
+                            }
+                            if(!req.query.paymentError) {
+                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr});
+                            }
+                            else {
+                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr, paymentError: true});
+                            }
+                        })
                     })
                 }
-                else 
-                    res.render('product', {data:data, sample:true});
+                else {
+                    console.log(req.path)
+                    res.render('product', {data:data, sample:true, path:req.path});
+                }
             })
-        //}
+        }
     })
 
-    app.get('/accountinfoAPI', function(req, res) {
-        UserModel.findOne({email: req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            res.json(user)
-        })
-    })  ///THIS IS AN API
-    
-    app.get("/removefromcart/:id", function(req, res) {
-        UserModel.findOne({email: req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            for(var i=0; i<user.cart.length; i++) {
-                if(user.cart[i].id == req.params.id) {
-                    user.cart.splice(i, 1)
-                    i--
-                }
-            }
-            user.save()
-            res.redirect('/cart')
-        })
-    })
-    
-    app.get("/removefromcartfrommydata/:id", function(req, res) {
-        UserModel.findOne({email: req.session.email}, function(err, user) {
-            if(err)
-                console.log(err)
-            if(user.cart.indexOf(req.params.id)>0) {
-                user.cart.splice(user.cart.indexOf(req.params.id), 1)
-                user.save()
-            }
-            res.redirect('/mydata')
-        })
-    }) //however, this only removes from the current user's cart??!!
-    
     app.get('/totalremove/:id', function(req, res) {
         if(!req.session.email) {
             res.redirect('/login')
         }
         else {
-            gridfs.remove({_id:req.params.id}, function(err) {
+            gridfs.findOne({_id:req.params.id}, function(err, file) {
                 if(err)
                     console.log(err)
-                console.log(req.session.email + " removed file ID " + req.params.id);
-                res.redirect('/')
+                if(file.metadata.email == req.session.email) {
+                    gridfs.remove({_id:req.params.id}, function(error) {
+                        if(error)
+                            console.log(error)
+                        console.log(req.session.email + " removed file ID " + req.params.id);
+                        res.redirect('/')
+                    })
+                }
+                else
+                    res.redirect('/')
             })
         }
     })
@@ -579,4 +487,219 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/listFolder/:name', function(req, res) {
         res.send(fs.readdirSync(req.params.name))
     })
+    
+    app.post('/pay', function(req, res) {
+        var idString = req.body.id.replace(/['"]+/g, '')
+        
+        gridfs.findOne({_id:idString}, function(err, data) {  //because strings have "...."
+            if(err)
+                console.log(err)
+                
+            var token = req.body.token;
+            
+            var price = data.metadata.price * 100;
+            var commission = Math.floor(price * 0.15)
+            var toSeller = price - commission
+            
+            UserModel.findOne({email:data.metadata.email}, function(err, user) {
+                if(err)
+                    console.log(err)
+                if(user.stripe){ //stripe already setup for seller
+                    console.log('stripe exists')
+                    stripe.charges.create(
+                        {
+                            amount: price, // amount in cents
+                            currency: "usd",
+                            source: token,
+                            description: "Purchased " + data.metadata.title,
+                            application_fee: commission // amount in cents
+                        },
+                        {stripe_account: user.stripe.stripe_user_id}, //seller
+                        function(error, charge) {
+                            if(error) {
+                                console.log(error)
+                                res.redirect('/product/' + idString + '?paymentError=true')
+                            }
+                            else {
+                                console.log('testCharge', charge)
+                                res.redirect('/addToPurchased?id=' + idString)
+                            }
+                        }
+                    )
+                }
+                else { //stripe not setup for seller
+                    console.log('stripe does not exist')
+                    
+                    stripe.charges.create({
+                        amount: price, // amount in cents, again
+                        currency: "usd",
+                        source: token,
+                        description: "Credit Card Charged to Unregistered " + user.email
+                    }, function(err, charge) {
+                        if (err && err.type === 'StripeCardError') 
+                            console.log(err)
+                            
+                        console.log('charge25', charge)
+                        
+                        var preOwed = user.owed
+                        user.owed = preOwed + (toSeller / 100)
+                        user.save()
+                        
+                        res.redirect('/addToPurchased?id=' + idString)
+                    });
+                }
+            })
+        })
+    })
+    
+    app.get('/addToPurchased', function(req, res) {
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            if(user.cart.indexOf(req.query.id) < 0) { //check if the id already exists in array
+                user.cart.push(req.query.id)
+                user.save()
+            }
+            res.redirect('/product/' + req.query.id)
+        })
+    })
+    
+    app.get('/onboardMerchant', function(req, res) {
+        res.render('onboardMerchant')
+    })
+    
+    app.get('/authorize', function(req, res) {
+        res.redirect('https://connect.stripe.com/oauth/authorize?' + qs.stringify({  //change in production
+            response_type: "code",
+            scope: "read_write",
+            client_id: CLIENT_ID
+        }));
+    })
+    
+    app.get('/oauth/callback', function(req, res) {
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            var code = req.query.code;
+            request.post({
+                url: 'https://connect.stripe.com/oauth/token',  //change in production
+                form: {
+                    grant_type: "authorization_code",
+                    client_id: CLIENT_ID,
+                    client_secret: CLIENT_SECRET,
+                    code:code
+                }},
+                function(err, response, body) {
+                    if(err)
+                        console.log(err)
+                    else {
+                        var stripe = JSON.parse(body)
+                        console.log(stripe)
+                        user.stripe = stripe
+                        user.save()
+                        res.redirect('/')
+                    }
+                }
+            )
+        })
+    })
+
+
+
+    /*
+    when going into production, remember:
+    -webhooks to new site
+    -client id
+    -client secret
+    */
+
+
+    //deprecated because lack of time. would like to reactivate when incorporated using Stripe (managed accounts)
+    /*
+    app.post('/onboardMerchant', function(req, res) {
+        req.session.email = 'jun73521@gmail.com'
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            console.log(user)
+            stripe.accounts.create({
+                managed: true,
+                country: 'US',
+                legal_entity: {
+                    dob: {
+                        day: 10,
+                        month: 1,
+                        year: 1986
+                    },
+                    first_name: "Jonathan",
+                    last_name: "Goode",
+                    type: "individual",
+                    address: {
+                        line1: "3180 18th St",
+                        postal_code: 94110,
+                        city: "San Francisco",
+                        state: "CA"
+                    },
+                    ssn_last_4: 1234
+                },
+                external_account: {
+                    object: "bank_account",
+                    country: "US",
+                    currency: "usd",
+                    routing_number: "110000000",
+                    account_number: "000123456789",
+                },
+                tos_acceptance: {
+                    date: Math.floor(user.dateCreated / 1000),
+                    ip: req.connection.remoteAddress // Assumes you're not using a proxy
+                }
+                }, function(err, account) {
+                    console.log(req.body)
+                    console.log(account)
+            })
+        })
+    })
+    
+    app.post('/stripeWebhooks', function(req, res) {
+        console.log('Stripe Webhook Received:', req.body)
+        res.status(200).send()
+    })
+    
+    app.get('/stripePay', function(req, res) {
+        stripe.charges.create({
+            amount: 99999999,
+            currency: "usd",
+            source: {
+                object: "card",
+                number: " 4000000000000077",
+                exp_month: 2,
+                exp_year: 2017
+            },
+            destination: 'acct_18W6QvAKefMwbq0p'
+            }, function(err, charge) {
+                if(err)
+                    console.log('error1', err)
+                console.log('charge', charge)
+                stripe.accounts.retrieve( 'acct_18W6QvAKefMwbq0p',
+                function(error, account) {
+                    if(error)
+                        console.log('error2', error)
+                    console.log('account',account);
+                }
+            );
+        });
+    })
+    
+    app.get('/test3', function(req, res) {
+        stripe.transfers.create({
+            amount: 400,
+            currency: "usd",
+            recipient: "self"
+        }, {
+            stripe_account: 'acct_18W6QvAKefMwbq0p'
+        }, function(err, transfer) {
+            if(err)
+                console.log(err)
+            console.log('transfer', transfer)
+        });
+    })
+    */
 }

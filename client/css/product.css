@@ -13,38 +13,216 @@ body {
     background: #F7FDFF;
     border:1px solid #ABCBD4;
     width:80%;
-    margin:20px auto 0px auto;
+    margin:20px auto 20px auto;
     padding:10px;
 }
 
 .content * {
-    margin:5px;
+    display:inline-block;
+    vertical-align:top;
 }
 
-.options {
+.left {
     width:50%;
+}
+
+.left * {
+    display:block;
+}
+
+#title {
+    font-size:2em;
+    font-weight:bold;
+    color:black;
+    margin-bottom:10px;
+}
+
+#filename {
+    color:black;
+    font-size:0.8em;
+}
+
+.right {
+    width:50%;
+}
+
+.right * {
+    display:block;
+    margin:0;
+    text-align:left;
+}
+
+.val {
+    font-weight:bold;    
+}
+
+.tab {
+    margin-left:10px;
+    margin-bottom:2px;
+}
+
+#headers {
+    font-size:0.9em;
+    font-weight:normal;
+}
+.pay {
+    margin:0;
+}
+
+
+#buttonLabel {
+    /*border:1px solid #499E34;*/
+    padding:5px;
     margin:auto;
 }
 
-.options a {
-    display:inline-block;
-    text-decoration:none;
-    margin:30px 10px 0 10px;
-    width:91px;
-    border-radius:5px;
+#buttonLabel p {
+    color: black /*#499E34*/;
+    font-size:0.8em;
+    font-weight:normal;
+    margin:2px;
 }
 
-.options a p {
+#creditCards{
+    margin-top:10px;
+    width:100px;
+}
+
+.pay * {
+    display:block;
+}
+
+#credit_cards {
+    width: 130px;
+    margin:auto;
+}
+
+.pay input {
+    border:1px solid gray;
+    padding:2px;
+    margin-left:3px;
+}
+
+.top {
+    margin-top:10px;
+    display:none;
+}
+
+.top * {
+    display:inline-block;
+    margin-top:10px 0 0 0;
+}
+
+#buttonLabel #payment-error {
+    margin:10px 0 10px 0;
+    color:red;
+    font-size:0.7em;
+}
+
+#number {
+    margin-right:5px;
+}
+
+.bottom {
+    margin-top:10px;
+    display:none;
+}
+
+.bottom * {
+    display:inline-block;
+    vertical-align:top;
+    margin-top:10px 0 0 0;
+}
+
+#exp_month {
+    margin-right:5px;
+}
+
+#exp_year {
+    margin-right:5px;
+}
+
+#buttonLabel #submit {
+    padding:5px;
+    /*border:2px solid black;*/
+    width:70px;
+    margin:10px auto;
+    font-weight:bold;
+    background:#499E34;
+    color:white;
+    cursor:pointer;
+}
+
+#buttonLabel #submit:hover {
+    color:black;
+}
+
+#buttonLabel #securityText {
+    margin:10px auto 0 auto;
+    color:blue;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:0.5em;
+    width:90px;
+}
+
+#buttonLabel #securityText:hover {
+    text-decoration:underline;
+}
+
+
+#buttonLabel #security {
+    position:absolute;
+    background:white;
+    padding:10px;
+    border:1px solid #499E34;
+    width:37%;
+    font-size:0.6em;
+    display:none;
+}
+
+.options {
+    margin:auto;
+}
+
+.options div {
+    display:inline-block;
+    margin:10px 10px 0 10px;
+    width:200px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.options div p {
     padding:3px;
 }
 
-.options a p:hover {
-    text-decoration:underline;
-}
 
 #download {
     color:blue;
     border:2px solid blue;
+}
+
+.options div .downloadOptions {
+    width: 80px;
+    margin:0px auto 10px auto;
+    display:none;
+}
+
+.downloadOptions a {
+    text-decoration:none;
+    margin:0;
+}
+
+.downloadOptions a p {
+    margin:0;
+    font-size:0.6em;
+    color:black;
+    cursor:pointer;
+}
+
+.downloadOptions a p:hover {
+    text-decoration:underline;
 }
 
 #delete {

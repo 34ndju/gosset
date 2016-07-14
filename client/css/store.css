@@ -15,7 +15,6 @@ body {
 }
 
 .header * {
-    
     vertical-align:middle;
 }
 
@@ -177,19 +176,11 @@ body {
     margin:0;
 }
 
-#beginBox #right #disclaimer {
-    width:70%;
-    margin:auto;
-    font-size:10px;
-    line-height:12px;
-    
-}
-
 #datacontent {
     background: #F7FDFF;
     border:1px solid #ABCBD4;
     width:95%;
-    margin:0 auto 0px auto;
+    margin:0 auto 20px auto;
 }
 
 #datacontent ul {

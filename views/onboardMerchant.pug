@@ -1,19 +1,18 @@
-head    
-    title Gosset
-    link(rel='shortcut icon', href='/images/GWhite.png')
-    link(href='/css/onboardMerchant.css' rel='stylesheet')
+head
     script(src='//code.jquery.com/jquery-1.11.2.min.js')
     script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
-    script(src='/scripts/fingerprint.js')
-    script(src='/scripts/GA.js')
-    script(src="/package/waypoints/lib/jquery.waypoints.min.js")
+    script(src="https://js.stripe.com/v2/")
     script(src='/scripts/onboardMerchant.js')
-body    
-    form(method='post', action='/onboardMerchant')
-        input(type='date', name='birthdate', placeholder='birthday')
-        input(type='text', name='streetAddress', placeholder='street address')
-        input(type='text', name='city', placeholder='city')
-        input(type='text', name='state', placeholder='state')
-        input(type='text', name='zipCode', placeholder='zip code')
-        input(type='email', name='venmoEmail', placeholder='venmo email')
-        button(type='submit') Submit
+body
+    a(href='/authorize')
+        div(style='width:50px; height:50px; background:black;')
+        
+    <!--form.business(method='post', action='/onboardMerchant')
+        input#creditCard(name='token', style='display:none;')
+        select(name='accountType')
+            option(value='business') Business
+            option(value='individual') Individual
+        select(name='country')
+            option US
+            option Canada
+        button(type='submit') Submit-->
