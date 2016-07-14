@@ -163,8 +163,13 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                 res.redirect('/')
                             }
                             else {
-                                console.log(req.session.email + ' not onboarded yet; redirecting to /authorize')
-                                res.redirect('/authorize')
+                                if(parseInt(fields.dollar[0]) + (parseInt(fields.cent[0]) / 100) != 0) {
+                                    console.log(req.session.email + ' not onboarded yet; redirecting to /authorize')
+                                    res.redirect('/authorize')
+                                }
+                                else {
+                                    res.redirect('/')
+                                }
                             }
                         })  
                     })
@@ -536,7 +541,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         source: token,
                         description: "Credit Card Charged to Unregistered " + user.email
                     }, function(err, charge) {
-                        if (err && err.type === 'StripeCardError') 
+                        if (err) 
                             console.log(err)
                             
                         console.log('charge25', charge)
