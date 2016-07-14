@@ -157,13 +157,14 @@ body {
     color:black;
 }
 
+
 #buttonLabel #securityText {
     margin:10px auto 0 auto;
     color:blue;
     font-weight:bold;
     cursor:pointer;
     font-size:0.5em;
-    width:90px;
+    width:120px;
 }
 
 #buttonLabel #securityText:hover {
