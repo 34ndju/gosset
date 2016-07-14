@@ -39,8 +39,9 @@ body
                     form.pay(method='post', action='/pay')
                         input(style="display:none;", value=data._id, name='id')
                         input#creditCardToken(style='display:none;', name='token')
+                        input#error(style='display:none;', name='error')
                         if(paymentError)
-                            p#payment-error Payment Error
+                            p#payment-error #{paymentError}
                         div.top
                             p Card Number
                             input#number(type='text', placeholder='000000000000', maxlength='16', size='16', value='4242424242424242') 

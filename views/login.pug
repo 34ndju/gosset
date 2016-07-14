@@ -8,10 +8,12 @@ head
     script(src='/scripts/GA.js')
     script(src='/scripts/login.js')
 body
+    p #{path}
     .login
         a(href='/')
             img#logo(src='/images/GossetMoustacheClear.png')
         form(method='post', action='/login')
+            input#path(style='display:none', name='path')
             input#email(type='email', spellcheck='false', placeholder='Email', name='email')
             input#password(type='password', placeholder='Password', name='password')
             if (failed)

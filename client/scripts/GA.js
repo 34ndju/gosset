@@ -17,6 +17,9 @@ if (window.location.host != 'base-a34ndju.c9users.io') {
         ga('create', 'UA-77388290-1', 'auto');
         ga('send', 'pageview');
     }
+    else
+        console.log('not sent');
 }
-console.log('not sent');
+else
+    console.log('not sent');
     

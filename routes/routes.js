@@ -2,7 +2,30 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     
     var CLIENT_ID = 'ca_8nK7vBK5dellv3bkYDWqzKou9HhpQQdm',
         CLIENT_SECRET = 'sk_live_zY6uwnHjwGgH3TNCTwYqbXvY'
+        
+    function loginRequired (req, res, next) {
+        var path = req._parsedOriginalUrl.pathname;
+        if (req.method === 'GET') {  
+            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite') {
+                next()
+            }
+            else {
+                if(!req.session.email) {
+                    var pathArr = path.split('/');
+                    path = pathArr.join('%2F')
+                    res.redirect('/login?path=' + path)
+                }
+                else {
+                    next()
+                }
+            }
+        }
+        else {
+            next()
+        }
+    }
     
+    app.use(loginRequired)
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -21,7 +44,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     
     app.get('/logout', function(req, res) {
         if(!req.session.email) {
-            res.redirect('/login')
+            res.redirect('/')
         }
         else {
             console.log(req.session.email + " logged out.");
@@ -48,17 +71,21 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             }
             if(user) {
                 if(bcrypt.compareSync(password, user.password)) {
-                    //visitor.event("Login", "User Login").send()
                     console.log(email + " logged in.")
                     req.session.email = email;
-                    res.redirect('/dashboard')
+                    if(req.body.path == '') {
+                        res.redirect('/dashboard')
+                    }
+                    else {
+                        res.redirect(req.body.path)
+                    }
                 }
                 else {
-                    res.redirect('/login?failed=true');
+                    res.redirect('/login?failed=true&path=' + req.body.path.split('/').join('%2F'));
                 }
             }
             else {
-                res.redirect('/login?failed=true');
+                res.redirect('/login?failed=true&path=' + req.body.path.split('/').join('%2F'));
             }
         });
         
@@ -446,7 +473,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                 res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr});
                             }
                             else {
-                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr, paymentError: true});
+                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr, paymentError: req.query.paymentError.split('%20').join(' ')});
                             }
                         })
                     })
@@ -523,7 +550,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         function(error, charge) {
                             if(error) {
                                 console.log(error)
-                                res.redirect('/product/' + idString + '?paymentError=true')
+                                if(req.body.error == '') 
+                                    res.redirect('/product/' + idString + '?paymentError=' + error.raw.message.split(' ').join('%20'))
+                                else
+                                    res.redirect('/product/' + idString + '?paymentError' + req.body.error.split(' ').join('%20'))
                             }
                             else {
                                 console.log('testCharge', charge)
@@ -540,17 +570,23 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         currency: "usd",
                         source: token,
                         description: "Credit Card Charged to Unregistered " + user.email
-                    }, function(err, charge) {
-                        if (err) 
-                            console.log(err)
+                    }, function(error, charge) {
+                        if (error)  {
+                            console.log(error)
+                            if(req.body.error == '') 
+                                res.redirect('/product/' + idString + '?paymentError=' + error.raw.message.split(' ').join('%20'))
+                            else
+                                res.redirect('/product/' + idString + '?paymentError=' + req.body.error.split(' ').join('%20'))
+                        }
+                        else {
+                            console.log('charge25', charge)
                             
-                        console.log('charge25', charge)
-                        
-                        var preOwed = user.owed
-                        user.owed = preOwed + (toSeller / 100)
-                        user.save()
-                        
-                        res.redirect('/addToPurchased?id=' + idString)
+                            var preOwed = user.owed
+                            user.owed = preOwed + (toSeller / 100)
+                            user.save()
+                            
+                            res.redirect('/addToPurchased?id=' + idString)
+                        }
                     });
                 }
             })
@@ -605,6 +641,11 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 }
             )
         })
+    })
+    
+    app.post('/stripeWebhooks', function(req, res) {
+        console.log('Stripe Webhook Received:', req.body)
+        res.status(200).send()
     })
 
 
@@ -661,11 +702,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                     console.log(account)
             })
         })
-    })
-    
-    app.post('/stripeWebhooks', function(req, res) {
-        console.log('Stripe Webhook Received:', req.body)
-        res.status(200).send()
     })
     
     app.get('/stripePay', function(req, res) {

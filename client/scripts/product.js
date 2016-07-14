@@ -2,6 +2,15 @@ $(document).ready(function() {
     Stripe.setPublishableKey('pk_live_0kmdttZT0HwB3E8el8SpRFf8');
     var opened = false;
     
+    function n(n){
+        if(n.length == 1) {
+            return '0' + n
+        }
+        else {
+            return n;
+        }
+    }
+    
     $('#user').click(function() {
         console.log($('#dropdown').css('visibility'))
         if($('#dropdown').css('visibility') == 'hidden') {
@@ -44,11 +53,13 @@ $(document).ready(function() {
             Stripe.card.createToken({
                 number: $('#number').val(),
                 cvc: $('#cvc').val(),
-                exp_month: $('#exp_month').val(),
+                exp_month: n($('#exp_month').val()),
                 exp_year: $('#exp_year').val()
             }, function(err, response) {
-                console.log(response)
                 $('#creditCardToken').val(response.id)
+                console.log(response)
+                if(response.error)
+                    $('#error').val(response.error.message)
                 $('.pay').submit()
             });
         }
