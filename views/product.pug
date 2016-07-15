@@ -33,7 +33,7 @@ body
         div.left
             p#title #{data.metadata.title}
             p#filename (#{data.filename})
-            if !isOwner && !isPurchased
+            if !isOwner && !isPurchased && data.metadata.price != 0
                 div#buttonLabel
                     //p Continue with Purchase
                     form.pay(method='post', action='/pay')
@@ -57,7 +57,7 @@ body
                         p#securityText Our Security Standards
                         p#security Credit card information is all tokenized on the client-side, making it nearly impossible for hackers to directly obtain this information. Additionally, all credit card information is processed through Stripe, a reliable and credible payments-processing company with a priority of security.
             div.options
-                if isOwner || isPurchased
+                if isOwner || isPurchased || data.metadata.price == 0
                     div#download
                         p download
                         div.downloadOptions

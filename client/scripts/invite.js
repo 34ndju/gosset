@@ -1,5 +1,13 @@
 $(document).ready(function() {
     var numInvites = 2;
+    
+    if(window.location.search.indexOf('path=') > -1) {
+        var path = window.location.search.split('path=')[1].split('%2F').join('/')
+        console.log(path)
+        $('#path').val(path)
+    }
+    
+    
     $('#submit').click(function() {
         console.log('click')
         $('.right form').submit();

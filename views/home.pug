@@ -26,20 +26,9 @@ body
             form(method='post', action='/registerEmail')
                 input(type='email', spellcheck='false', placeholder='Email address', name='email')
                 button(type='submit') Join
-        .box
-            div#exit
-                h1 ✕
-            form(method='post', action='/register')
-                input(spellcheck='false', placeholder='First Name', name='firstName')
-                input(spellcheck='false', placeholder='Last Name', name='lastName')
-                input(type='email', spellcheck='false', placeholder='E-mail', name='email')
-                label.checkLabel
-                    input.checkInput(type='checkbox', name='receiveEmail', checked='') 
-                    | I accept receiving occasional emails!
-                input(id="pw1" type='password', placeholder='Password', name='password')
-                input(id="pw2" type='password' placeholder="Re-enter Password")
-                p#noMatch Passwords do not match.
-                button(type='submit') Join
+        p#sample or 
+            a(href='/register?path=%2Fproduct%2F576d50c430c66a5f0312cf9b')
+                span View a Free Sample Data Set
         div.info
             h1#head Unifying data-sellers and data-buyers
             p#secondUSP Data is a resource that lends the world another dimension in guiding actions and decisions. 

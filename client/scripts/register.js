@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    if(window.location.search.indexOf('path=') > -1) {
+        var path = window.location.search.split('path=')[1]
+        console.log(path)
+        $('#path').val(path)
+    }
+    
     $('#pw1, #pw2').on('input', function() {
         if($('#pw1').val() != $('#pw2').val()) {
             $('#noMatch').css('visibility', 'visible')

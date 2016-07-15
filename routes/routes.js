@@ -96,7 +96,12 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/register', function(req, res) {
-        res.render('register', {email:req.query.email})
+        if(req.query.path) {
+            res.render('register', {path:req.query.path})
+        }
+        else {
+            res.render('register', {email:req.query.email})
+        }
     })
     
     app.post('/register', function(req, res) {
@@ -104,7 +109,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             if(err)
                 console.log(err)
             if(!user) {
-                //visitor.event("Register", "User Registration").send()
                 var email = req.body.email;
                 var receiveEmail;
                 if(req.body.receiveEmail) 
@@ -125,7 +129,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                         throw err;
                     console.log(email + " registered")
                     req.session.email = email;
-                    res.redirect('/invite?ref=' + email)
+                    if(req.body.path == '')
+                        res.redirect('/invite?ref=' + email)
+                    else 
+                        res.redirect('/invite?ref=' + email + '&path=' + req.body.path)
                 })
             }
             else 
@@ -134,7 +141,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     }); 
     
     app.get('/invite', function(req, res) {
-        res.render('invite', {ref:req.query.ref})
+        if(req.query.path)
+            res.render('invite', {ref:req.query.ref, path: req.query.path})
+        else
+            res.render('invite', {ref:req.query.ref})
     })
     
     app.post('/invite', function(req, res) {
@@ -149,7 +159,12 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         }, function(err, results) {
             if(err)
                 console.log(err)
-            res.redirect('/')
+            else {
+                if(req.body.path == '')
+                    res.redirect('/')
+                else
+                    res.redirect(req.body.path)
+            }
         })
     })
     
@@ -218,7 +233,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 UserModel.findOne({email:req.session.email}, function(error, user) {
                     if(error)
                         console.log(error)
-                    if(user.cart.indexOf(req.params.id) > -1 || file.metadata.email == req.session.email) {
+                    if(user.cart.indexOf(req.params.id) > -1 || file.metadata.email == req.session.email || file.metadata.price == 0) {
                         var ext = file.filename.split('.')[1]
                         var readStream = gridfs.createReadStream({_id: file._id})
                         readStream.on('error', function(err) {

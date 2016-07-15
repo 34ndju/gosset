@@ -20,12 +20,17 @@ body
                 h1 Invite Your Colleagues 
                 h3 Receive one month of commission-free sales and purchases on Gosset for every successful invite.
                 button#submit Invite
-                a#skip(href='/')
-                    h1 Skip
+                if (path)
+                    a#skip(href=path.split('%2F').join('/'))
+                        h1 Skip
+                else
+                    a#skip(href='/')
+                        h1 Skip
             div.right
                 p#head Email Address(es)
                 form(method='post', action='/invite')
-                    input#hidden(value=ref, name='refEmail', style='display:none;')
+                    input#path(style='display:none;', name='path')
+                    input(value=ref, name='refEmail', style='display:none;')
                     input(type='email', spellcheck='false', name='email0')
                     input(type='email', spellcheck='false', name='email1')
                     input(type='email', spellcheck='false', name='email2')

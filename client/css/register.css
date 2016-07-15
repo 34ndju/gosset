@@ -23,6 +23,12 @@ body {
     width:30%;
 }
 
+.box #sample {
+    color:#499E34;
+    font-size:0.7em;
+    font-weight:bold;
+}
+
 .box #title {
     font-weight:normal;
     margin:20px;

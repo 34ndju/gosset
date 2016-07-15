@@ -153,116 +153,22 @@ body {
     background:#347025;
 }
 
-.box {
-    position:fixed;
-    background: rgba(5, 5, 5, 0.9);
-    padding:20px;
-    width: 230px;
-    top:calc(50% - 150px);
-    left:calc(50% - 120px);
-    border-radius:5px;
-    visibility:hidden;
-    z-index:101;
-} 
- 
-.box #exit {
-    width:20px;
-    height:20px;
-    background:white;
-    border-radius:10px;
-    position:absolute;
-    top:-8px;
-    right:-8px;
-    cursor:pointer;
-}
-
-.box #exit h1 {
-    height:15px;
-    font-size:15px;
-    margin:0;
-}
- 
-.box button {
-    height: 40px;
-    width: 130px;
-    border-radius: 40px;
-    background: #499E34;
-    border: 2px white solid;
-    color: white;
-    font-family:'Muli';
-    font-size: 1.5em;
-    font-weight:bold;
-    cursor: pointer;
-}
-
-.box button:hover {
-    transition: 0.25s;
-    color: black;
-}
-
- 
- 
-/* All Placeholders*/ 
-::-webkit-input-placeholder {
-    font-weight:bold;
-    font-family:"Muli";
-    text-align: center;
-}
-:-moz-placeholder { /* Firefox 18- */
-    font-weight:bold;
-    font-family:"Muli";
-    text-align: center;
-}
-::-moz-placeholder {  /* Firefox 19+ */
-    font-weight:bold;
-    font-family:"Muli";
-    text-align: center;
-}
-:-ms-input-placeholder {  
-    font-weight:bold;
-    font-family:"Muli";
-    text-align: center;
- 
-}
-/*All Placeholders */
-
-
-.box form {
-    margin-left: auto;
-    margin-right: auto;
-    width:220px;
-}
-
-.box input {
-    width: 200px;
-    height: 30px;
-    border-radius:10px;
-    margin-bottom: 20px;
-    text-align:center;
-}
-
-#pw2 {
-    margin-bottom:10px;
-}
-
-#noMatch {
+#sample {
+    color:white;
     font-size:0.8em;
-    color:red;
-    margin: 0 0 10px 0;
-    visibility:hidden;
 }
 
-.checkLabel {
-    width:200px;
-    font-size:0.6em;
-    color:white;
+#sample a {
+    text-decoration:none;
 }
 
-.box .checkInput {
-    margin:0;
-    width:30px;
-    height:10px;
-    color:white;
+#sample a span {
+    color:#499E34;
+    font-weight:bold;
+}
+
+#sample a span:hover {
+    text-decoration:underline;
 }
 
 .info {
