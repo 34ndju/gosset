@@ -10,6 +10,15 @@ $(document).ready(function() {
         }); 
     }, 10000);
     
+    $('#sample a span').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Click',
+            eventAction: 'Clicked on "View Sample Data Set"',
+            eventLabel: 'Sample Data Set Click'
+        }); 
+    })
+    
     $('#reg').click(function() {
         $('html, body').animate({
             scrollTop: $("body").offset().top
