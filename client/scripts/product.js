@@ -21,6 +21,11 @@ $(document).ready(function() {
         }
     })
     
+    $('#download').click(function() {
+        $('.downloadOptions').css('display', 'block')
+    })
+    
+    
     $('#rawDownload').click(function() {
         ga('send', {
             hitType: 'event',
