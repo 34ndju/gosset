@@ -219,14 +219,9 @@ body {
 }
 
 #sellScroll, #buyScroll {
-    cursor:pointer;
-    color:#499E34;
+    color:#8FC496;
 }
 
-#sellScroll:hover, #buyScroll:hover {
-    font-weight:bold;
-    text-decoration:underline;
-}
 
 .more {
     margin-bottom:30px;

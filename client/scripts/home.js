@@ -39,21 +39,7 @@ $(document).ready(function() {
             $('.box form button').prop('disabled', false)
         }
     })
-    
 
-    $('#sellScroll').click(function() {  //click sell in .info and scroll to bottom, then transition left/right
-        /*$('html, body').animate({
-            scrollTop: $(".more").offset().top
-        }, 600); */
-        
-        $(".more").scrollTop(300)
-    })
-    
-    $('#buyScroll').click(function() { //click buy in .info and scroll to bottom, then transition left/right
-        $('html, body').animate({
-            scrollTop: $(".more").offset().top
-        }, 600);
-    })
     
     $('#register').waypoint(function(direction) {
         console.log(direction)
