@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').load()
 var gridfs
 var express = require('express');
 var mongoose = require('mongoose');
@@ -18,12 +19,10 @@ var xlsxj = require('xlsx-to-json')
 var xlsj = require('xls-to-json')
 var request = require('request')
 var excel = require('xlsx')
-var stripe = require('stripe')('sk_live_zY6uwnHjwGgH3TNCTwYqbXvY')
+var stripe = require('stripe')(process.env.CLIENT_SECRET)
 var qs = require('querystring');
 
 var app = express();
-
-require('dotenv').load()
 
 var port = process.env.PORT || 8080;
 var visitor = ua('UA-77388290-1');

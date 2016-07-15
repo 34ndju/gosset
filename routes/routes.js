@@ -1,7 +1,4 @@
 module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs) {
-    
-    var CLIENT_ID = 'ca_8nK7vBK5dellv3bkYDWqzKou9HhpQQdm',
-        CLIENT_SECRET = 'sk_live_zY6uwnHjwGgH3TNCTwYqbXvY'
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -613,7 +610,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         res.redirect('https://connect.stripe.com/oauth/authorize?' + qs.stringify({  //change in production
             response_type: "code",
             scope: "read_write",
-            client_id: CLIENT_ID
+            client_id: process.env.CLIENT_ID
         }));
     })
     
@@ -624,8 +621,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 url: 'https://connect.stripe.com/oauth/token',  //change in production
                 form: {
                     grant_type: "authorization_code",
-                    client_id: CLIENT_ID,
-                    client_secret: CLIENT_SECRET,
+                    client_id: process.env.CLIENT_ID,
+                    client_secret: process.env.CLIENT_SECRET,
                     code:code
                 }},
                 function(err, response, body) {
