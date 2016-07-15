@@ -18,7 +18,7 @@ var xlsxj = require('xlsx-to-json')
 var xlsj = require('xls-to-json')
 var request = require('request')
 var excel = require('xlsx')
-var stripe = require('stripe')('sk_test_WlhJ4nGNTIC9w6LFIH6XYtRX')
+var stripe = require('stripe')('sk_live_zY6uwnHjwGgH3TNCTwYqbXvY')
 var qs = require('querystring');
 
 var app = express();

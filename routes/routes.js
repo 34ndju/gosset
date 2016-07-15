@@ -556,7 +556,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     res.redirect('/product/' + idString + '?paymentError' + req.body.error.split(' ').join('%20'))
                             }
                             else {
-                                console.log('testCharge', charge)
+                                console.log('charge21', charge)
                                 res.redirect('/addToPurchased?id=' + idString)
                             }
                         }
