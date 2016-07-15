@@ -527,7 +527,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             var token = req.body.token;
             
             var price = data.metadata.price * 100;
-            var commission = Math.round(price * 15) / 100
+            var commission = Math.round(price * 0.15) 
             var toSeller = price - commission
             
             UserModel.findOne({email:data.metadata.email}, function(err, user) {
