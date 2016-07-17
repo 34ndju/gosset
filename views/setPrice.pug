@@ -1,0 +1,20 @@
+head 
+    link(rel='stylesheet', href='/css/setPrice.css')
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    script(src='/scripts/fingerprint.js')
+    script(src='/scripts/GA.js')
+body
+    form(method='post', action='/setPrice')
+        input(style='display:none;', name='id', value=data._id)
+        div.priceArea
+            div.priceArea-top
+                p #{data.metadata.email}
+                h3 Set Price for #{data.metadata.title} (#{data.filename})
+                h5 Description: #{data.metadata.description}
+            div.priceArea-bottom
+                p.money $
+                input.price(type='number', name='dollar', style='width:50px;', maxlength='4', value='0000')
+                p.money .
+                input.price(type='number', name='cent', maxlength='2', value='00')
+        button(type='submit') Submit

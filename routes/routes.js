@@ -659,7 +659,25 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         console.log('Stripe Webhook Received:', req.body)
         res.status(200).send()
     })
-
+    
+    app.get('/setPrice', function(req, res) {
+        gridfs.files.find({"metadata.email": req.session.email}).toArray(function(err, data) {
+            res.render('setPrice', {data:data[0]})
+        })
+    })
+    
+    app.post('/setPrice', function(req, res) {
+        var price = parseInt(req.body.dollar) + (parseInt(req.body.cent) / 100)
+        UserModel.findOne({email:req.session.email}, function(err, user) {
+            if(err)
+                console.log(err)
+            else {
+                user.cart.append('price' + price)
+                user.save()
+                res.redirect('/')
+            }
+        })
+    })
 
 
     /*
