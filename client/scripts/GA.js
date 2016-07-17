@@ -15,6 +15,7 @@ if (window.location.host != 'base-a34ndju.c9users.io') {
         (window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         
         ga('create', 'UA-77388290-1', 'auto');
+        ga('require', 'ec');
         ga('send', 'pageview');
     }
     else

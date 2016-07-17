@@ -72,6 +72,12 @@ $(document).ready(function() {
             $('.top').css('display', 'block')
             $('.bottom').css('display', 'block')
             opened = true;
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'Click',
+                eventAction: 'Clicked on "Purchase, no purchase yet"',
+                eventLabel: 'Purchase Clicked, no buy'
+            }); 
         }
     })
     

@@ -3,7 +3,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
         if (req.method === 'GET') {  
-            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite') {
+            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite' || path == '/medR' || path == '/blog') {
                 next()
             }
             else {
