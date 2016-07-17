@@ -672,7 +672,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             if(err)
                 console.log(err)
             else {
-                user.cart.append('price' + price)
+                user.cart.push('price' + price)
                 user.save()
                 res.redirect('/')
             }
