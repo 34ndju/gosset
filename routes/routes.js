@@ -702,6 +702,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             else {
                 user.password = bcrypt.hashSync(req.body.password, 10)
                 user.save()
+                res.redirect('/')
             }
                 
         })
