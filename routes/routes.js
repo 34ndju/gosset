@@ -1,9 +1,9 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, jsonSql) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
         if (req.method === 'GET') {  
-            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite' || path == '/medR' || path == '/blog') {
+            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite' || path == '/medR' || path == '/blog' || path == '/resetPassword') {
                 next()
             }
             else {
@@ -23,6 +23,16 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     }
     
     app.use(loginRequired)
+    
+    /*var sql = jsonSql.build({
+        type: 'select',
+        table: 'users',
+        fields: ['name', 'age'],
+        condition: {name: 'Max', id: 6}
+    }); 
+    
+    console.log('sql.query', sql.query)
+    console.log('sql.value', sql.values) */
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -678,6 +688,27 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             }
         })
     })
+    
+    app.get('/resetPassword', function(req, res) {
+        res.render('resetPassword')
+    })
+    
+    app.post('/resetPassword', function(req, res) {
+        UserModel.findOne({email:req.body.email}, function(err, user) {
+            if(err) {
+                console.log(err)
+                res.redirect('/resetPassword')
+            }
+            else {
+                user.password = bcrypt.hashSync(req.body.password, 10)
+                user.save()
+            }
+                
+        })
+    })
+
+
+
 
 
     /*

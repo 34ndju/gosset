@@ -21,6 +21,7 @@ var request = require('request')
 var excel = require('xlsx')
 var stripe = require('stripe')(process.env.CLIENT_SECRET)
 var qs = require('querystring');
+var jsonSql = require('json-sql')()
 
 var app = express();
 
@@ -54,7 +55,7 @@ db.once('open', function callback () {
     
     var UserModel = require('./client/models/user')(mongoose, db);
     
-    require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs);
+    require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, jsonSql);
 
 });
 
