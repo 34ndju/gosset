@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, jsonSql) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -21,18 +21,61 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             next()
         }
     }
-    
     app.use(loginRequired)
     
-    /*var sql = jsonSql.build({
-        type: 'select',
-        table: 'users',
-        fields: ['name', 'age'],
-        condition: {name: 'Max', id: 6}
-    }); 
-    
-    console.log('sql.query', sql.query)
-    console.log('sql.value', sql.values) */
+    function jsonToSQL(filename, json) {
+        var table = filename.split('.')[0].split(' ').join('_')
+        var keys = Object.keys(json[0])
+        var definition = {};
+        var keyStr = '('
+        for(var i = 0; i < keys.length; i++) {
+            var syntaxFixedKey = keys[i].split(' ').join('_')
+            definition[syntaxFixedKey] = {
+                type: 'varchar'
+            }
+            if(i != keys.length - 1) {
+                keyStr += '"' + syntaxFixedKey + '", '
+            }
+            else {
+                keyStr += '"' + syntaxFixedKey + '")'
+            }
+        }
+        
+        var createTableQuery = {
+            type: 'create-table',
+            table: table,
+            ifNotExists: true,
+            definition: definition
+        }
+        
+        var insertQuery = 'insert into ' + table + ' ' + keyStr + ' values '
+        
+        var valuesStr = ''
+        var currentVal,
+            currentValStr;
+        
+        for(var x = 0; x < jsonObj.length; x++) {
+            currentValStr = '('
+            for(var y = 0; y < keys.length; y++) {
+                if(y != keys.length - 1) {
+                    currentValStr += jsonObj[x][keys[y]] + ', ' 
+                }
+                else {
+                    currentValStr += jsonObj[x][keys[y]] + ')'
+                }
+            }
+            if(x != jsonObj.length - 1) {
+                valuesStr += currentValStr + ', '
+            }
+            else {
+                valuesStr += currentValStr
+            }
+        }
+        
+        var result = sqlBuilder.sql(createTableQuery) + ';\ninsert into "' + table + '" ' + keyStr + ' values ' + valuesStr + ';'
+        
+        return result;
+    }
     
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
@@ -45,8 +88,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.get('/', function(req, res) {
         if(req.session.email)
             res.redirect('/dashboard')
-        else 
+        else {
+            console.log(2)
             res.render('home');
+        }
     })
     
     app.get('/logout', function(req, res) {
@@ -270,7 +315,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     if(err)
                                         console.log(err)
                                         
-                                    if(req.query.ext == 'json') {
+                                    if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         console.log(req.session.email + " downloaded " + jsonFile)
                                         xlsxj({
                                             input: path,
@@ -279,7 +324,13 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                             if(err) 
                                                 console.log(err)
                                             else {
-                                                res.json(result)
+                                                if(req.query.ext == 'json')
+                                                    res.json(result)
+                                                else {
+                                                    var buffer = new Buffer(jsonToSQL(file.filename, result))
+                                                    res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                    res.send(buffer)
+                                                }
                                             }
                                         }) 
                                     }
@@ -310,7 +361,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     if(err)
                                         console.log(err)
                                     
-                                    if(req.query.ext == 'json') {
+                                    if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         console.log(req.session.email + " downloaded " + jsonFile)
                                         xlsj({
                                             input: path,
@@ -319,7 +370,13 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                             if(err) 
                                                 console.log(err)
                                             else {
-                                                res.json(result)
+                                                if(req.query.ext == 'json')
+                                                    res.json(result)
+                                                else{
+                                                    var buffer = new Buffer(jsonToSQL(file.filename, result))
+                                                    res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                    res.send(buffer)
+                                                }
                                             }
                                         }) 
                                     }
@@ -538,10 +595,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         res.redirect('/?utm_source=Medium&utm_medium=Blog&utm_campaign=Medium%20Blogs');
     })
     
-    app.get('/listFolder/:name', function(req, res) {
-        res.send(fs.readdirSync(req.params.name))
-    })
-    
     app.post('/pay', function(req, res) {
         var idString = req.body.id.replace(/['"]+/g, '')
         
@@ -709,15 +762,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
 
 
-
-
-
-    /*
-    when going into production, remember:
-    -webhooks to new site
-    -client id
-    -client secret
-    */
 
 
     //deprecated because lack of time. would like to reactivate when incorporated using Stripe (managed accounts)

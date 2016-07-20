@@ -53,6 +53,15 @@ $(document).ready(function() {
         });
     })
     
+    $('#sql').click(function() {
+        ga('send', {
+            hitType: 'event',
+            eventCategory: 'Download',
+            eventAction: 'Downloaded SQL',
+            eventLabel: 'Downloaded' + $('#filename').text()
+        });
+    })
+    
     $('#submit').click(function() {
         if(opened) {
             Stripe.card.createToken({
