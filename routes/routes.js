@@ -47,24 +47,21 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             ifNotExists: true,
             definition: definition
         }
-        
-        var insertQuery = 'insert into ' + table + ' ' + keyStr + ' values '
-        
+
         var valuesStr = ''
-        var currentVal,
-            currentValStr;
+        var currentValStr;
         
-        for(var x = 0; x < jsonObj.length; x++) {
+        for(var x = 0; x < json.length; x++) {
             currentValStr = '('
             for(var y = 0; y < keys.length; y++) {
                 if(y != keys.length - 1) {
-                    currentValStr += jsonObj[x][keys[y]] + ', ' 
+                    currentValStr += json[x][keys[y]] + ', ' 
                 }
                 else {
-                    currentValStr += jsonObj[x][keys[y]] + ')'
+                    currentValStr += json[x][keys[y]] + ')'
                 }
             }
-            if(x != jsonObj.length - 1) {
+            if(x != json.length - 1) {
                 valuesStr += currentValStr + ', '
             }
             else {
@@ -89,7 +86,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         if(req.session.email)
             res.redirect('/dashboard')
         else {
-            console.log(2)
             res.render('home');
         }
     })
