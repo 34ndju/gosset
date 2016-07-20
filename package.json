@@ -26,6 +26,7 @@
   "dependencies": {
     "bcrypt": "^0.8.6",
     "body-parser": "^1.15.0",
+    "csvtojson": "^1.0.0",
     "d3": "^3.5.16",
     "db": "^1.0.6",
     "dotenv": "^1.2.0",

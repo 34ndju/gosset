@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder) {
+module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -291,7 +291,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                             console.log(err)
                         })
                         
-                        if(req.query.ext == 'rawDownload') {
+                        if(ext == req.query.ext) {
+                            res.redirect('/download/' + req.params.id + '?ext=rawDownload')
+                        }
+                        else if(req.query.ext == 'rawDownload') {
                             res.set('Content-Type', file.contentType);
                             res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
                             readStream.pipe(res)
@@ -312,7 +315,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                         console.log(err)
                                         
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
-                                        console.log(req.session.email + " downloaded " + jsonFile)
+
                                         xlsxj({
                                             input: path,
                                             output: null
@@ -322,7 +325,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                             else {
                                                 if(req.query.ext == 'json')
                                                     res.json(result)
-                                                else {
+                                                else if(req.query.ext == 'sql') {
                                                     var buffer = new Buffer(jsonToSQL(file.filename, result))
                                                     res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
                                                     res.send(buffer)
@@ -358,7 +361,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                         console.log(err)
                                     
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
-                                        console.log(req.session.email + " downloaded " + jsonFile)
+                                        
                                         xlsj({
                                             input: path,
                                             output: null 
@@ -368,7 +371,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                             else {
                                                 if(req.query.ext == 'json')
                                                     res.json(result)
-                                                else{
+                                                else if(req.query.ext == 'sql') {
                                                     var buffer = new Buffer(jsonToSQL(file.filename, result))
                                                     res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
                                                     res.send(buffer)
@@ -380,7 +383,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                         console.log(req.session.email + " downloaded " + csvFile)
                                         xlsj({
                                             input: path,
-                                            output: null
+                                            output: null 
                                         }, function(err, result) {
                                             if(err) 
                                                 console.log(err)
@@ -389,6 +392,39 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                                 res.send(new Buffer(papa.unparse(result)))
                                             }
                                         }) 
+                                    }
+                                })
+                            }
+                            
+                            
+                            else if(ext == 'csv') {
+                                var path = '/tmp/' + file.filename
+                                var out = fs.createWriteStream(path)
+                                readStream.pipe(out)
+                                
+                                readStream.on('close', function(err) {
+                                    if(err)
+                                        console.log(err)
+                                        
+                                    else {
+                                        if(req.query.ext == 'json' || req.query.ext == 'sql') {
+
+                                            csv2json.fromFile(path, function(error, result) {
+                                                if(error)
+                                                    console.log(error)
+                                                    
+                                                else {
+                                                    if(req.query.ext == 'json') {
+                                                        res.json(result)
+                                                    }
+                                                    else if(req.query.ext == 'sql') {
+                                                        var buffer = new Buffer(jsonToSQL(file.filename, result))
+                                                        res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                        res.send(buffer)
+                                                    }
+                                                }
+                                            });
+                                        }
                                     }
                                 })
                             }
