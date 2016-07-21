@@ -259,7 +259,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         }
                     }
                     else if(ext == 'csv') {
-                        var csv = fs.readFileSync(path, 'utf8').split("\r")[0]
+                        var csv = fs.readFileSync(file.path, 'utf8').split("\r")[0]
                         var headers = csv.split(',')
                     }
                     /*getting headers*/
