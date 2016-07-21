@@ -58,8 +58,9 @@ db.once('open', function callback () {
     gridfs = gridFs(db.db, mongoose.mongo)
     
     var UserModel = require('./client/models/user')(mongoose, db);
+    var fileMetadataModel = require('./client/models/fileMetadata')(mongoose, db);
     
-    require('./routes/routes')(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json);
+    require('./routes/routes')(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json);
 
 });
 

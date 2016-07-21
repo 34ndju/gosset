@@ -60,7 +60,7 @@ body
                     
             h3 Data by #{user.firstName} #{user.lastName} 
             div#datacontent
-                if data[0] 
+                if metadata[0] 
                     ul#labels
                         li#col1 Title
                         li#col2 Description
@@ -68,15 +68,15 @@ body
                         li#col4 Filename
                         li#col5 Upload Date
                         li#col6 File Size
-                    each d in data
+                    each m in metadata
                         ul
-                            a(href='/product/' + d._id)
-                                li#col1 #{d.metadata.title}
-                            li#col2 #{d.metadata.description}
-                            li#col3 #{d.metadata.email}
-                            li#col4 #{d.filename}
-                            li#col5 #{d.uploadDate.toDateString()}
-                            li#col6 #{d.length / 1000}kb
+                            a(href='/product/' + m._id)
+                                li#col1 #{m.title}
+                            li#col2 #{m.description}
+                            li#col3 #{m.email}
+                            li#col4 #{m.filename}
+                            li#col5 #{m.uploadDate.toDateString()}
+                            li#col6 #{m.length / 1000}kb
                 else
                     h4(style='font-weight:normal;') You have no data yet...Try uploading a data set above!
 

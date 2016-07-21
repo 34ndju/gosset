@@ -6,12 +6,12 @@ head
     script(src='/scripts/GA.js')
 body
     form(method='post', action='/setPrice')
-        input(style='display:none;', name='id', value=data._id)
+        input(style='display:none;', name='id', value=metadata._id)
         div.priceArea
             div.priceArea-top
-                p #{data.metadata.email}
-                h3 Set Price for #{data.metadata.title} (#{data.filename})
-                h5 Description: #{data.metadata.description}
+                p #{metadata.email}
+                h3 Set Price for #{metadata.title} (#{metadata.filename})
+                h5 Description: #{metadata.description}
             div.priceArea-bottom
                 p.money $
                 input.price(type='number', name='dollar', style='width:50px;', maxlength='4', value='0000')

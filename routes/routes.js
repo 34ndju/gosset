@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json) {
+module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -234,18 +234,56 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 var file = files.file[0];
 
                 var ext = file.originalFilename.split('.')[1]
-                if(ext == 'xlsx' || ext == 'xltx' || ext == 'xls' || ext == 'xlw' || ext == 'xml' || ext == 'csv') {
-                    var writeStream = gridfs.createWriteStream({filename: file.originalFilename,
-                                                                metadata: {
-                                                                    email: req.session.email,
-                                                                    title: fields.title[0],
-                                                                    description: fields.description[0],
-                                                                    price: parseInt(fields.dollar[0]) + (parseInt(fields.cent[0]) / 100)
-                                                                }
-                    })
+                if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml' || ext == 'csv') {
+                    /*getting headers*/
+                    if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml'){
+                        var workbook = excel.readFile(file.path);
+                        if(workbook.Sheets.Sheet1) {
+                            var sheet1 = workbook.Sheets.Sheet1
+                            var alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+                            var keepParsing = true;
+                            var headers = []
+                            var currentCell;
+                            while(keepParsing) {
+                                currentCell = alphabet[0] + '1'
+                                if(sheet1[currentCell]) {
+                                    headers.push(sheet1[currentCell].v)
+                                    alphabet.shift();
+                                }
+                                else
+                                    keepParsing = false;
+                            }
+                        }
+                        else {
+                            headers = []
+                        }
+                    }
+                    else if(ext == 'csv') {
+                        var csv = fs.readFileSync(path, 'utf8').split("\r")[0]
+                        var headers = csv.split(',')
+                    }
+                    /*getting headers*/
+                
+                    var writeStream = gridfs.createWriteStream({filename: file.originalFilename})
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {
-                        console.log(req.session.email + " uploaded " + file.originalFilename)
+                        var newFileMetadata = new fileMetadataModel();
+                        
+                        newFileMetadata._id = file._id
+                        newFileMetadata.email = req.session.email
+                        newFileMetadata.title = fields.title[0]
+                        newFileMetadata.description = fields.description[0]
+                        newFileMetadata.filename = file.filename
+                        newFileMetadata.length = file.length
+                        newFileMetadata.uploadDate = file.uploadDate
+                        newFileMetadata.headers = headers
+                        newFileMetadata.price = parseInt(fields.dollar[0]) + (parseInt(fields.cent[0]) / 100)
+                        newFileMetadata.category = null
+
+                        
+                        newFileMetadata.save()
+
+                        console.log(req.session.email + " uploaded " + file.filename)
                         UserModel.findOne({email:req.session.email}, function(err, user) {
                             if(err)
                                 console.log(err)
@@ -273,10 +311,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })  
     
     app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be rawDownload, json, or csv)
-        gridfs.findOne({_id: req.params.id}, function(err, file) {
+        fileMetadataModel.findOne({_id: req.params.id}, function(err, metadata) {
             if(err)
                 console.log(err)
-            if(!file) {
+            if(!metadata) {
                 console.log("File not found");
                 res.redirect('/')
             }
@@ -284,9 +322,9 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                 UserModel.findOne({email:req.session.email}, function(error, user) {
                     if(error)
                         console.log(error)
-                    if(user.cart.indexOf(req.params.id) > -1 || file.metadata.email == req.session.email || file.metadata.price == 0) {
-                        var ext = file.filename.split('.')[1]
-                        var readStream = gridfs.createReadStream({_id: file._id})
+                    if(user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
+                        var ext = metadata.filename.split('.')[1]
+                        var readStream = gridfs.createReadStream({_id: metadata._id})
                         readStream.on('error', function(err) {
                             console.log(err)
                         })
@@ -295,18 +333,20 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                             res.redirect('/download/' + req.params.id + '?ext=rawDownload')
                         }
                         else if(req.query.ext == 'rawDownload') {
-                            res.set('Content-Type', file.contentType);
-                            res.set("Content-Disposition", 'attachment; filename="' + file.filename + '"')
+                            res.set("Content-Disposition", 'attachment; filename="' + metadata.filename + '"')
                             readStream.pipe(res)
                             readStream.on('close', function(err) {
-                                console.log(req.session.email + " downloaded " + file.filename)
+                                console.log(req.session.email + " downloaded " + metadata.filename)
                             })
+                        }
+                        else if (metadata.length > 10000000) {
+                            res.redirect('/product/' + req.params.id + '?tooLarge=true')
                         }
                         else {
                             if(ext == 'xlsx') {
-                                var path = '/tmp/' + file.filename,
-                                    jsonFile = file.filename.split('.')[0] + '.json',
-                                    csvFile = file.filename.split('.')[0] + '.csv'
+                                var path = '/tmp/' + metadata.filename,
+                                    jsonFile = metadata.filename.split('.')[0] + '.json',
+                                    csvFile = metadata.filename.split('.')[0] + '.csv'
                                 var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
                                 
@@ -315,7 +355,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                         console.log(err)
                                         
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
-
                                         xlsxj({
                                             input: path,
                                             output: null
@@ -323,11 +362,12 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                             if(err) 
                                                 console.log(err)
                                             else {
-                                                if(req.query.ext == 'json')
+                                                if(req.query.ext == 'json') {
                                                     res.json(result)
+                                                }
                                                 else if(req.query.ext == 'sql') {
-                                                    var buffer = new Buffer(jsonToSQL(file.filename, result))
-                                                    res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                    var buffer = new Buffer(jsonToSQL(metadata.filename, result))
+                                                    res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
                                                     res.send(buffer)
                                                 }
                                             }
@@ -350,9 +390,9 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                 })
                             }
                             else if(ext == 'xls') {
-                                var path = '/tmp/' + file.filename,
-                                    jsonFile = file.filename.split('.')[0] + '.json',
-                                    csvFile = file.filename.split('.')[0] + '.csv'
+                                var path = '/tmp/' + metadata.filename,
+                                    jsonFile = metadata.filename.split('.')[0] + '.json',
+                                    csvFile = metadata.filename.split('.')[0] + '.csv'
                                 var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
                                 
@@ -372,8 +412,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                                 if(req.query.ext == 'json')
                                                     res.json(result)
                                                 else if(req.query.ext == 'sql') {
-                                                    var buffer = new Buffer(jsonToSQL(file.filename, result))
-                                                    res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                    var buffer = new Buffer(jsonToSQL(metadata.filename, result))
+                                                    res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
                                                     res.send(buffer)
                                                 }
                                             }
@@ -395,20 +435,18 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                     }
                                 })
                             }
-                            
-                            
                             else if(ext == 'csv') {
-                                var path = '/tmp/' + file.filename
-                                var out = fs.createWriteStream(path)
+
+                                var path = '/tmp/' + metadata.filename
+                                var out = fs.createWriteStream(metadata.filename)
                                 readStream.pipe(out)
-                                
+
                                 readStream.on('close', function(err) {
                                     if(err)
                                         console.log(err)
                                         
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
-
                                             csv2json.fromFile(path, function(error, result) {
                                                 if(error)
                                                     console.log(error)
@@ -418,15 +456,16 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                                                         res.json(result)
                                                     }
                                                     else if(req.query.ext == 'sql') {
-                                                        var buffer = new Buffer(jsonToSQL(file.filename, result))
-                                                        res.set("Content-Disposition", 'attachment; filename="' + file.filename.split('.')[0]+ '.sql' + '"')
+                                                        var buffer = new Buffer(jsonToSQL(metadata.filename, result))
+                                                        res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
                                                         res.send(buffer)
                                                     }
                                                 }
                                             });
+                                            
                                         }
                                     }
-                                })
+                                }) 
                             }
                         }
                     }
@@ -438,18 +477,6 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
         })
     })
     
-    app.get('/mydata', function(req, res) {
-        if(!req.session.email)
-            res.redirect('/login')
-        else {
-            UserModel.findOne({email:req.session.email}, function(err, user) {
-                if(err)
-                    console.log(err)
-                res.render('mydata', {cart:user.cart})
-            })
-        }
-    })
-    
     app.get('/dashboard', function(req, res) {
         if(!req.session.email)
             res.redirect('/login')
@@ -457,14 +484,14 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             UserModel.findOne({email:req.session.email}, function(err, user) {
                 if(err)
                     console.log(err);
-                gridfs.files.find({'metadata.email': req.session.email}).toArray(function(err, data) {
+                fileMetadataModel.find({email: req.session.email}, function(err, metadata) {
                     if(err)
                         console.log(err) 
                     if(user.dateCreated < new Date('Wed Jul 12 2016 23:29:59 GMT+0000 (UTC)')) { //check if created before I started new TOS
-                        res.render('dashboard', {user:user, data:data, showTOS:true})
+                        res.render('dashboard', {user:user, metadata:metadata, showTOS:true})
                     }
                     else {
-                        res.render('dashboard', {user:user, data:data, showTOS:false})
+                        res.render('dashboard', {user:user, metadata:metadata, showTOS:false})
                     }
                 })
             })
@@ -476,10 +503,10 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.redirect('/login')
         else {
             if(req.query.category) {
-                gridfs.files.find({"metadata.category": req.query.category}).toArray(function(err, data) {
+                fileMetadataModel.find({category: req.query.category}, function(err, metadata) {
                     if(err)
                         console.log(err)
-                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), data:data})
+                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), metadata:metadata})
                 })
             }
             else {
@@ -493,16 +520,16 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
             res.redirect('/login')
         else {
             console.log(req.body.search)
-            gridfs.files.find({'metadata.description': { "$regex": req.body.search, "$options": "i" }}).toArray(function(err, files) { //checks description
+            fileMetadataModel.find({description: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata) { //checks description
                 if(err)
                     console.log(err)
-                if(files[0])
-                    res.render('store', {search:req.body.search, data:files})
+                if(metadata[0])
+                    res.render('store', {search:req.body.search, metadata:metadata})
                 else {
-                    gridfs.files.find({'metadata.title': { "$regex": req.body.search, "$options": "i" }}).toArray(function(err, files) { //checks title
+                    fileMetadataModel.find({title: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata2) { //checks title
                         if(err)
                             console.log(err)
-                        res.render('store', {search:req.body.search, data:files})
+                        res.render('store', {search:req.body.search, metadata:metadata2})
                     })
                 }
             })
@@ -514,109 +541,58 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
 
     app.get('/product/:id', function(req, res) {
+        var tooLarge = false;
+        if(req.query.tooLarge == 'true') 
+            tooLarge = true;
+            
         if(!req.session.email)
             res.redirect('/login') 
         else { 
-            gridfs.findOne({_id:req.params.id}, function(err, data) {
+            fileMetadataModel.findOne({_id:req.params.id}, function(err, metadata) {
                 if(err)
                     console.log(err)
-                if(!data.metadata.sample) {
                     
-                    //get headers
-                    var readStream = gridfs.createReadStream({_id: data._id})
-                    var path = '/tmp/' + data.filename
-                    var out = fs.createWriteStream(path)
-                        readStream.pipe(out)
+                var headerStr = metadata.headers.join(', ')
+                
+                UserModel.findOne({email:req.session.email}, function(err, user) {
+                    if(err)
+                        console.log(err)
                         
-                    readStream.on('close', function(err) {
-                        if(err)
-                            console.log(err)
-                        
-                        var ext = data.filename.split('.')[1] 
-                        if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml'){
-                            var workbook = excel.readFile(path);
-                            if(workbook.Sheets.Sheet1) {
-                                var sheet1 = workbook.Sheets.Sheet1
-                                var alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-                                var keepParsing = true;
-                                var headers = []
-                                var currentCell;
-                                while(keepParsing) {
-                                    currentCell = alphabet[0] + '1'
-                                    if(sheet1[currentCell]) {
-                                        headers.push(sheet1[currentCell].v)
-                                        alphabet.shift();
-                                    }
-                                    else
-                                        keepParsing = false;
-                                }
-                            }
-                            else {
-                                headers = []
-                            }
-                        }
-                        else if(ext == 'csv') {
-                            var csv = fs.readFileSync(path, 'utf8').split("\r")[0]
-                            var headers = csv.split(',')
-                        }
-                        
-                        var headerStr = headers.join(', ')
-                        
-                        UserModel.findOne({email:req.session.email}, function(err, user) {
-                            if(err)
-                                console.log(err)
-                                
-                            var isOwner; //check if item belongs to current user's session
-                            var isPurchased; //check if item is already purchased
-                            
-                            if(data.metadata.email == req.session.email) {
-                                isOwner = true;
-                                isPurchased = false;
-                            }
-                            else {
-                                isOwner = false;
-                                if(user.cart.indexOf(req.params.id) > -1)
-                                    isPurchased = true;
-                                else
-                                    isPurchased = false;
-                            }
-                            if(!req.query.paymentError) {
-                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr});
-                            }
-                            else {
-                                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, data:data, sample:false, headers: headerStr, paymentError: req.query.paymentError.split('%20').join(' ')});
-                            }
-                        })
-                    })
-                }
-                else {
-                    console.log(req.path)
-                    res.render('product', {data:data, sample:true, path:req.path});
-                }
+                    var isOwner; //check if item belongs to current user's session
+                    var isPurchased; //check if item is already purchased
+                    
+                    if(metadata.email == req.session.email) {
+                        isOwner = true;
+                        isPurchased = false;
+                    }
+                    else {
+                        isOwner = false;
+                        if(user.cart.indexOf(req.params.id) > -1)
+                            isPurchased = true;
+                        else
+                            isPurchased = false;
+                    }
+                    if(!req.query.paymentError) {
+                        res.render('product', {isPurchased:isPurchased, isOwner:isOwner, metadata:metadata, sample:false, headers: headerStr, tooLarge:tooLarge});
+                    }
+                    else {
+                        res.render('product', {isPurchased:isPurchased, isOwner:isOwner, metadata:metadata, sample:false, headers: headerStr, paymentError: req.query.paymentError.split('%20').join(' '), tooLarge: tooLarge});
+                    }
+                })
             })
         }
     })
 
     app.get('/totalremove/:id', function(req, res) {
-        if(!req.session.email) {
-            res.redirect('/login')
-        }
-        else {
-            gridfs.findOne({_id:req.params.id}, function(err, file) {
-                if(err)
-                    console.log(err)
-                if(file.metadata.email == req.session.email) {
-                    gridfs.remove({_id:req.params.id}, function(error) {
-                        if(error)
-                            console.log(error)
-                        console.log(req.session.email + " removed file ID " + req.params.id);
-                        res.redirect('/')
-                    })
-                }
-                else
-                    res.redirect('/')
-            })
-        }
+        gridfs.remove({_id:req.params.id, email:req.session.email}, function(err) {
+            if(err)
+                console.log(err)
+            else {
+                fileMetadataModel.find({_id:req.params.id, email:req.session.email}).remove().exec()
+                console.log(req.session.email + " removed file ID " + req.params.id);
+                res.redirect('/')
+            }
+        })
     })
     
     app.get('/termsofuse', function(req, res) {
@@ -630,17 +606,17 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     app.post('/pay', function(req, res) {
         var idString = req.body.id.replace(/['"]+/g, '')
         
-        gridfs.findOne({_id:idString}, function(err, data) {  //because strings have "...."
+        fileMetadataModel.findOne({_id:idString}, function(err, metadata) {  //because strings have "...."
             if(err)
                 console.log(err)
                 
             var token = req.body.token;
             
-            var price = data.metadata.price * 100;
+            var price = metadata.price * 100;
             var commission = Math.round(price * 0.15) 
             var toSeller = price - commission
             
-            UserModel.findOne({email:data.metadata.email}, function(err, user) {
+            UserModel.findOne({email:metadata.email}, function(err, user) {
                 if(err)
                     console.log(err)
                 if(user.stripe){ //stripe already setup for seller
@@ -650,7 +626,7 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
                             amount: price, // amount in cents
                             currency: "usd",
                             source: token,
-                            description: "Purchased " + data.metadata.title,
+                            description: "Purchased " + metadata.title,
                             application_fee: commission // amount in cents
                         },
                         {stripe_account: user.stripe.stripe_user_id}, //seller
@@ -756,8 +732,8 @@ module.exports = function(express, app, session, papa, UserModel, d3, multiparty
     })
     
     app.get('/setPrice', function(req, res) {
-        gridfs.files.find({"metadata.email": req.session.email}).toArray(function(err, data) {
-            res.render('setPrice', {data:data[0]})
+        fileMetadataModel.findOne({email: req.session.email}, function(err, metadata) {
+            res.render('setPrice', {metadata:metadata})
         })
     })
     

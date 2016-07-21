@@ -31,13 +31,13 @@ body
                         p Settings
     div.content
         div.left
-            p#title #{data.metadata.title}
-            p#filename (#{data.filename})
-            if !isOwner && !isPurchased && data.metadata.price != 0
+            p#title #{metadata.title}
+            p#filename (#{metadata.filename})
+            if !isOwner && !isPurchased && metadata.price != 0
                 div#buttonLabel
                     //p Continue with Purchase
                     form.pay(method='post', action='/pay')
-                        input(style="display:none;", value=data._id, name='id')
+                        input(style="display:none;", value=metadata._id, name='id')
                         input#creditCardToken(style='display:none;', name='token')
                         input#error(style='display:none;', name='error')
                         if(paymentError)
@@ -57,17 +57,19 @@ body
                         p#securityText Our Security Standards
                         p#security Credit card information is all tokenized on the client-side, making it nearly impossible for hackers to directly obtain this information. Additionally, all credit card information is processed through Stripe, a reliable and credible payments-processing company with a priority of security.
             div.options
-                if isOwner || isPurchased || data.metadata.price == 0
+                if isOwner || isPurchased || metadata.price == 0
                     div#download
+                        if(tooLarge)
+                            p(style='font-size:0.5em; color:red; margin:5px;') File too large for selected export method. Contact nathan@gosset.co for options.
                         p download
                         div.downloadOptions
-                            a(href='/download/' + data._id + '?ext=rawDownload')
+                            a(href='/download/' + metadata._id + '?ext=rawDownload')
                                 p#rawDownload Raw Download
-                            a(href='/download/' + data._id + '?ext=json')
+                            a(href='/download/' + metadata._id + '?ext=json')
                                 p#json JSON Response
-                            a(href='/download/' + data._id + '?ext=csv')
+                            a(href='/download/' + metadata._id + '?ext=csv')
                                 p#csv CSV Download
-                            a(href='/download/' + data._id + '?ext=sql')
+                            a(href='/download/' + metadata._id + '?ext=sql')
                                 p#sql SQL Download      
                 if isOwner
                     div#delete
@@ -75,13 +77,13 @@ body
                 
         div.right
             p.val Uploaded 
-            p.tab #{data.uploadDate.toDateString()}
+            p.tab #{metadata.uploadDate.toDateString()}
             p.val File Size
-            p.tab #{data.length / 1000}kb
+            p.tab #{metadata.length / 1000}kb
             p.val Published By 
-            p.tab #{data.metadata.email}
+            p.tab #{metadata.email}
             p.val Description
-            p.tab #{data.metadata.description}
+            p.tab #{metadata.description}
             if headers[0]
                 p.val Fields
                 p.tab #{headers}
@@ -90,4 +92,4 @@ body
                 p.tab (Unparsable) Contact nathan@gosset.co for more details.
             if !isPurchased
                 p.val Price
-                p.tab $#{data.metadata.price.toFixed(2)}
+                p.tab $#{metadata.price.toFixed(2)}
