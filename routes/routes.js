@@ -259,8 +259,14 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         }
                     }
                     else if(ext == 'csv') {
-                        var csv = fs.readFileSync(file.path, 'utf8').split("\r")[0]
-                        var headers = csv.split(',')
+                        var csv = fs.readFileSync(file.path, 'utf8')//.split("\r")[0]
+                        var headers;
+                        if(csv.indexOf("\n") == -1) {
+                            headers = csv.split("\r")[0].split(',')
+                        }
+                        else {
+                            headers = csv.split("\n")[0].split(',')
+                        }
                     }
                     /*getting headers*/
                 
@@ -438,13 +444,12 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                             else if(ext == 'csv') {
 
                                 var path = '/tmp/' + metadata.filename
-                                var out = fs.createWriteStream(metadata.filename)
+                                var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
 
                                 readStream.on('close', function(err) {
                                     if(err)
                                         console.log(err)
-                                        
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                             csv2json.fromFile(path, function(error, result) {
