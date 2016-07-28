@@ -2,8 +2,9 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
-        if (req.method === 'GET') {  
-            if(path == '/' || path == '/termsofuse' || path == '/login' || path == '/logout' || path == '/register' || path == '/invite' || path == '/medR' || path == '/blog' || path == '/resetPassword') {
+        if (req.method === 'GET') {
+            var exceptions = ['/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
+            if(exceptions.indexOf(path > -1)) {
                 next()
             }
             else {
@@ -147,12 +148,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     })
     
     app.get('/register', function(req, res) {
-        if(req.query.path) {
-            res.render('register', {path:req.query.path})
-        }
-        else {
-            res.render('register', {email:req.query.email})
-        }
+        res.render('register', {email:req.query.email})
     })
     
     app.post('/register', function(req, res) {
@@ -180,10 +176,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         throw err;
                     console.log(email + " registered")
                     req.session.email = email;
-                    if(req.body.path == '')
-                        res.redirect('/invite?ref=' + email)
-                    else 
-                        res.redirect('/invite?ref=' + email + '&path=' + req.body.path)
+                    res.redirect('/invite?ref=' + email)
                 })
             }
             else 
@@ -192,10 +185,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     }); 
     
     app.get('/invite', function(req, res) {
-        if(req.query.path)
-            res.render('invite', {ref:req.query.ref, path: req.query.path})
-        else
-            res.render('invite', {ref:req.query.ref})
+        res.render('invite', {ref:req.query.ref})
     })
     
     app.post('/invite', function(req, res) {
@@ -211,10 +201,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
             if(err)
                 console.log(err)
             else {
-                if(req.body.path == '')
-                    res.redirect('/')
-                else
-                    res.redirect(req.body.path)
+                res.redirect('/')
             }
         })
     })
@@ -328,7 +315,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                 UserModel.findOne({email:req.session.email}, function(error, user) {
                     if(error)
                         console.log(error)
-                    if(user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
+                    if(metadata.id == '576d50c430c66a5f0312cf9b' || user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
                         var ext = metadata.filename.split('.')[1]
                         var readStream = gridfs.createReadStream({_id: metadata._id})
                         readStream.on('error', function(err) {
@@ -550,15 +537,19 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
         if(req.query.tooLarge == 'true') 
             tooLarge = true;
             
-        if(!req.session.email)
-            res.redirect('/login') 
-        else { 
-            fileMetadataModel.findOne({_id:req.params.id}, function(err, metadata) {
-                if(err)
-                    console.log(err)
-                    
-                var headerStr = metadata.headers.join(', ')
+        fileMetadataModel.findOne({_id:req.params.id}, function(err, metadata) {
+            if(err)
+                console.log(err)
                 
+            var headerStr = metadata.headers.join(', ')
+            
+            if(req.params.id == '576d50c430c66a5f0312cf9b') {
+                var isOwner = false
+                var isPurchased = true;
+                res.render('product', {isPurchased:isPurchased, isOwner:isOwner, metadata:metadata, sample:false, headers: headerStr, tooLarge:tooLarge})
+            }
+            
+            else {
                 UserModel.findOne({email:req.session.email}, function(err, user) {
                     if(err)
                         console.log(err)
@@ -584,8 +575,8 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         res.render('product', {isPurchased:isPurchased, isOwner:isOwner, metadata:metadata, sample:false, headers: headerStr, paymentError: req.query.paymentError.split('%20').join(' '), tooLarge: tooLarge});
                     }
                 })
-            })
-        }
+            }
+        })
     })
 
     app.get('/totalremove/:id', function(req, res) {
@@ -772,6 +763,10 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
             }
                 
         })
+    })
+    
+    app.get('/test', function(req, res) {
+        res.render('test')
     })
 
 

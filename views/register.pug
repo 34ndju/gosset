@@ -14,10 +14,7 @@ body
         a(href='/')
             img#logo(src='/images/GossetMoustacheClear.png')
         h1#title Join Gosset
-        if (path)
-            p#sample Create an account to view the free sample data set.
         form(method='post', action='/register')
-            input#path(style='display:none', name='path')
             label.checkLabel
                 input.checkInput(type='checkbox', name='receiveEmail', checked='') 
                 | I accept receiving very occasional emails!
