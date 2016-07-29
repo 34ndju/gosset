@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json) {
+module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json, csvjson) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -318,6 +318,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                     else if(metadata.id == '576d50c430c66a5f0312cf9b' || user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
                         var ext = metadata.filename.split('.')[1]
                         var readStream = gridfs.createReadStream({_id: metadata._id})
+                        
                         readStream.on('error', function(err3) {
                             console.log('err3', err3)
                         })
@@ -457,7 +458,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                                     }
                                                 }
                                             });*/
-                                            
+                                            /*
                                             csv2json.on("end_parsed", function (result) {
                                                 if(req.query.ext == 'json') {
                                                     res.json(result)
@@ -469,7 +470,20 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                                 }
                                             });
                                             
-                                            fs.createReadStream(path).pipe(csv2json);
+                                            fs.createReadStream(path).pipe(csv2json); */
+                                            /*
+                                            var result = papa.parse(fs.readFileSync(path, 'utf8'))
+                                            res.json(result)*/
+                                            
+                                            var result = csvjson.toObject(fs.readFileSync(path, 'utf8'))
+                                            if(req.query.ext == 'json') {
+                                                res.json(result)
+                                            }
+                                            else if(req.query.ext == 'sql') {
+                                                var buffer = new Buffer(jsonToSQL(metadata.filename, result))
+                                                res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
+                                                res.send(buffer)
+                                            }
                                         }
                                     }
                                 }) 
