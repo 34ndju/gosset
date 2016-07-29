@@ -85,7 +85,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     
     app.get('/', function(req, res) {
         if(req.session.email)
-            res.redirect('/dashboard')
+            res.redirect('/store')
         else {
             res.render('home');
         }
@@ -123,7 +123,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                     console.log(email + " logged in.")
                     req.session.email = email;
                     if(req.body.path == '') {
-                        res.redirect('/dashboard')
+                        res.redirect('/')
                     }
                     else {
                         res.redirect(req.body.path)
@@ -509,7 +509,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     
     app.post('/store', function(req, res) {
         if(!req.session.email)
-            res.redirect('/login')
+            res.redirect('/')
         else {
             console.log(req.body.search)
             fileMetadataModel.find({description: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata) { //checks description
