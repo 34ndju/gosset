@@ -315,7 +315,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                 UserModel.findOne({email:req.session.email}, function(error, user) {
                     if(error)
                         console.log(error)
-                    if(metadata.id == '576d50c430c66a5f0312cf9b' || user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
+                    else if(metadata.id == '576d50c430c66a5f0312cf9b' || user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
                         var ext = metadata.filename.split('.')[1]
                         var readStream = gridfs.createReadStream({_id: metadata._id})
                         readStream.on('error', function(err) {
@@ -343,17 +343,17 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                 var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
                                 
-                                readStream.on('close', function(err) {
-                                    if(err)
-                                        console.log(err)
+                                readStream.on('close', function(error1) {
+                                    if(error1)
+                                        console.log(error1)
                                         
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         xlsxj({
                                             input: path,
                                             output: null
-                                        }, function(err, result) {
-                                            if(err) 
-                                                console.log(err)
+                                        }, function(error2, result) {
+                                            if(error2) 
+                                                console.log(error2)
                                             else {
                                                 if(req.query.ext == 'json') {
                                                     res.json(result)
@@ -389,18 +389,18 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                 var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
                                 
-                                readStream.on('close', function(err) {
-                                    if(err)
-                                        console.log(err)
+                                readStream.on('close', function(error1) {
+                                    if(error1)
+                                        console.log(error1)
                                     
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         
                                         xlsj({
                                             input: path,
                                             output: null 
-                                        }, function(err, result) {
-                                            if(err) 
-                                                console.log(err)
+                                        }, function(error2, result) {
+                                            if(error2) 
+                                                console.log(error2)
                                             else {
                                                 if(req.query.ext == 'json')
                                                     res.json(result)
@@ -434,14 +434,14 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                 var out = fs.createWriteStream(path)
                                 readStream.pipe(out)
 
-                                readStream.on('close', function(err) {
-                                    if(err)
-                                        console.log(err)
+                                readStream.on('close', function(error1) {
+                                    if(error1)
+                                        console.log(error1)
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
-                                            csv2json.fromFile(path, function(error, result) {
-                                                if(error)
-                                                    console.log(error)
+                                            csv2json.fromFile(path, function(error2, result) {
+                                                if(error2)
+                                                    console.log(error2)
                                                     
                                                 else {
                                                     if(req.query.ext == 'json') {
