@@ -442,7 +442,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                         console.log('error1', error1)
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
-                                            csv2json.fromFile(path, function(error2, result) {
+                                            /*csv2json.fromFile(path, function(error2, result) {
                                                 if(error2)
                                                     console.log('error2', error2)
                                                     
@@ -456,8 +456,20 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                                         res.send(buffer)
                                                     }
                                                 }
+                                            });*/
+                                            
+                                            csv2json.on("end_parsed", function (result) {
+                                                if(req.query.ext == 'json') {
+                                                    res.json(result)
+                                                }
+                                                else if(req.query.ext == 'sql') {
+                                                    var buffer = new Buffer(jsonToSQL(metadata.filename, result))
+                                                    res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
+                                                    res.send(buffer)
+                                                }
                                             });
                                             
+                                            fs.createReadStream(path).pipe(csv2json);
                                         }
                                     }
                                 }) 
