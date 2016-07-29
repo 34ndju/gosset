@@ -304,22 +304,22 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     })  
     
     app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be rawDownload, json, or csv)
-        fileMetadataModel.findOne({_id: req.params.id}, function(err, metadata) {
-            if(err)
-                console.log(err)
+        fileMetadataModel.findOne({_id: req.params.id}, function(err1, metadata) {
+            if(err1)
+                console.log('err1', err1)
             if(!metadata) {
                 console.log("File not found");
                 res.redirect('/')
             }
             else {
-                UserModel.findOne({email:req.session.email}, function(error, user) {
-                    if(error)
-                        console.log(error)
+                UserModel.findOne({email:req.session.email}, function(err2, user) {
+                    if(err2)
+                        console.log('err2', err2)
                     else if(metadata.id == '576d50c430c66a5f0312cf9b' || user.cart.indexOf(req.params.id) > -1 || metadata.email == req.session.email || metadata.price == 0) {
                         var ext = metadata.filename.split('.')[1]
                         var readStream = gridfs.createReadStream({_id: metadata._id})
-                        readStream.on('error', function(err) {
-                            console.log(err)
+                        readStream.on('error', function(err3) {
+                            console.log('err3', err3)
                         })
                         
                         if(ext == req.query.ext) {
@@ -328,8 +328,11 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         else if(req.query.ext == 'rawDownload') {
                             res.set("Content-Disposition", 'attachment; filename="' + metadata.filename + '"')
                             readStream.pipe(res)
-                            readStream.on('close', function(err) {
-                                console.log(req.session.email + " downloaded " + metadata.filename)
+                            readStream.on('close', function(err4) {
+                                if(err4)
+                                    console.log('err4', err4)
+                                else
+                                    console.log(req.session.email + " downloaded " + metadata.filename)
                             })
                         }
                         else if (metadata.length > 10000000) {
@@ -345,7 +348,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                 
                                 readStream.on('close', function(error1) {
                                     if(error1)
-                                        console.log(error1)
+                                        console.log('error1', error1)
                                         
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         xlsxj({
@@ -353,7 +356,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                             output: null
                                         }, function(error2, result) {
                                             if(error2) 
-                                                console.log(error2)
+                                                console.log('error2', error2)
                                             else {
                                                 if(req.query.ext == 'json') {
                                                     res.json(result)
@@ -371,9 +374,9 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                         xlsxj({
                                             input: path,
                                             output: null 
-                                        }, function(err, result) {
-                                            if(err) 
-                                                console.log(err)
+                                        }, function(error2, result) {
+                                            if(error2) 
+                                                console.log('error2', error2)
                                             else {
                                                 res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
                                                 res.send(new Buffer(papa.unparse(result)))
@@ -391,7 +394,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                 
                                 readStream.on('close', function(error1) {
                                     if(error1)
-                                        console.log(error1)
+                                        console.log('error1', error1)
                                     
                                     if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                         
@@ -400,7 +403,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                             output: null 
                                         }, function(error2, result) {
                                             if(error2) 
-                                                console.log(error2)
+                                                console.log('error2', error2)
                                             else {
                                                 if(req.query.ext == 'json')
                                                     res.json(result)
@@ -417,9 +420,9 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                         xlsj({
                                             input: path,
                                             output: null 
-                                        }, function(err, result) {
-                                            if(err) 
-                                                console.log(err)
+                                        }, function(error2, result) {
+                                            if(error2) 
+                                                console.log('error2', error2)
                                             else {
                                                 res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
                                                 res.send(new Buffer(papa.unparse(result)))
@@ -436,12 +439,12 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
 
                                 readStream.on('close', function(error1) {
                                     if(error1)
-                                        console.log(error1)
+                                        console.log('error1', error1)
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
                                             csv2json.fromFile(path, function(error2, result) {
                                                 if(error2)
-                                                    console.log(error2)
+                                                    console.log('error2', error2)
                                                     
                                                 else {
                                                     if(req.query.ext == 'json') {
