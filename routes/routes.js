@@ -445,6 +445,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                                     
                                                 else {
                                                     if(req.query.ext == 'json') {
+                                                        console.log(result)
                                                         res.json(result)
                                                     }
                                                     else if(req.query.ext == 'sql') {
