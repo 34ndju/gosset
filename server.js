@@ -23,10 +23,7 @@ var stripe = require('stripe')(process.env.CLIENT_SECRET)
 var qs = require('querystring');
 var sql = require('sql.js')
 var sqlBuilder = require('mongo-sql')
-var Converter = require('csvtojson').Converter
 var csvjson = require('csvjson')
-
-var csv2json = new Converter({})
 
 var app = express();
 
@@ -61,7 +58,7 @@ db.once('open', function callback () {
     var UserModel = require('./client/models/user')(mongoose, db);
     var fileMetadataModel = require('./client/models/fileMetadata')(mongoose, db);
     
-    require('./routes/routes')(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json, csvjson);
+    require('./routes/routes')(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csvjson);
 
 });
 

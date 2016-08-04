@@ -1,4 +1,4 @@
-module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csv2json, csvjson) {
+module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csvjson) {
         
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -74,7 +74,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
         
         return result;
     }
-    
+
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
             return next();
@@ -221,7 +221,7 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                 var file = files.file[0];
 
                 var ext = file.originalFilename.split('.')[1]
-                if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml' || ext == 'csv') {
+                if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml' || ext == 'csv' || ext == 'json') {
                     /*getting headers*/
                     if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml'){
                         var workbook = excel.readFile(file.path);
@@ -254,6 +254,9 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                         else {
                             headers = csv.split("\n")[0].split(',')
                         }
+                    }
+                    else if(ext == 'json') {
+                        var headers = Object.keys(JSON.parse(fs.readFileSync(file.path, 'utf8'))[0])
                     }
                     /*getting headers*/
                 
@@ -443,38 +446,6 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                         console.log('error1', error1)
                                     else {
                                         if(req.query.ext == 'json' || req.query.ext == 'sql') {
-                                            /*csv2json.fromFile(path, function(error2, result) {
-                                                if(error2)
-                                                    console.log('error2', error2)
-                                                    
-                                                else {
-                                                    if(req.query.ext == 'json') {
-                                                        res.json(result)
-                                                    }
-                                                    else if(req.query.ext == 'sql') {
-                                                        var buffer = new Buffer(jsonToSQL(metadata.filename, result))
-                                                        res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
-                                                        res.send(buffer)
-                                                    }
-                                                }
-                                            });*/
-                                            /*
-                                            csv2json.on("end_parsed", function (result) {
-                                                if(req.query.ext == 'json') {
-                                                    res.json(result)
-                                                }
-                                                else if(req.query.ext == 'sql') {
-                                                    var buffer = new Buffer(jsonToSQL(metadata.filename, result))
-                                                    res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
-                                                    res.send(buffer)
-                                                }
-                                            });
-                                            
-                                            fs.createReadStream(path).pipe(csv2json); */
-                                            /*
-                                            var result = papa.parse(fs.readFileSync(path, 'utf8'))
-                                            res.json(result)*/
-                                            
                                             var result = csvjson.toObject(fs.readFileSync(path, 'utf8'))
                                             if(req.query.ext == 'json') {
                                                 res.json(result)
@@ -487,6 +458,29 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
                                         }
                                     }
                                 }) 
+                            }
+                            else if(ext == 'json') {
+                                var path = '/tmp/' + metadata.filename
+                                var out = fs.createWriteStream(path)
+                                readStream.pipe(out)
+
+                                readStream.on('close', function(error1) {
+                                    if(error1)
+                                        console.log('error1', error1)
+                                    
+                                    if(req.query.ext == 'sql') {
+                                        var buffer = new Buffer(jsonToSQL(metadata.filename, JSON.parse(fs.readFileSync(path, 'utf8'))))
+                                        res.set("Content-Disposition", 'attachment; filename="' + metadata.filename.split('.')[0]+ '.sql' + '"')
+                                        res.send(buffer)
+                                    }
+                                    
+                                    else if(req.query.ext == 'csv') {
+                                        var csvFile = metadata.filename.split('.')[0] + '.csv'
+
+                                        res.set("Content-Disposition", 'attachment; filename="' + csvFile + '"')
+                                        res.send(new Buffer(papa.unparse(JSON.parse(fs.readFileSync(path, 'utf8')))))
+                                    }
+                                })
                             }
                         }
                     }
