@@ -1,10 +1,36 @@
-module.exports = function(express, app, session, papa, UserModel, fileMetadataModel, d3, multiparty, fs, mongoose, db, path, gridfs, pug, visitor, bcrypt, xlsxj, xlsj, request, excel, stripe, qs, sql, sqlBuilder, csvjson) {
-        
+module.exports = function(
+    express, 
+    app, 
+    session, 
+    papa, 
+    UserModel, 
+    fileMetadataModel, 
+    d3, 
+    multiparty, 
+    fs, 
+    mongoose, 
+    db, 
+    path, 
+    gridfs, 
+    pug, 
+    visitor, 
+    bcrypt, 
+    xlsxj, 
+    xlsj, 
+    request, 
+    excel, 
+    stripe, 
+    qs, 
+    sql, 
+    sqlBuilder, 
+    csvjson, 
+    o2x) {
+    
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
         if (req.method === 'GET') {
-            var exceptions = ['/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
-            if(exceptions.indexOf(path > -1)) {
+            var exceptions = ['/metadata', '/xml', '/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
+            if(exceptions.indexOf(path) > -1) {
                 next()
             }
             else {
@@ -74,7 +100,99 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
         
         return result;
     }
+    
+    function jsonToXMLMetadata(json) {
+        var parent = Object.keys(json)[0]
+        var xml = ['<', 'EntityType', ' ', 'Name="Data"', '>', '\n']
+        var headers = json[parent]['#']
+        headers.forEach(function(h) {
+            var arr = ['\t', '<Property Name="', h['Property']['@']['Name'], '" Type="', h['Property']['@']['Type'], '" Nullable="', h['Property']['@']['Nullable'], '"/>', '\n']
+            xml.push(arr.join(''))
+        })
+        xml.push('</EntityType>')
+        return xml.join('')
+    }
+    
+    var json2 = {
+        EntityType: {
+            '@': {
+                Name: 'Data'
+            },
+            '#': [
+                {
+                    Property: {
+                        '@': {
+                            Name: 'ID',
+                            Type:'Edm.Int32',
+                            Nullable:'false'
+                        }
+                    }
+                },
+                {
+                    Property: {
+                        '@': {
+                            Name: 'Price',
+                            Type:'Edm.Int32',
+                            Nullable:'false'
+                        }
+                    }
+                }
+            ]    
+        }
+    }
 
+    
+    app.get('/metadata', function(req, res) {
+        fileMetadataModel.findOne({_id:req.query.id}, function(err, metadata) {
+            if(err)
+                console.log(err)
+            else {
+                var json = {
+                    EntityType: {
+                        '@': {
+                            Name: 'Data'
+                        },
+                        '#': [
+                            {
+                                Property: {
+                                    '@': {
+                                        Name: 'ID',
+                                        Type:'Edm.Int32',
+                                        Nullable:'false'
+                                    }
+                                }
+                            },
+                            {
+                                Property: {
+                                    '@': {
+                                        Name: 'Price',
+                                        Type:'Edm.Int32',
+                                        Nullable:'false'
+                                    }
+                                }
+                            }
+                        ]    
+                    }
+                }
+                
+                metadata.headers.forEach(function(h) {
+                    json['EntityType']['#'].push({
+                        Property: {
+                            '@': {
+                                Name: h,
+                                Type:'Edm.String',
+                                Nullable:'false'
+                            }
+                        }
+                    })
+                })
+                res.set('Content-Type', 'text/xml');
+                console.log(jsonToXMLMetadata(json))
+                res.send(jsonToXMLMetadata(json))
+            }
+        })
+    })
+    
     app.get('*',function(req,res, next){  
         if (req.headers["x-forwarded-proto"] === "https"){
             return next();
@@ -514,41 +632,34 @@ module.exports = function(express, app, session, papa, UserModel, fileMetadataMo
     }) 
     
     app.get('/store', function(req, res) {
-        if(!req.session.email)
-            res.redirect('/login')
-        else {
-            if(req.query.category) {
-                fileMetadataModel.find({category: req.query.category}, function(err, metadata) {
-                    if(err)
-                        console.log(err)
-                    res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), metadata:metadata})
-                })
-            }
-            else {
-                res.render('store') // on cient-side, check if "category" exists
-            }
+        if(req.query.category) {
+            fileMetadataModel.find({category: req.query.category}, function(err, metadata) {
+                if(err)
+                    console.log(err)
+                res.render('store', {category:req.query.category.charAt(0).toUpperCase() + req.query.category.substring(1), metadata:metadata})
+            })
         }
+        else {
+            res.render('store') // on cient-side, check if "category" exists
+        }
+    
     })
     
     app.post('/store', function(req, res) {
-        if(!req.session.email)
-            res.redirect('/')
-        else {
-            console.log(req.body.search)
-            fileMetadataModel.find({description: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata) { //checks description
-                if(err)
-                    console.log(err)
-                if(metadata[0])
-                    res.render('store', {search:req.body.search, metadata:metadata})
-                else {
-                    fileMetadataModel.find({title: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata2) { //checks title
-                        if(err)
-                            console.log(err)
-                        res.render('store', {search:req.body.search, metadata:metadata2})
-                    })
-                }
-            })
-        }
+        fileMetadataModel.find({description: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata) { //checks description
+            if(err)
+                console.log(err)
+            if(metadata[0])
+                res.render('store', {search:req.body.search, metadata:metadata})
+            else {
+                fileMetadataModel.find({title: { "$regex": req.body.search, "$options": "i" }}, function(err, metadata2) { //checks title
+                    if(err)
+                        console.log(err)
+                    res.render('store', {search:req.body.search, metadata:metadata2})
+                })
+            }
+        })
+        
     })
     
     app.get('/blog', function(req, res) {
