@@ -23,8 +23,7 @@ module.exports = function(
     qs, 
     sql, 
     sqlBuilder, 
-    csvjson, 
-    o2x) {
+    csvjson) {
     
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
@@ -113,35 +112,6 @@ module.exports = function(
         return xml.join('')
     }
     
-    var json2 = {
-        EntityType: {
-            '@': {
-                Name: 'Data'
-            },
-            '#': [
-                {
-                    Property: {
-                        '@': {
-                            Name: 'ID',
-                            Type:'Edm.Int32',
-                            Nullable:'false'
-                        }
-                    }
-                },
-                {
-                    Property: {
-                        '@': {
-                            Name: 'Price',
-                            Type:'Edm.Int32',
-                            Nullable:'false'
-                        }
-                    }
-                }
-            ]    
-        }
-    }
-
-    
     app.get('/metadata', function(req, res) {
         fileMetadataModel.findOne({_id:req.query.id}, function(err, metadata) {
             if(err)
@@ -187,7 +157,6 @@ module.exports = function(
                     })
                 })
                 res.set('Content-Type', 'text/xml');
-                console.log(jsonToXMLMetadata(json))
                 res.send(jsonToXMLMetadata(json))
             }
         })

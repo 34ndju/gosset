@@ -24,7 +24,6 @@ var qs = require('querystring');
 var sql = require('sql.js')
 var sqlBuilder = require('mongo-sql')
 var csvjson = require('csvjson')
-var o2x = require('object-to-xml')
 
 var app = express();
 
@@ -84,8 +83,7 @@ db.once('open', function callback () {
         qs, 
         sql, 
         sqlBuilder, 
-        csvjson, 
-        o2x)
+        csvjson)
         
 });
 

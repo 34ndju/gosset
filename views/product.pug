@@ -90,6 +90,9 @@ body
             else 
                 p.val Headers 
                 p.tab (Unparsable) Contact nathan@gosset.co for more details.
+            p.val Metadata
+            a(href='/metadata?id=' + metadata._id)
+                p.tab www.gosset.co/metadata?id=#{metadata._id}
             if !isPurchased
                 p.val Price
                 p.tab $#{metadata.price.toFixed(2)}
