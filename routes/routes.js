@@ -28,7 +28,7 @@ module.exports = function(
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
         if (req.method === 'GET') {
-            var exceptions = ['/metadata', '/xml', '/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
+            var exceptions = ['/medR', '/e', '/metadata', '/xml', '/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
             if(exceptions.indexOf(path) > -1) {
                 next()
             }
@@ -160,6 +160,10 @@ module.exports = function(
                 res.send(jsonToXMLMetadata(json))
             }
         })
+    })
+    
+    app.get('/e', function(req, res) {
+        res.redirect('/?utm_source=Gmail&utm_medium=email&utm_content=Cold%20Email&utm_campaign=First%20Cold%20Email%20Campaign')
     })
     
     app.get('*',function(req,res, next){  
