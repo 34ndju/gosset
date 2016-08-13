@@ -30,118 +30,28 @@ body {
     display:block;
 }
 
-.uploadFile {
+.upload {
+    width:200px;
     margin:auto;
-}
-
-.top {
-    margin-top:20px;
-    
-}
-
-.top *{
-    display:inline-block;
-}
-
-.file {
-    font-size:12px;
-}
-
-#filename {
-  padding: 0.5em;
-  float: left;
-  width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  background: #66C44F;
-}
-
-#fileInput {
-    display:none;
-}
-
-#file {
-    margin-right:10px;
-    padding: 0.5em;
-    display: inline-block;
-    background: #499E34;
-    cursor: pointer;
-}
-
-#file:hover {
-    background: #418A2F;
-}
-
-.title * {
-    display: block;
-}
-
-.title p {
-    margin: 0;
-    font-size:0.8em;
-}
-
-#title {
-    border:1px solid black;
-    font-family:"Muli";
-    padding:2px;
-    margin-right:10px;
-}
-
-.priceArea * {
-    display:block;
-}
-
-.priceArea-top p {
-    font-size:0.8em;
-    margin:0;
-}
-
-.priceArea-bottom *{
-    display:inline-block;
-}
-
-.money {
-    margin:0;
-}
-
-.price {
-    margin-left:2px;
-    margin-right:2px;
-    width:40px;
-    border:1px solid black;
-    text-align:center;
-}
-
-.bottom {
-    margin-top:20px;
-}
-
-.bottom * {
-    display:inline-block;
-    vertical-align:middle;
-}
-
-#description {
-    resize:none;
-    border:1px solid black;
-    height:70px;
-    padding:5px;
-    font-family:"Muli";
-    margin-right:10px;
-}
-
-#submit {
-    font-family:'Muli';
-    height:30px;
-    background:#66C44F;
-    border:1px solid black;
+    background:#499E34;
+    border: 1px solid black;
     cursor:pointer;
 }
-#submit:hover {
-    background:#499E34;
+
+.upload a{
+    text-decoration:none;
 }
 
+.upload a p{
+    font-size:12px;
+    color:black;
+    margin:0;
+    padding:5px;
+}
+
+.upload:hover {
+    font-weight:bold;
+}
 
 #datacontent {
     background: #F7FDFF;

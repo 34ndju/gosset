@@ -297,6 +297,10 @@ module.exports = function(
         })
     })
     
+    app.get('/upload', function(req, res) {
+        res.render('upload', {email:req.session.email})
+    })
+    
     app.post('/upload', function(req, res) {
         
         var form = new multiparty.Form()
@@ -359,6 +363,7 @@ module.exports = function(
                         newFileMetadata._id = file._id
                         newFileMetadata.email = req.session.email
                         newFileMetadata.title = fields.title[0]
+                        newFileMetadata.sentence = fields.sentence[0]
                         newFileMetadata.description = fields.description[0]
                         newFileMetadata.filename = file.filename
                         newFileMetadata.length = file.length
@@ -375,7 +380,7 @@ module.exports = function(
                             if(err)
                                 console.log(err)
                             if(user.stripe) {
-                                res.redirect('/')
+                                res.redirect('/dashboard')
                             }
                             else {
                                 if(parseInt(fields.dollar[0]) + (parseInt(fields.cent[0]) / 100) != 0) {
@@ -383,7 +388,7 @@ module.exports = function(
                                     res.redirect('/authorize')
                                 }
                                 else {
-                                    res.redirect('/')
+                                    res.redirect('/dashboard')
                                 }
                             }
                         })  
@@ -391,7 +396,7 @@ module.exports = function(
                 }
                 else {
                     console.log(req.session.email + " uploaded the wrong filetype")
-                    res.redirect('/dashboard')
+                    res.redirect('/upload')
                 } 
             }
         })

@@ -1,0 +1,81 @@
+head
+    link(href='/css/upload.css', rel='stylesheet')
+    link(href='/css/header.css', rel='stylesheet')
+    
+    link(rel='shortcut icon', href='/images/GWhite.png')
+    
+    script(src='/scripts/fingerprint.js')
+    script(src='/scripts/GA.js')
+    
+    script(src='//code.jquery.com/jquery-1.11.2.min.js')
+    script(src='//code.jquery.com/jquery-migrate-1.2.1.min.js')
+    script(src='/scripts/upload.js')
+    
+    title Upload
+body
+    header.main-header
+        div#nav
+            a#seller-dashboard(href='/dashboard')
+                p seller dashboard
+            a#store(href='/store')
+                p store
+        a(href='/')
+            img.logo(src='/images/GossetMoustacheClear.png')
+        div#user
+            div#dropdown
+                a(href='/logout')
+                    div#logout
+                        p Logout
+                a(href='#')
+                    div#settings
+                        p Settings
+    div.content
+        form.uploadFile(method='post', action='/upload', enctype='multipart/form-data', align='left')
+            div.file
+                div#block
+                    div.img
+                        img(src='/images/info.png')
+                        div.info(style='height:45px') 
+                            p Upload a data set in any of these formats: csv, json, xml, xls, xlsx, xlsb, or xlsm.
+                span#filename Select your file
+                label#file(for="fileInput") Choose a File...
+                    input#fileInput(type='file', name='file')
+            div.title
+                div#block
+                    div.img
+                        img(src='/images/info.png')
+                        div.info(style='height:45px') 
+                            p This is the first piece of metadata that buyers will see. Make it appealing and meaningful.
+                p Title
+                input(type='text', name='title', data-multiple-caption="{count} files selected" multiple)
+            div.sentence
+                div#block
+                    div.img
+                        img(src='/images/info.png')
+                        div.info(style='height:60px')
+                            p Historically, buyers respond best to a well-written single sentence descriptor. This sentence should be brief, detailing what the data set really is.
+                p Sentence Descriptor
+                input(type='text', name='sentence', data-multiple-caption="{count} files selected" multiple)
+            div.description
+                div#block
+                    div.img
+                        img(src='/images/info.png')
+                        div.info(style='height:85px')
+                            p Follow the sentence descriptor with an extended description detailing the data set's selling points. Make sure to include how big the data set is, how many pieces of information are attached to each record, how recent the data may be, and any other meaningful selling points.
+                p Full Description
+                textarea(name='description', cols="40", rows="50")
+            div.price
+                div#block
+                    div.img
+                        img(src='/images/info.png')
+                        div.info(style='height:30px')
+                            p Have trouble pricing your data set? Visit our 
+                                a#priceIndexLink(href='/priceIndex')
+                                    span price index
+                                span .
+                p Price
+                p.money $
+                input#dollar(type='number', name='dollar',  maxlength='4', value='0000')
+                p.money .
+                input#cent(type='number', name='cent', maxlength='2', value='00')
+            button.submit(type='submit') Upload

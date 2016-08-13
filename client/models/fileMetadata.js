@@ -3,6 +3,7 @@ module.exports = function(mongoose, db) {
     var fileMetadataSchema = new mongoose.Schema({
         email: String,
         title: String,
+        sentence: String,
         description: String,
         filename: String,
         length: Number,
