@@ -1,4 +1,8 @@
 //Google Analytics
+
+//test
+console.log(new Fingerprint().get())
+
 if (window.location.host != 'base-a34ndju.c9users.io') {
     if(new Fingerprint().get() != 2379720647) {
         console.log('sent');

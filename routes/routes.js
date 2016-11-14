@@ -28,7 +28,7 @@ module.exports = function(
     function loginRequired (req, res, next) {
         var path = req._parsedOriginalUrl.pathname;
         if (req.method === 'GET') {
-            var exceptions = ['/medR', '/e', '/metadata', '/xml', '/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
+            var exceptions = ['/homecoming', '/homeCorrect', '/H10092016C', '/medR', '/e', '/metadata', '/xml', '/', '/termsofuse', '/login', '/logout', '/register', '/invite', '/medR', '/blog', '/resetPassword', '/product/576d50c430c66a5f0312cf9b']
             if(exceptions.indexOf(path) > -1) {
                 next()
             }
@@ -880,9 +880,6 @@ module.exports = function(
     app.get('/test', function(req, res) {
         res.render('test')
     })
-
-
-
 
     //deprecated because lack of time. would like to reactivate when incorporated using Stripe (managed accounts)
     /*
