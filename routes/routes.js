@@ -4,7 +4,8 @@ module.exports = function(
     session, 
     papa, 
     UserModel, 
-    fileMetadataModel, 
+    fileMetadataModel,
+    LeadModel,
     d3, 
     multiparty, 
     fs, 
@@ -317,6 +318,7 @@ module.exports = function(
 
                 var ext = file.originalFilename.split('.')[1]
                 if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml' || ext == 'csv' || ext == 'json') {
+                    
                     /*getting headers*/
                     if(ext == 'xls' || ext == 'xlsx' || ext == 'xlsb' || ext == 'xlsm' || ext =='xml'){
                         var workbook = excel.readFile(file.path);
@@ -355,6 +357,7 @@ module.exports = function(
                     }
                     /*getting headers*/
                 
+                    //uploading with distributed file system to db
                     var writeStream = gridfs.createWriteStream({filename: file.originalFilename})
                     fs.createReadStream(file.path).pipe(writeStream)
                     writeStream.on('close', function(file) {

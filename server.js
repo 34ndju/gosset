@@ -48,7 +48,6 @@ console.log("Secret: " + process.env.SECRET)
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
-
 var db = mongoose.createConnection(process.env.MONGO_URI);
 
 db.once('open', function callback () {
@@ -57,6 +56,7 @@ db.once('open', function callback () {
     
     var UserModel = require('./client/models/user')(mongoose, db);
     var fileMetadataModel = require('./client/models/fileMetadata')(mongoose, db);
+    var LeadModel = require('./client/models/lead')(mongoose, db);
     
     require('./routes/routes')(
         express, 
@@ -64,7 +64,8 @@ db.once('open', function callback () {
         session, 
         papa, 
         UserModel, 
-        fileMetadataModel, 
+        fileMetadataModel,
+        LeadModel,
         d3, 
         multiparty, 
         fs, 

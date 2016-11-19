@@ -46,13 +46,13 @@ $(document).ready(function() {
         if(direction == 'down') {
             $('#reg').css({'display':'block'})
             $('#login div').css({'width':'66px'})
-            $('.header').css({'background':'rgba(255,255,255,0.9)', 'height': '50px'})
+            $('.header').css({'background':'rgba(255,255,255,1)', 'height': '50px'})
             $('#logo h1').css({'margin-left':'5px', 'float': 'right'});
         }
         else {
             $('#reg').css('display','none')
             $('#login div').css({'width':'76px'})
-            $('.header').css({'background':'rgba(255,255,255,0.3)', 'height': '75px'})
+            $('.header').css({'background':'rgba(255,255,255,0.7)', 'height': '75px'})
             $('#logo h1').css({'margin-left':0, 'float': 'none'});
         }
     })
