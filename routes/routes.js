@@ -405,6 +405,36 @@ module.exports = function(
         })
     })  
     
+    app.get('/read/:id', function(req, res) {
+        fileMetadataModel.findOne({_id:req.params.id}, function(err, metadata) {
+            if(err)
+                console.log(err)
+            else {
+                var ext = metadata.filename.split('.')[1]
+                var readStream = gridfs.createReadStream({_id: metadata._id})
+                
+                readStream.on('error', function(err3) {
+                    console.log('err3', err3)
+                })
+                
+                var path = '/tmp/' + metadata.filename
+                var out = fs.createWriteStream(path)
+                readStream.pipe(out)
+                
+                readStream.on('close', function(error1) {
+                    if(error1)
+                        console.log(error1)
+                    else {
+                        var result = csvjson.toObject(fs.readFileSync(path, 'utf8'))
+                        console.log(result)
+                        res.send(fs.readFileSync(path, 'utf8'))
+                    }
+                })
+            }
+            
+        })
+    })
+    
     app.get('/download/:id', function(req, res) {  //using req.query to determine how to export (ext will be rawDownload, json, or csv)
         fileMetadataModel.findOne({_id: req.params.id}, function(err1, metadata) {
             if(err1)
